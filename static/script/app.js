@@ -900,7 +900,7 @@ function check_notice()
 
 					play_sound();
 
-					if( window.webkitNotifications.checkPermission() == 0 )
+					if( window.webkitNotifications && window.webkitNotifications.checkPermission() == 0 )
 					{
 						var notification = window.webkitNotifications.createNotification
 						(

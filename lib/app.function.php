@@ -651,6 +651,7 @@ function link_at( $str )
 
 function scan_plugin_info()
 {
+    if( file_exists( c('plugin_path') ) )
     foreach( glob( c('plugin_path') . DS . "*" , GLOB_ONLYDIR ) as $pfold  )
     {
         $app_file = $pfold .DS .'app.php';
