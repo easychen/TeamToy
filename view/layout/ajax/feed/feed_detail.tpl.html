@@ -1,0 +1,31 @@
+<div class="p20">
+<?php do_action( 'UI_FEED_DETAIL_TITLE_BEFORE' ); ?>	
+<a class="close pull-right"  href="javascript:fdboard_close();" title="收起动态详情">&minus;</a>
+<div class="fd_cast_title side_long " title="<?=$data['content']?>">
+	<?=$data['content']?>
+</div>
+<?php do_action( 'UI_FEED_DETAIL_TITLE_AFTER' ); ?>	
+
+<?php do_action( 'UI_FEED_DETAIL_COMMENTBOX_BEFORE' ); ?>	
+<div class="comment_box">
+<form class="form-inline" action="javascript:feed_add_comment( '<?=$data['id']?>' ,  $('#fcomment_text').val() );void(0);" method="post" id="fcomment_form">
+<div class="input-append">
+  <input class="side_board_input" id="fcomment_text" type="text" placeholder="请输入评论内容">
+  <button class="btn" type="submit">发布</button>
+</div>	
+</form>	
+</div>	
+<?php do_action( 'UI_FEED_DETAIL_COMMENTBOX_AFTER' ); ?>	
+
+<div class="line"></div>
+
+<?php do_action( 'UI_FEED_DETAIL_COMMENTLIST_BEFORE' ); ?>	
+<ul class="fcomment" id="feed_comment">	
+<?php if( isset( $data['comment'] ) && is_array( $data['comment'] ) ):  ?>
+	<?php foreach( $data['comment'] as $item ): ?>
+	<?php require( AROOT . 'view' . DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'fcomment.tpl.html' ); ?>
+	<?php endforeach; ?>
+<?php endif; ?>
+</ul>	
+<?php do_action( 'UI_FEED_DETAIL_COMMENTLIST_AFTER' ); ?>	
+</div>	

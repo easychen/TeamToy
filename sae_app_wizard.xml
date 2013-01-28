@@ -1,0 +1,27 @@
+﻿<appwizard> 
+	<introduction> 
+		<name>TeamToy2</name> 
+		<author>-</author> 
+		<icon>-</icon> 
+		<homepage>-</homepage> 
+		<description> 
+		<![CDATA[-]]>
+		</description> 
+	</introduction> 
+	<platform> 
+		<services>
+			<service>Mysql</service> 
+		</services> 
+		<appconfig> 
+			<tpl> 
+            <![CDATA[
+name: <<appname>>
+version: <<version>>
+            ]]>
+			</tpl> 
+		</appconfig> 
+	</platform> 
+	<code> 
+	<initScript>index.php?c=install</initScript> 
+	</code> 
+</appwizard>

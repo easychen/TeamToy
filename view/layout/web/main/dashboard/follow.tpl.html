@@ -1,0 +1,41 @@
+<div class="row-fluid">
+<div class="span7">
+	<!-- dropdown menu -->
+	<div class="btn-group card-title">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">我关注的TODO&nbsp;<span class="caret"></span></a>
+  		<ul class="dropdown-menu" id="todo_tab_menu">
+    		<!-- dropdown menu links -->
+    		<li><a tabindex="-1" href="?c=dashboard&a=index" >我的TODO</a></li>
+  			<li><a tabindex="-1" href="?c=dashboard&a=follow" >我关注的TODO</a></li>
+		</ul>
+	</div>
+
+	<div  id="todo_follow">
+			<!-- my todo list -->
+			<ul id="todo_list_follow">
+			</ul>
+
+			
+	</div>
+	<script>
+	
+	function loaded()
+	{
+		remember();
+
+		load_todo('follow');
+
+	}
+	
+
+
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	</script>
+
+</div>
+
+
+<div class="span5" id="side_board">
+<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'todobox.tpl.html' ); ?>
+</div>
+</div>	

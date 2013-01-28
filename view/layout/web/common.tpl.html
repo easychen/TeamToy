@@ -1,0 +1,51 @@
+<div id="im">
+
+<div id="im_header">
+  <a href="javascript:void(0);" id="im_swith">&minus;</a>
+</div>  
+
+<div id="im_search" class="input-prepend ">
+    <span class="add-on"><i class="icon-search"></i></span>
+    <input id="imkeyword" type="text" placeholder="姓名或拼音">
+</div>
+
+<ul id="im_buddy_list">
+</ul> 
+</div>
+
+<div id="im_box">
+<div id="im_box_header"><a href="javascript:close_im_box();void(0);" id="im_box_closer">&times;</a></div>
+<ul id="im_area_list">
+</ul>  
+</div> 
+
+<!--  float box  -->
+  <div class="modal hide fade" id="float_box">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="float_box_title">正在载入</h3>
+  </div>
+  <div class="modal-body"></div>
+  </div>
+</div>
+<!--  / float box  -->
+
+<audio id='ttsoundplayer'  preload='auto'>
+  <source src='static/sound/dididi.wav' type='audio/wav'>
+</audio> 
+
+
+
+<script>
+setTimeout( check_notice , 2000 );
+setInterval( check_notice , 100000 );
+
+setTimeout( check_online , 1000 );
+setInterval( check_online , 100000 );
+
+
+var site_url = '<?=c('site_url')?>';
+var favicon = site_url + '/<?=c('favicon')?>';
+var current_user = '<?=uname()?>';
+load_im_buddy_list();
+</script>

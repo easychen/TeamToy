@@ -1,0 +1,6 @@
+<?php foreach( $items as $item ): ?>
+<?php do_action( 'UI_IM_BUDDYLIST_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_IM_BUDDYLIST_ITEM_FILTER' , $item ); ?>
+<li uid="<?=$item['id']?>" class="user_line" id="im_blist_<?=$item['id']?>" user="<?=$item['name']?>" pinyin="<?=$item['pinyin']?>"><img src="<?=avatar($item['avatar_small']);?>" class="avatar" title="<?=$item['name']?>"/> <a><?=$item['name']?></a></li>
+<?php do_action( 'UI_IM_BUDDYLIST_ITEM_AFTER' , $item ); ?>
+<?php endforeach; ?>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+    <title><?=$top_title . ' | ' . c('site_name') ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="<?=c('favicon')?>" />
+    <style type="text/css">
+     body 
+    {
+    	padding-top: 60px;
+    	padding-bottom: 40px;
+    }
+
+    .sidebar-nav 
+    {
+    	padding: 9px 0;
+    }
+    </style>
+	<link href="static/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <!--[if IE 6]>    
+        <link href="static/css/ie6.min.css" rel="stylesheet">
+  <![endif]-->
+
+  <link rel="stylesheet" href="static/css/font-awesome.css" type="text/css" >
+  <link rel="stylesheet" href="static/css/jquery.jscrollpane.css" type="text/css" >
+  <link rel="stylesheet" href="static/css/jquery.jcrop.min.css" type="text/css" >
+  <link rel="stylesheet" href="static/css/tooltipster.css" type="text/css" >
+
+  <!--[if IE 7]>    
+    <link rel="stylesheet" href="static/css/font-awesome-ie7.css" type="text/css" >
+  <![endif]-->
+	
+  <link rel="stylesheet" href="static/css/style.css" type="text/css" >
+
+  <?php if( isset($css) && is_array( $css ) ): ?>
+        <?php foreach( $css as $cfile ): ?><link rel="stylesheet" type="text/css" href="static/css/<?=$cfile?>">
+        <?php endforeach; ?>
+  <?php endif; ?>
+
+  <!--[if lt IE 9]>
+        <script src="static/script/html5.js"></script>
+  <![endif]-->
+
+  <script src="static/script/jquery.min.js"></script>
+  <script src="static/script/jquery.cookie.js"></script>
+
+  <script src="static/script/jquery.jscrollpane.min.js"></script>
+  <script src="static/script/jquery.mousewheel.js"></script>
+  <script src="static/script/jquery.jcrop.min.js"></script>
+  <script src="static/script/jquery.caret.js"></script>
+  <script src="static/script/jquery.atwho.js"></script>
+  <script src="static/script/jquery.titlealert.js"></script>
+  <script src="static/script/jquery.tooltipster.js"></script>
+
+
+  <script src="static/script/bootstrap.min.js"></script>
+  <!--[if IE 6]>    
+  		 <script src="static/script/ie6.min.js"></script>
+  <![endif]-->
+
+  <script src="static/script/app.js?v=<?=local_version();?>"></script>
+
+
+  <?php if( isset($js) && is_array( $js ) ): ?>
+  	<?php foreach( $js as $jfile ): ?><script type="text/javascript" src="static/script/<?=$jfile;?>" ></script>
+  	<?php endforeach; ?>
+  <?php endif; ?>
+  <?php do_action( 'UI_HEAD' ); ?>
+
+</head>    
+<body>
+ 	<?php do_action( 'UI_HEADER_BEFORE' ); ?>
+  <?php @include_once( dirname(__FILE__) ) . DS . 'header.tpl.html'; ?>  
+  <?php do_action( 'UI_HEADER_AFTER' ); ?>
+  
+  <div class="container mainbody"> 
+  <?php 
+     @include_once( c('plugin_path') . DS . basename($pathinfo) . DS . 'view' . DS . g('a') . '.tpl.html');
+  ?>
+  </div>
+   <?php do_action( 'UI_FOOTER_BEFORE' ); ?> 
+  <?php @include_once( dirname(__FILE__) ) . DS . 'footer.tpl.html'; ?>
+   <?php do_action( 'UI_FOOTER_AFTER' ); ?> 
+
+  <?php @include_once( dirname(__FILE__) ) . DS . 'common.tpl.html'; ?> 
+
+  </div><!--/.fluid-container-->
+   
+</body>
+</html>

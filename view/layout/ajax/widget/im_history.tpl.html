@@ -1,0 +1,10 @@
+<?php do_action( 'UI_IM_HISTORY_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_IM_HISTORY_ITEM_FILTER' , $item ); ?>
+<?php if( $item['from_uid'] == uid() ): ?>
+<div class="text-right chat-timeline"><?=ctime($item['timeline'])?></div>
+<div class="my clearfix" ><div class="span" title="<?=rtime($item['timeline'])?>"><?=$item['content']?></div></div>
+<?php else: ?>
+<div class="text-left chat-timeline"><?=ctime($item['timeline'])?></div>
+<div class="others clearfix"><div class="span" title="<?=rtime($item['timeline'])?>"><?=$item['content']?></div></div>
+<?php endif; ?>
+<?php do_action( 'UI_IM_HISTORY_ITEM_AFTER' , $item ); ?>

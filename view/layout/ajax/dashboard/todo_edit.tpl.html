@@ -1,0 +1,17 @@
+<form class="form-inline" action="javascript:todo_update(<?=$tid?> , $('#todo_edit_text').val());void(0);" method="post" id="todo_edit_form">
+<div class="input-append">
+  <input  id="todo_edit_text" type="text" value="<?=$text?>" class="side_edit" autofocus="autofocus"	>
+  <div class="btn-group left_square">
+	<button class="btn" >保存</button>
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu short_menu">
+    	<li><a tabindex="-1" href="javascript:show_todo_detail(<?=$tid?>)">取消</a></li>
+    </ul>
+  </div>
+</div>
+</form>
+<style>
+
+</style>	

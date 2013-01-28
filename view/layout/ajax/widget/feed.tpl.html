@@ -1,0 +1,20 @@
+<?php do_action( 'UI_FEED_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_FEED_ITEM_FILTER' , $item ); ?>
+<?php if( $item['type'] == 4 ): ?>
+<li class="<?=feed_class($item['type'])?>" fid="<?=$item['id']?>" uid="<?=$item['uid']?>" id="fid-<?=$item['id']?>"  >
+<div class="quote">
+	<?=link_at($item['content'])?>
+	<div class="via"> &mdash; <img src="<?=avatar($item['user']['avatar_small'])?>" class="avatar"> <a uid="<?=$item['uid']?>"  href="javascript:void(0);" class="namecard"><?=$item['user']['name']?></a> </div>
+</div>
+<div><span class="time"><?=rtime($item['timeline'])?>&nbsp;<?=device($item['device']);?></span>
+	<?php if( intval($item['comment_count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt"><?=intval($item['comment_count'])?></span>)</a><?php endif; ?>
+</div>
+
+</li>
+<?php else: ?>
+<li class="<?=feed_class($item['type'])?>" tid="<?=$item['tid']?>" uid="<?=$item['uid']?>" id="fid-<?=$item['id']?>"  >
+	<img src="<?=avatar($item['user']['avatar_small'])?>" class="avatar"> <a uid="<?=$item['uid']?>" href="javascript:void(0);" class="namecard"><?=$item['user']['name']?></a>&nbsp;<?=link_at(noname($item['content'] , $item['user']['name'] ));?> 
+	<div><span class="time"><?=rtime($item['timeline'])?>&nbsp;<?=device($item['device']);?></span></div>
+</li>
+<?php endif; ?>	
+<?php do_action( 'UI_FEED_ITEM_AFTER' , $item ); ?>

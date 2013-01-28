@@ -1,0 +1,45 @@
+<?php do_action( 'UI_FEED_BEFORE' );  ?>
+<div class="row-fluid">
+<div class="span7">
+	<h2 class="main_board">团队动态</h2>
+
+	<?php do_action( 'UI_FEED_LIST_BEFORE' ); ?>
+	<ul id="feed_list"></ul>
+	<?php do_action( 'UI_FEED_LIST_AFTER' ); ?>
+
+	<?php do_action( 'UI_FEED_SCRIPT_BEFORE' ); ?>
+	<script>
+	function loaded()
+	{
+		remember();
+		load_feed();
+		cast_at_check();
+		<?php do_action( 'UI_FEED_SCRIPT_LOAD' ); ?>
+	}
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	<?php do_action( 'UI_FEED_SCRIPT_LAST' ); ?>
+	</script>
+	<?php do_action( 'UI_FEED_SCRIPT_AFTER' ); ?>
+	
+</div>
+
+<?php do_action( 'UI_SIDEBOARD_BEFORE' ); ?>
+<div class="span5" id="side_board">
+<div id="cast_box">
+	<div id="side_container">
+		<h2 class="side_board">发起广播&nbsp;<a href="#" class="side_link" id="cast_user_tips">所有人都会收到通知</a></h2>
+		<form action="javascript:cast_send($('#cast_text').val());void(0);" id="cast_form">
+			<textarea rows="3" class="full" name="text" id="cast_text" placeholder="如果你只想特定的人收到通知，可以使用@ 进行点名；未进行点名的广播将发送给所有人"></textarea><?php do_action( 'UI_CASTBOX_FIELD_LAST' ); ?>
+	<div><a href="javascript:at_chooser();void(0);" class="side_link">@点名</a><?php do_action( 'UI_CASTBOX_HELPER_LAST' ); ?>
+		<button class="btn pull-right" type="submit" disabled="disabled">发送</button>
+		<!--<a href="#" class="gray_link">添加更多描述</a>-->	
+	</div>
+		</form>
+	</div>	
+</div>	
+
+</div>
+<?php do_action( 'UI_SIDEBOARD_AFTER' ); ?>
+
+</div>
+<?php do_action( 'UI_FEED_AFTER' );  ?>

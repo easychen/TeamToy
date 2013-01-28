@@ -1,0 +1,5 @@
+<?php do_action( 'UI_TODO_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_TODO_ITEM_FILTER' , $item ); ?>
+<li class="<?php if( $item['is_public'] == 0 ): ?>red<?else:?>blue<?php endif; ?> <?php if( $item['status'] == 3 ): ?>finished<?php endif; ?>" id="t-<?=$item['tid']?>" tid="<?=$item['tid']?>"><div class="todo_fav" title="星标操作" ><div class="todo_row" title="<?=$item['content']?>"><a href="#" ><?=$item['content']?></a></div></div></li>
+<?php do_action( 'UI_TODO_ITEM_AFTER' , $item ); ?>
+

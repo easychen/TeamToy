@@ -1,0 +1,13 @@
+#安装简介
+
+TeamToy需要PHP5、MySQL4以上的运行环境，依赖PHP的json/gd扩展，为支持在线升级，请将代码目录设为可写。
+
+请将config/db.config.sample.php改名为config/db.config.php 并将里边的数据库信息修改为您空间的配置；
+
+然后将代码上传至服务器，用过浏览器访问[domain.com]/index.php?c=install 进行初始化
+
+将TeamToy安装到根目录以外的同学，请将config/app.config.sample.php 改名为 config/app.config.php，并根据自己的情况修改site_url值。 
+
+#提示
+
+我们希望将精力集中到TeamToy本身的开发上，所以暂时不提供运行环境相关的服务支持，如果您不熟悉相关知识，请使用即点即用的【一键安装】服务。

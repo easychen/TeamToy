@@ -1,0 +1,70 @@
+<?php 
+do_action( 'UI_DASHBOARD_BEFORE' ); 
+if( v('type') == 'follow' ) $follow = true;
+else $follow = false;
+?>
+
+<div class="row-fluid">
+<div class="span7">
+	<!-- dropdown menu -->
+	<?php do_action( 'UI_DASHBOARD_TODO_CATE_BEFORE' ); ?>
+	<div class="btn-group card-title">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			<?php if($follow):?>我关注的TODO<?php else: ?>我的TODO<?php endif; ?>&nbsp;<span class="caret"></span></a>
+  		<ul class="dropdown-menu" id="todo_tab_menu">
+    		<!-- dropdown menu links -->
+    		<li><a tabindex="-1" href="?c=dashboard&a=index" >我的TODO</a></li>
+  			<li><a tabindex="-1" href="?c=dashboard&a=index&type=follow" >我关注的TODO</a></li>
+  			<?php do_action( 'UI_DASHBOARD_TODO_CATE_LAST' ); ?>
+		</ul>
+		<?php if(!$follow): ?><a href="javascript:todo_all_done();" class="side_link">全部标记为完成</a><?php endif; ?>
+	</div>
+	<?php do_action( 'UI_DASHBOARD_TODO_CATE_AFTER' ); ?>
+	
+	<?php do_action( 'UI_DASHBOARD_TODO_LIST_BEFORE' ); ?>
+	<?php if( $follow ): ?>
+	<div  id="todo_follow">
+		<ul id="todo_list_follow"></ul>
+	</div>
+	<?php else: ?>
+	<div  id="todo_mine">
+		<ul id="todo_list_star"></ul>
+		<ul id="todo_list_normal"></ul>
+		<p class="dtitle"><img src="<?=image('tt2.title.done.png');?>" /></p>
+		<ul id="todo_list_done"></ul>
+		
+		<a href="javascript:todo_clean();" class="side_link">清除所有已完成TODO</a>
+	</div>
+	<?php endif; ?>
+	<?php do_action( 'UI_DASHBOARD_TODO_LIST_AFTER' ); ?>
+	
+	<?php do_action( 'UI_DASHBOARD_TODO_SCRIPT_BEFORE' ); ?>
+	<script>
+	function loaded()
+	{
+		remember();
+
+		<?php if( $follow ): ?>
+		load_todo('follow');	
+		<?php else: ?>
+		load_todo('star');
+		load_todo('normal');
+		load_todo('done');
+		<?php endif; ?>
+
+		<?php do_action( 'UI_DASHBOARD_TODO_SCRIPT_LOAD' ); ?>
+
+	}
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	<?php do_action( 'UI_DASHBOARD_TODO_SCRIPT_LAST' ); ?>
+	</script>
+	<?php do_action( 'UI_DASHBOARD_TODO_SCRIPT_AFTER' ); ?>
+</div>
+
+<?php do_action( 'UI_SIDEBOARD_BEFORE' ); ?>
+<div class="span5" id="side_board">
+<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'todobox.tpl.html' ); ?>
+</div>
+<?php do_action( 'UI_SIDEBOARD_AFTER' ); ?>
+</div>
+<?php do_action( 'UI_DASHBOARD_AFTER' ); ?>

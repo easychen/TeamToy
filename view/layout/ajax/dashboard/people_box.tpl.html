@@ -1,0 +1,113 @@
+<?php if( isset( $data ) && is_array( $data ) ): ?>
+
+<?php if( count($data) > 15 ): ?>
+<div class="ppfliter inline-form" >
+<div class="input-prepend ">
+	<span class="add-on"><i class="icon-search"></i></span>
+	<input id="ppkeyword" type="text" placeholder="通过姓名或拼音查找">
+</div>
+<span id="ppuname_selected" ></span>
+</div>
+<?php endif; ?>
+
+<ul class="pplist">
+<?php foreach( $data as $item ): ?>
+
+<?php if(intval(v('multi')) == 1 ):  ?>
+<!-- choose multi user -->
+	<li class="multi user" uid="<?=$item['id']?>" uname="<?=$item['name']?>" pinyin="<?=$item['pinyin']?>"><a href="#"><img src="<?=avatar($item['avatar_small'])?>"><br/><?=$item['name']?></a></li>
+
+<?php else: ?>	
+<!-- choose single user -->
+
+
+<?php if( $item['id'] == uid() && v('self') != 1 ): ?>
+	<li class="user" uid="<?=$item['id']?>" uname="<?=$item['name']?>" pinyin="<?=$item['pinyin']?>"><a href="#"><img src="<?=avatar($item['avatar_small'])?>"><br/><?=$item['name']?></a></li>
+<?php else: ?>
+<li class="user" uid="<?=$item['id']?>" uname="<?=$item['name']?>" pinyin="<?=$item['pinyin']?>"><a href="javascript:<?=z(t(v('jsfunc')))?>(<?=$tid?> , <?=$item['id']?> , '<?=$item['name']?>');"><img src="<?=avatar($item['avatar_small'])?>"><br/><?=$item['name']?></a></li>
+<?php endif; ?>	
+
+<?php endif; ?>
+<!-- . end foreach -->
+
+
+<?php endforeach; ?>
+</ul>	
+
+<?php if(intval(v('multi')) == 1 ):  ?>
+<div class="modal-footer mywhite">
+    <a href="#" class="btn btn-primary" id="pp_multi_ok_btn">确定</a>
+</div>
+<script type="text/javascript">
+
+$('.pplist .multi').unbind( 'click');
+$('.pplist .multi').bind( 'click' , function()
+{
+	$(this).toggleClass('pp-selected');
+	$("#ppuname_selected").empty();
+	if( $('.pplist .multi.pp-selected').size() > 0 )
+	{
+		$("#ppuname_selected").html('已选同事 - ');
+		$('.pplist .multi.pp-selected').each( function()
+		{
+			$("#ppuname_selected").append( $('<span class="nameitem" uid="' + $(this).attr('uid') + '"><i class="icon-user"></i>'+ $(this).attr('uname') +'</span> &nbsp;') );
+		});
+	}
+	
+	
+
+});
+
+$('#pp_multi_ok_btn').unbind( 'click' );
+$('#pp_multi_ok_btn').bind( 'click' , function()
+{
+	if( $('.pp-selected').size() < 1 )
+	{
+		alert('请至少选择一位同事');
+		return false;
+	}
+	
+	var uids = [] , unames = [];
+	$('.pp-selected').each( function()
+	{
+		uids.push( $(this).attr('uid') );
+		unames.push( $(this).attr('uname') );
+	});
+
+	<?=z(t(v('jsfunc')))?>(uids , unames);
+});
+
+
+</script>
+<?php endif; ?>	
+
+<script type="text/javascript">
+
+$('#ppkeyword').unbind('keyup keydown');
+$('#ppkeyword').bind('keyup keydown' ,function()
+{
+	if( $('#ppkeyword').val() != '' )
+		{
+			$('.pplist li.user').each(function()
+			{
+				if( ($(this).attr('pinyin').indexOf( $('#ppkeyword').val() ) < 0) 
+					&& ( $(this).attr('uname').indexOf( $('#ppkeyword').val() ) < 0 ))
+				 	$(this).css('display','none');
+				else 
+					$(this).css('display','inline-block');
+			});
+		}
+		else
+		{
+			$('.pplist li.user').each(function()
+			{
+				$(this).css('display','inline-block');
+			});
+		}
+
+});
+</script>	
+
+
+
+<?php endif; ?>	

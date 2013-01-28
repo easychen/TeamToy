@@ -1,0 +1,51 @@
+<?php do_action( 'UI_BUDDY_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_BUDDY_ITEM_FILTER' , $item ); ?>
+<li class="clearfix user overhide" pinyin="<?=$item['pinyin']?>" user="<?=$item['name']?>" id="uid-<?=$item['id']?>" uid="<?=$item['id']?>">
+	<?php if( $_SESSION['level'] == 9 ): ?>
+	<a class="close pull-right hide"  href="javascript:admin_close_user(<?=$item['id']?>);">&times;</a>
+	<?php endif; ?>
+	<?php do_action( 'UI_BUDDY_ITEM_AVATAR_BEFORE' , $item ); ?>
+	<img src="<?=avatar($item['avatar_small'])?>" class="avatar pull-left hidden-phone"/>
+	<?php do_action( 'UI_BUDDY_ITEM_AVATAR_AFTER' , $item ); ?>
+ 	<ul class="binfo pull-left ">
+ 		<li ><?=$item['name']?> 
+ 		<?php if( $_SESSION['level'] == 9  ): ?>	
+ 			<?php if( $item['level'] == 9 ): ?>
+ 				<i class="icon-star"></i><a href="javascript:admin_user_off(<?=$item['id']?>);void(0);" class="side_link">降为普通用户</a></li>
+ 			<?php else: ?>
+ 				<a href="javascript:admin_user_on(<?=$item['id']?>);void(0);" class="side_link">升为管理员</a></li>
+ 			<?php endif; ?>	
+ 		<?php endif; ?>	
+
+ 		<?php do_action( 'UI_BUDDY_ITEM_INFO_FIRST' , $item ); ?>
+ 		<?php if( strlen($item['email']) ): ?>
+ 			<li><i class="icon-envelope" ></i>&nbsp;邮箱 - <a href="mailto:<?=$item['email']?>" target="_blank"><?=$item['email']?></a></li>
+ 		<?php endif; ?>
+
+ 		
+ 		<?php if( strlen($item['mobile']) ): ?>
+ 			<li><i class="icon-phone" ></i>&nbsp;手机 - <a href="tel:+86<?=$item['mobile']?>" target="_blank"><?=$item['mobile']?></a></li>
+ 		<?php endif; ?>
+ 		
+
+ 		<?php if( strlen($item['tel']) ): ?>
+ 			<li><i class="icon-phone" ></i>&nbsp;分机 - <a href="tel:+86:<?=$item['tel']?>" target="_blank"><?=$item['tel']?></a></li>
+ 		<?php endif; ?>
+ 		
+
+ 		<?php if( strlen($item['eid']) ): ?>
+ 			<li><i class="icon-credit-card" ></i>&nbsp;工号 - <a href="#"><?=$item['eid']?></a></li>
+ 		<?php endif; ?>
+ 		
+ 		<?php if( strlen($item['weibo']) ): ?>
+ 			<li><i class="icon-twitter" ></i>&nbsp;微博 - <a href="http://s.weibo.com/user/<?=$item['weibo']?>" target="_blank">@<?=$item['weibo']?></a></li>
+ 		<?php endif; ?>
+ 		
+ 		<?php if( strlen($item['desp']) ): ?>
+ 			<li><i class="icon-asterisk" ></i>&nbsp;备注 - <?=nl2br($item['desp'])?></li>
+ 		<?php endif; ?>
+
+ 		<?php do_action( 'UI_BUDDY_ITEM_INFO_LAST' , $item ); ?>
+ 	</ul>	
+ </il>
+<?php do_action( 'UI_BUDDY_ITEM_AFTER' , $item ); ?>

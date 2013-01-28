@@ -1,0 +1,5 @@
+<?php if( isset( $data['items'] ) && is_array($data['items']) ): ?>
+<?php foreach( $data['items'] as $item ): ?>
+	<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'im_history.tpl.html' ); ?>
+<?php endforeach; ?>
+<?php endif; ?>	

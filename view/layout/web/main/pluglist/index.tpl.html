@@ -1,0 +1,45 @@
+
+<?php do_action( 'UI_PLUGINLIST_BEFORE' );  ?>
+<div class="row-fluid">
+<div class="span12">
+	<h2 class="main_board">插件管理&nbsp;<?php if( is_writable( c('plugin_path') )  ): ?><a href="javascript:show_float_box('上传插件' , '?c=pluglist&a=upload');void(0);" class="side_link">上传插件</a><?php endif; ?> </h2>
+	<?php do_action( 'UI_PLUGIN_TABLE_BEFORE' ); ?>
+	<?php if( $plist && is_array( $plist ) ): ?>
+	<table class="table table-hover table-plugin">
+	<thead>
+		<tr>
+			<th width="100">名称</th>
+			<th width="40">版本</th>
+			<th>简介</th>
+			<th width="60">状态</th>
+		<tr>	
+	</thead>
+
+	<tbody>
+	<?php foreach( $plist as $item ): ?>
+	<tr>
+		<td><?=$item['name']?></td>
+		<td class="tcenter"><?=$item['reversion']?></td>
+		<td><?=$item['desp']?> - by <a href="mailto:<?=$item['email']?>" target="_blank"><?=$item['author']?></a></td>
+		<td>
+		<?php if( in_array( strtolower($item['folder_name']) , c('plugins') ) ):?>
+		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )" checked="true"/>启用</label>
+		<?php else: ?>
+		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )"/>启用</label>
+		<?php endif; ?>
+		</td>
+	</tr>	
+	<?php endforeach; ?>	
+	</tbody>
+	</table>
+	
+	<?php else: ?>
+	<div>没有发现可用的插件</div>
+	<?php endif; ?>	
+	<?php do_action( 'UI_PLUGIN_TABLE_AFTER' ); ?>
+
+	
+	
+</div>
+</div>
+<?php do_action( 'UI_PLUGINLIST_AFTER' );  ?>

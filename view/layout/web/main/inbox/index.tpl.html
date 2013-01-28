@@ -1,0 +1,67 @@
+<?php do_action( 'UI_INBOX_BEFORE' );  ?>
+<div class="row-fluid">
+<div class="span7">
+	<h2 class="main_board">收件箱</h2>
+
+	<?php do_action( 'UI_INBOX_LIST_BEFORE' ); ?>
+	<ul id="notice_list"></ul>	
+	<?php do_action( 'UI_INBOX_LIST_AFTER' ); ?>
+	
+
+	<?php do_action( 'UI_INBOX_SCRIPT_BEFORE' ); ?>
+	<script>
+	function loaded()
+	{
+		remember();
+		load_inbox();
+		$('.settings_icon').tooltip('show');
+		
+		if( !window.webkitNotifications )
+			$('#desknoty_li').hide();
+		else
+		{
+			if( window.webkitNotifications.checkPermission() == 0 )
+				$('#desknoty_li').css('background-color','#999');
+			else
+				$('#desknoty_link').bind('click',function(callback)
+				{
+					window.webkitNotifications.requestPermission(callback);
+				});		
+		}
+		<?php do_action( 'UI_INBOX_SCRIPT_LOAD' ); ?>
+	}
+	<?php do_action( 'UI_INBOX_SCRIPT_LAST' ); ?>
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	</script>
+	<?php do_action( 'UI_INBOX_SCRIPT_AFTER' ); ?>
+	
+</div>
+
+<?php do_action( 'UI_SIDEBOARD_BEFORE' ); ?>
+<div class="span5" id="side_board">
+<div id="nsettings_box">
+	<div id="side_container">
+		<h2 class="side_board">消息推送设置</h2>
+		<ul class="settings_icon" id="n1">
+			<li id="desknoty_li"><a href="javascript:void(0);" title="桌面通知" id="desknoty_link"><img src="<?=image('settings.btn.desktop.png')?>"/></a></li>
+		<!--
+			<li><a href="#" title="邮件通知" rel="tooltip"><img src="<?=image('settings.btn.email.png')?>"/></a></li>
+			<li><a href="#" title="短信通知" rel="tooltip"><img src="<?=image('settings.btn.mobile.png')?>"/></a></li>
+		-->	<?php do_action( 'UI_INBOX_SETTINGS_LAST' ); ?>
+		</ul>	
+		<div class="line-large"></div>
+		
+		<h2 class="side_board">通过手机客户端接收通知</h2>
+		<ul class="settings_icon client">
+			<li><a href="javascript:show_float_box( '使用Android客户端登入' , '?c=inbox&a=client&type=android' );void(0);" target="_blank" title="Android" rel="tooltip"><img src="<?=image('settings.btn.android.png')?>"/></a></li>
+			<li><a href="javascript:show_float_box( '使用iOS客户端登入' , '?c=inbox&a=client&type=ios' );void(0);" target="_blank" title="iOS" rel="tooltip"><img src="<?=image('settings.btn.ios.png')?>"/></a></li>
+			<?php do_action( 'UI_INBOX_CLIENT_LAST' ); ?>
+		</ul>		
+		
+	</div>	
+</div>	
+
+</div>
+<?php do_action( 'UI_SIDEBOARD_AFTER' ); ?>
+</div>	
+<?php do_action( 'UI_INBOX_AFTER' );  ?>

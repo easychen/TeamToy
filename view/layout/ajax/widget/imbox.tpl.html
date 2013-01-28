@@ -1,0 +1,18 @@
+<li id="im_box_<?=$item['id']?>" class="clearfix">
+	<div class="im_avatar">
+    	<img src="<?=avatar($item['avatar_small'])?>" alt="<?=$item['name']?>" class="namecard" uid="<?=$item['id']?>" />&nbsp;<a href="javascript:void(0);" class="namecard" uid="<?=$item['id']?>"><?=$item['name']?></a>
+    </div>
+	<div class="im_text">
+		<div class="im_history">
+			
+		</div>
+		<div class="im_form">
+			<div class="im_divider"></div>
+			<?php if( $item['id'] == uid() ):?>
+				<textarea class="im_form_textarea" disabled="disabled" uid="<?=$item['id']?>" autofocus="autofocus">亲，自言自语就不用发到服务器啦~</textarea>
+			<?php else: ?>
+			<textarea class="im_form_textarea" placeholder="输入聊天文字，按回车键送出" uid="<?=$item['id']?>" autofocus="autofocus"></textarea>
+			<?php endif; ?>
+		</div>
+	</div>
+</li>	

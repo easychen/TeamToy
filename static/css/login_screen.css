@@ -1,0 +1,15 @@
+body,html
+{
+	background: url(../image/tt2bg.png) repeat!important;
+}
+
+div.container
+{
+	width:300px;
+}
+
+button.login
+{
+	width:200px;
+	height: 50px;
+}

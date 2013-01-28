@@ -1,0 +1,8 @@
+<div class="cbox">
+<img class="close" src="static/image/cross.png" onclick="hide_pop_box();"/>
+<?php	
+	$tfile = 'view' . DS . 'layout' . DS  . g('layout') . DS . g('c') . DS . g('a') . '.tpl.html' ;
+	if( file_exists( AROOT . $tfile ) ) include( AROOT . $tfile );
+	else @include( CROOT . $tfile );
+ ?>
+</div>

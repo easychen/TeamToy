@@ -1,0 +1,47 @@
+<form action="?c=dashboard&a=update_profile" id="profile_form">
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-user"></i>&nbsp;姓名</span>
+		<input  name="name" type="text" placeholder="不可修改，请填写真实姓名" value="<?=$data['name']?>" readOnly="true" >
+</div>
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-envelope"></i>&nbsp;邮箱</span>
+		<input  name="email" type="text" placeholder="必填、用于收发通知" value="<?=$data['email']?>">
+</div>
+
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-phone"></i>&nbsp;手机</span>
+		<input  name="mobile" type="text" placeholder="必填、136****" value="<?=$data['mobile']?>">
+</div>
+
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-phone"></i>&nbsp;分机</span>
+		<input  name="tel" type="text" placeholder="请填写完整号码" value="<?=$data['tel']?>">
+</div>
+
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-credit-card"></i>&nbsp;工号</span>
+		<input  name="eid" type="text" placeholder="为接入公司其他系统预留" value="<?=$data['eid']?>">
+</div>
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-twitter"></i>&nbsp;微博</span>
+		<input  name="weibo" type="text" placeholder="微博昵称" value="<?=$data['weibo']?>">
+</div>
+
+<div class="input-prepend full">
+		<span class="add-on"><i class="icon-asterisk"></i>&nbsp;备注</span>
+		<input  name="desp" type="text" placeholder="岗位职责/其他联系方式" value="<?=$data['desp']?>">
+</div>
+
+
+<div class="line"></div>
+
+<div>
+	<button class="btn" type="button" onclick="send_form( 'profile_form' , function(data){ profile_updated( data ); } )" >更新</button>
+</div>
+
+</form>	

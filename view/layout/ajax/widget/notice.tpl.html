@@ -1,0 +1,30 @@
+<?php do_action( 'UI_INBOX_ITEM_BEFORE' , $item ); ?>
+<?php $item = apply_filter( 'UI_INBOX_ITEM_FILTER' , $item ); ?>
+<?php if( $item['type'] == 1 ): ?>
+<li class="todo" tid="<?=$item['data']['tid']?>" id="nid-<?=$item['id']?>"  >
+	<a href="javascript:void(0);" class="namecard" uid="<?=$item['uid']?>" ><?=$item['user']['name']?></a>&nbsp;<?=link_at(noname($item['content'] , $item['user']['name'] ));?> 
+	<div><span class="time"><?=rtime($item['timeline'])?></span></div>
+</li>
+<?php elseif( $item['type'] == 2 ): ?>
+<li class="cast" fid="<?=$item['data']['fid']?>" id="nid-<?=$item['id']?>"  >
+	<a href="javascript:void(0);" class="namecard" uid="<?=$item['uid']?>" ><?=$item['user']['name']?></a>&nbsp;<?=link_at(noname($item['content'] , $item['user']['name']) );?> 
+	<div><span class="time"><?=rtime($item['timeline'])?></span></div>
+</li>
+<?php elseif( $item['type'] == 10 ): ?>
+<li class="upgrade"  id="nid-<?=$item['id']?>"  >
+	<?=$item['content']?>
+	<?php if( isset($item['data']['info']) ): ?>
+	<div class="upgrade">
+		<?=t($item['data']['info'])?><br/>
+		<?php if( is_admin() ): ?><a class="btn btn-primary" href="?c=dashboard&a=upgrade" target="_blank">立刻升级</a><?php endif; ?>
+	</div>	
+	<?php endif; ?>
+	<div><span class="time"><?=rtime($item['timeline'])?></span></div>
+</li>
+<?php else: ?>
+<li class="normal"  id="nid-<?=$item['id']?>"  >
+	<a href="javascript:void(0);" class="namecard" uid="<?=$item['uid']?>" ><?=$item['user']['name']?></a>&nbsp;<?=link_at(noname($item['content'] , $item['user']['name'] ));?> 
+	<div><span class="time"><?=rtime($item['timeline'])?></span></div>
+</li>
+<?php endif; ?>	
+<?php do_action( 'UI_INBOX_ITEM_AFTER' , $item ); ?>

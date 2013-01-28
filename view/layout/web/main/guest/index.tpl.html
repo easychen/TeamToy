@@ -1,0 +1,31 @@
+<div class="login">
+<div class="container">
+<h1><img src="<?=image('tt2.flogo.large.png')?>" /></h1>
+<center>
+<div class="login-area">
+<form class="form-horizontal" action="?c=guest&a=login" method="post" id="login_form" onsubmit="send_form_in('login_form');return false;void(0);">
+<div class="input-prepend">
+  <span class="add-on"><img src="<?=image('login.mail.png')?>" class="licon"/></span>
+  <input  name="email" type="text" placeholder="电邮地址" value="<?=v('email')?>">
+</div>  
+<div class="line-large"></div>
+<div class="input-prepend">
+  <span class="add-on"><img src="<?=image('login.lock.png')?>" class="licon"/></span>
+  <input  name="password" type="password" placeholder="密码" value="<?=v('password')?>">
+</div>  
+<div class="line-large"></div>
+<div class="line-large"></div>
+<div>
+<button class="btn btn-large btn-inverse login" type="submit" >登入</button>
+</div>
+</form>
+</div>
+</center>
+</div>
+</div>
+<script type="text/javascript">
+if( $.browser.msie )
+{
+	$('#login_form').html('<h3 style="color:white">不支持IE系浏览器<br/><br/>请换用Chome、Firefox或者Safari</h3>');	
+}
+</script>

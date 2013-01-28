@@ -1,0 +1,5 @@
+<?php if( isset( $data ) && is_array($data) ): ?>
+<?php foreach( $data as $item ): ?>
+	<?php require( AROOT .  'view' . DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'buddy.tpl.html' ); ?>
+<?php endforeach; ?>
+<?php endif; ?>	

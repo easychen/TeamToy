@@ -1,0 +1,84 @@
+<?php do_action( 'UI_BUDDY_BEFORE' ); ?>	
+<div class="row-fluid">
+<div class="span7">
+	<h2 class="main_board">团队成员</h2>
+	
+	<?php do_action( 'UI_BUDDY_LIST_BEFORE' ); ?>
+	<ul id="buddy_list"></ul>	
+	<?php do_action( 'UI_BUDDY_LIST_AFTER' ); ?>
+	
+	<?php do_action( 'UI_BUDDY_SCRIPT_BEFORE' ); ?>
+	<script>
+	function loaded()
+	{
+		remember();
+		load_buddy();
+		buddy_search();
+		<?php do_action( 'UI_BUDDY_SCRIPT_LOAD' ); ?>
+	}
+	<?php do_action( 'UI_BUDDY_SCRIPT_LAST' ); ?>
+	document.addEventListener('DOMContentLoaded', loaded, false);
+	</script>
+	<?php do_action( 'UI_BUDDY_SCRIPT_AFTER' ); ?>
+
+</div>
+
+<?php do_action( 'UI_SIDEBOARD_BEFORE' ); ?>
+<div class="span5" id="side_board">
+<div id="buddy_box">
+	<div id="side_container">
+		<h2 class="side_board">搜索成员 <?php if( $_SESSION['level'] == 9 ): ?><a href="javascript:$('#buddy_add_box').slideToggle();void(0);" class="side_link">添加</a><?php endif; ?></h2>
+		<div class="input-append ">
+  			<input id="buddy_key" type="text" placeholder="输入姓名或拼音" autofocus="autofocus">
+  			<span class="add-on">搜索</span>
+		</div>
+		<div class="line"></div>
+		<?php if( $_SESSION['level'] == 9 ): ?>
+		<div id="buddy_add_box" class="hide clearfix">
+		<h2 class="side_board">添加成员</h2>
+		<form action="?c=buddy&a=add" id="buddy_form">
+			<div class="input-prepend full">
+  				<span class="add-on"><i class="icon-user"></i>&nbsp;姓名</span>
+  				<input  name="name" type="text" placeholder="不可修改，请填写真实姓名" >
+			</div>
+
+			<div class="input-prepend full">
+  				<span class="add-on"><i class="icon-envelope"></i>&nbsp;邮箱</span>
+  				<input  name="email" type="text" placeholder="用于收发通知">
+			</div>
+
+			
+
+			<div class="input-prepend ">
+  				<span class="add-on"><i class="icon-key"></i>&nbsp;密码</span>
+  				<input  name="password" type="password" placeholder="密码" >
+			</div>
+
+
+			<div>
+				<button class="btn pull-right" type="button" onclick="send_form( 'buddy_form' , function(data){ user_added(data); } )" >添加</button>
+			</div>
+
+		</form>	
+		</div>
+		
+		<div id="buddy_mulit_box" class="hide">
+			<div class="line"></div>
+			<h2 class="side_board">添加标签 <a href="#" class="side_link">使用#标签 对一组用户点名</a></h2> 
+			<ul id="namelist"></ul>
+			<div class="input-append">
+  				<input name="tag" type="text" class="full" placeholder="输入要添加的标签">
+  				<button class="btn" type="button">保存</button>
+			</div>
+		</div>	
+
+		<?php endif; ?>
+
+	</div>	
+</div>	
+
+</div>
+<?php do_action( 'UI_SIDEBOARD_AFTER' ); ?>
+
+</div>
+<?php do_action( 'UI_BUDDY_AFTER' ); ?>	
