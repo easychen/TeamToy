@@ -780,7 +780,7 @@ ul.history li img.avatar,ul.fcomment li img.avatar
 
 ul.history li a , ul.fcomment li a 
 {
-	color:#1982D1;
+	color:#0194C4;
 }
 
 ul.history li .exp_line , ul.fcomment li .exp_line
@@ -820,6 +820,11 @@ ul#feed_list li,ul#notice_list li
 	word-break: break-all;
 }
 
+ul#notice_list li.read
+{
+	color:#999;
+}
+
 ul#feed_list li:hover,ul#notice_list li:hover 
 {
 	background-color:white!important;
@@ -838,7 +843,7 @@ ul#feed_list li img.avatar,ul#notice_list li img.avatar
 	padding:1px;
 }
 
-ul#feed_list li span.time,ul#notice_list li span.time,ul#feed_list li .ccount
+li span.time,li .ccount
 {
 	font-size: 12px;
 	color:gray;
@@ -1046,7 +1051,7 @@ input.side_edit
 	width:226px!important;
 }
 
-ul.history:hover a.close,ul.fcomment:hover a.close
+ul.history li:hover a.close,ul.fcomment li:hover a.close,ul#feed_list li:hover a.close
 {
 	display: block;
 }

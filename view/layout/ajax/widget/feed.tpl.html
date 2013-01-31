@@ -2,19 +2,32 @@
 <?php $item = apply_filter( 'UI_FEED_ITEM_FILTER' , $item ); ?>
 <?php if( $item['type'] == 4 ): ?>
 <li class="<?=feed_class($item['type'])?>" fid="<?=$item['id']?>" uid="<?=$item['uid']?>" id="fid-<?=$item['id']?>"  >
+<?php if( ($item['uid'] == uid())  ): ?>
+	<a class="close pull-right hide"  href="javascript:feed_remove(<?=$item['id']?>);void(0);">&times;</a>
+<?php endif; ?>	
+<div class="hotarea">
 <div class="quote">
 	<?=link_at($item['content'])?>
 	<div class="via"> &mdash; <img src="<?=avatar($item['user']['avatar_small'])?>" class="avatar"> <a uid="<?=$item['uid']?>"  href="javascript:void(0);" class="namecard"><?=$item['user']['name']?></a> </div>
 </div>
 <div><span class="time"><?=rtime($item['timeline'])?>&nbsp;<?=device($item['device']);?></span>
-	<?php if( intval($item['comment_count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt"><?=intval($item['comment_count'])?></span>)</a><?php endif; ?>
+	<?php if( intval($item['comment_count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt ccount"><?=intval($item['comment_count'])?></span>)</a><?php endif; ?>
+</div>
 </div>
 
 </li>
 <?php else: ?>
 <li class="<?=feed_class($item['type'])?>" tid="<?=$item['tid']?>" uid="<?=$item['uid']?>" id="fid-<?=$item['id']?>"  >
+<?php if( ($item['uid'] == uid())  ): ?>
+	<a class="close pull-right hide"  href="javascript:feed_remove(<?=$item['id']?>);void(0);">&times;</a>
+<?php endif; ?>	
+<div class="hotarea">
+
 	<img src="<?=avatar($item['user']['avatar_small'])?>" class="avatar"> <a uid="<?=$item['uid']?>" href="javascript:void(0);" class="namecard"><?=$item['user']['name']?></a>&nbsp;<?=link_at(noname($item['content'] , $item['user']['name'] ));?> 
-	<div><span class="time"><?=rtime($item['timeline'])?>&nbsp;<?=device($item['device']);?></span></div>
+	<div><span class="time"><?=rtime($item['timeline'])?>&nbsp;<?=device($item['device']);?></span>
+	<?php if( intval($item['comment_count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt ccount"><?=intval($item['comment_count'])?></span>)</a><?php endif; ?>
+	</div>
+</div>
 </li>
 <?php endif; ?>	
 <?php do_action( 'UI_FEED_ITEM_AFTER' , $item ); ?>

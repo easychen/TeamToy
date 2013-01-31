@@ -13,10 +13,13 @@ class inboxController extends appController
 	function index()
 	{
 		
-		send_request( 'notice_mark_read' ,  array() , token());
-
 		$data['title'] = $data['top_title'] = '收件箱';
 		render( $data , 'web' , 'card' );
+	}
+
+	function mark_read()
+	{
+		send_request( 'notice_mark_read' ,  array() , token());
 	}
 	
 	function qrlogin()

@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `todo` (
   `content` varchar(255) NOT NULL,
   `timeline` datetime DEFAULT NULL,
   `owner_uid` int(11) DEFAULT NULL,
+  `comment_count` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 

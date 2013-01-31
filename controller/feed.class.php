@@ -61,6 +61,29 @@ class feedController extends appController
 		return null;
 	}
 
+	function feed_remove()
+	{
+		$fid = intval(v('fid'));
+		if( $fid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+
+		$params = array();
+		$params['fid'] = $fid;
+
+		if($content = send_request( 'feed_remove' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			if( $data['err_code'] == 0 )
+			{
+				return render( array( 'code' => 0 , 'data' => $data['data']) , 'rest' );
+			}
+			else
+				return render( array( 'code' => 100002 , 'message' => 'can not save data' ) , 'rest' );
+			//return render( array( 'code' => 0 , 'data' => $data['data'] ) , 'rest' );
+		}
+
+		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+	}
+
 	function feed_remove_comment()
 	{
 		$cid = intval(v('cid'));

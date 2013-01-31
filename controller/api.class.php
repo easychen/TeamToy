@@ -339,7 +339,7 @@ class apiController extends appController
 			$zip->debug = false;	
 		
 			$zip->unzipAll( AROOT  );
-			chmod( AROOT , 0755 );
+			@chmod( AROOT , 0755 );
 			
 			if( isset( $info['post_script'] ) ) $pscript = t($info['post_script']);
 			else $pscript = false;
@@ -452,6 +452,9 @@ class apiController extends appController
      */
 	function user_update_password()
 	{
+		
+		if( !c('can_modify_password') ) return $this -> send_error( LR_API_ARGS_ERROR , 'CANNOT MODITY PASSWORD IN THIS MODE' );
+
 		$opassword = z(t(v('opassword')));
 		if( !not_empty($opassword) ) return $this -> send_error( LR_API_ARGS_ERROR , 'old password FIELD REQUIRED' );
 		
@@ -719,7 +722,19 @@ class apiController extends appController
 			if( db_errno() != 0 )
 				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
+			{
+				// 更新todo 评论计数
+				$tid = $hitem['tid'];
+				$count = get_var( "SELECT COUNT(*) FROM `todo_history` WHERE `tid` = '" . intval($tid) . "' AND `type` = 2 " , db()) ;
+				$sql = "UPDATE `todo` SET `comment_count` = '" . intval($count) . "' WHERE `id` = '" . intval($tid) . "' LIMIT 1";
+				run_sql( $sql );
+
+				$sql = "UPDATE `feed` SET `comment_count` = '" . intval( $count ) . "' WHERE `tid` = '" . intval( $tid ) . "' AND `comment_count` != '" . intval( $count )  . "' ";
+				run_sql( $sql );		
+
 				return $this->send_result( $hitem );
+			}
+				
 		}
 		
 		
@@ -761,6 +776,15 @@ class apiController extends appController
 		{
 			$lid = last_id();
 			
+			// 更新todo 评论计数
+			$count = get_var( "SELECT COUNT(*) FROM `todo_history` WHERE `tid` = '" . intval($tid) . "' AND `type` = 2 " , db()) ;
+			$sql = "UPDATE `todo` SET `comment_count` = '" . intval($count) . "' WHERE `id` = '" . intval($tid) . "' LIMIT 1";
+			run_sql( $sql );
+
+			$sql = "UPDATE `feed` SET `comment_count` = '" . intval( $count ) . "' WHERE `tid` = '" . intval( $tid ) . "' AND `comment_count` != '" . intval( $count )  . "' ";
+			run_sql( $sql );			
+
+
 			// 向订阅todo的同学发送通知
 			$sql = "SELECT `uid` FROM `todo_user` WHERE `tid`= '" . intval($tid) . "' AND `is_follow` = 1 ";
 			
@@ -772,7 +796,7 @@ class apiController extends appController
 				{
 					if( !in_array( $uitem['uid'] , $follow_uids ) )
 					{
-						send_notice( $uitem['uid'] , uname() .'评论了你关注的TODO【'. $tinfo['content'] .'】: '.$content , 1 , array('tid'=>intval($tid) )  );
+						send_notice( $uitem['uid'] , uname() .'评论了你关注的TODO【'. $tinfo['content'] .'】: '.$content , 1 , array('tid'=>intval($tid) , 'count' => $count )  );
 
 						$follow_uids[] = $uitem['uid'];
 					} 
@@ -787,7 +811,7 @@ class apiController extends appController
 			if( $tinfo['owner_uid'] != uid() )
 			{
 				if( !in_array( $tinfo['owner_uid'] , $follow_uids ) )
-					send_notice( $tinfo['owner_uid'] , uname() .'评论了你的TODO【'. $tinfo['content'] .'】: '.$content , 1 ,  array('tid'=>intval($tid) )  );
+					send_notice( $tinfo['owner_uid'] , uname() .'评论了你的TODO【'. $tinfo['content'] .'】: '.$content , 1 ,  array('tid'=>intval($tid) , 'count' => $count )  );
 			}
 			
 			// 向被@的同学，发送通知
@@ -819,7 +843,7 @@ class apiController extends appController
 						foreach( $myuids as $muid )
 						{
 							if( $muid != uid() && $muid != $tinfo['owner_uid'] )
-							send_notice( $muid , uname().'在TODO【'.$tinfo['content'].'】的评论中@了你: '.$content , 1 , array('tid'=>intval($tid)  ));
+							send_notice( $muid , uname().'在TODO【'.$tinfo['content'].'】的评论中@了你: '.$content , 1 , array('tid'=>intval($tid) , 'count' => $count  ));
 						}
 					}
 						
@@ -950,8 +974,9 @@ class apiController extends appController
 			$uinfo = get_user_info_by_id($uid);	
 			
 			$todo_text = get_todo_text_by_id( $tid );
+			$todo_count = get_var( "SELECT `comment_count` FROM `todo` WHERE `id` = '" . intval( $tid ) . "'" );
 			// 向todo新主人发送通知
-			send_notice( intval( $uid ) , uname() .'向你转让了TODO【'. $todo_text .'】' , 1 ,  array('tid'=>intval($tid))  );
+			send_notice( intval( $uid ) , uname() .'向你转让了TODO【'. $todo_text .'】' , 1 ,  array('tid'=>intval($tid) , 'count'=> $todo_count )  );
 			
 			
 			// 向todo关注者发送通知
@@ -962,7 +987,7 @@ class apiController extends appController
 			{
 				// 避免向当前转让人发送通知
 				if( $uitem['uid'] != uid() )
-					send_notice( $uitem['uid'] , uname() .'将你关注的TODO【'. $todo_text .'】转让给了'.$uinfo['name'] , 1 , array('tid'=>intval($tid) )  );
+					send_notice( $uitem['uid'] , uname() .'将你关注的TODO【'. $todo_text .'】转让给了'.$uinfo['name'] , 1 , array('tid'=>intval($tid) , 'count'=> $todo_count )  );
 			}
 			
 			add_history( $tid , '转让了TODO'  );
@@ -1021,9 +1046,9 @@ class apiController extends appController
         if( $count > 100 ) $count = 100;
         
         if( $since_id > 0 )
-            $wsql = " AND `id` > '" . intval( $since_id ) . "' ";
+            $wsql = " AND `tid` > '" . intval( $since_id ) . "' ";
         elseif( $max_id > 0 )
-            $wsql = " AND `id` < '" . intval( $max_id ) . "' ";
+            $wsql = " AND `tid` < '" . intval( $max_id ) . "' ";
        	else
        		$wsql = '';
 
@@ -1233,7 +1258,7 @@ class apiController extends appController
 					foreach( $uitems as $uitem )
 					{
 						if( $uitem['uid'] != uid() )
-							send_notice( $uitem['uid'] , uname() .'完成了你关注的TODO【'. $todoinfo['content'] .'】' , 1 , array('tid'=>intval($tid) )  );
+							send_notice( $uitem['uid'] , uname() .'完成了你关注的TODO【'. $todoinfo['content'] .'】' , 1 , array('tid'=>intval($tid) , 'count' => $todoinfo['comment_count'] )  );
 					}
 				}
 				
@@ -1618,7 +1643,7 @@ class apiController extends appController
 							$myuids = array_unique($myuids);
 							foreach( $myuids as $muid )
 								if( $muid != uid() )
-									send_notice( $muid , uname().'在广播【'.$content.'】中@了你' , 2 , array('fid'=>intval($lid) ));
+									send_notice( $muid , uname().'在广播【'.$content.'】中@了你' , 2 , array('fid'=>intval($lid) , 'count'=> $feed['comment_count'] ));
 								
 						}
 					}
@@ -1637,7 +1662,7 @@ class apiController extends appController
 								$myuids = array_unique($myuids);
 								foreach( $myuids as $muid )
 									if( $muid != uid() )
-										send_notice( $muid, uname().'发起了广播【'.$content.'】' , 2 , array('fid'=>intval($lid) ));
+										send_notice( $muid, uname().'发起了广播【'.$content.'】' , 2 , array('fid'=>intval($lid) , 'count'=> $feed['comment_count']  ));
 							}
 						
 					}
@@ -1820,6 +1845,38 @@ class apiController extends appController
 	}
 
 	/**
+     * 删除Feed
+     *
+     *
+     * @param string token , 必填
+     * @param string fid - 必填
+     * @return feed array 
+     * @author EasyChen
+     */
+	public function feed_remove( $fid = false )
+	{
+		if( !$fid ) $fid = intval(v('fid'));
+		if( intval( $fid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'FID NOT EXISTS' );
+
+		$finfo = get_line("SELECT * FROM `feed` WHERE `id` = '" . intval( $fid ) . "' LIMIT 1");
+		if( $finfo['uid'] != uid() && !is_admin() ) 
+			return $this->send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S FEED' );
+
+		$sql = "DELETE FROM `feed` WHERE `id` = '" . intval( $fid ) . "' LIMIT 1";
+		run_sql( $sql );
+
+		$sql = "DELETE FROM `comment` WHERE `fid` = '" . intval( $fid ) . "'";
+		run_sql( $sql );
+
+		if( db_errno() != 0 )
+				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+			else
+				return $this->send_result( $finfo );
+
+
+	}
+
+	/**
      * 为Feed添加评论
      *
      *
@@ -1877,7 +1934,7 @@ class apiController extends appController
 				$myuids = array_unique($myuids);
 				foreach( $myuids as $muid )
 				{
-					send_notice( $muid , uname() .'评论了你参与讨论的动态【'. $finfo['content'] .'】: '.$content , 2 , array('fid'=>intval($fid) )  );	
+					send_notice( $muid , uname() .'评论了你参与讨论的动态【'. $finfo['content'] .'】: '.$content , 2 , array('fid'=>intval($fid) , 'count'=> $count  )  );	
 				}
 			}
 				
@@ -1886,7 +1943,7 @@ class apiController extends appController
 			// 向Feed作者发通知
 			if( $finfo['uid'] != uid() )
 			{
-				send_notice( $finfo['uid'] , uname() .'评论了你的动态【'. $finfo['content'] .'】: '.$content , 2 ,  array('fid'=>intval($fid) )  );
+				send_notice( $finfo['uid'] , uname() .'评论了你的动态【'. $finfo['content'] .'】: '.$content , 2 ,  array('fid'=>intval($fid) , 'count'=> $count  )  );
 			}
 			
 			// 向被@的同学，发送通知
@@ -1917,7 +1974,7 @@ class apiController extends appController
 							$myuids = array_unique( $myuids );
 							foreach( $myuids as $muid )
 								if( $muid != uid() && $muid != $finfo['uid'] )
-									send_notice( $muid , uname().'在动态【'.$finfo['content'].'】的评论中@了你: '.$content , 2 , array('fid'=>intval($fid) ));
+									send_notice( $muid , uname().'在动态【'.$finfo['content'].'】的评论中@了你: '.$content , 2 , array('fid'=>intval($fid) , $count  ));
 						
 						}
 
@@ -2023,15 +2080,7 @@ class apiController extends appController
 			
 	}
 	
-	/**
-     * 删除Feed
-     *
-     *
-     * @param string token , 必填
-     * @param string fid - 必填
-     * @return feed array 
-     * @author EasyChen
-     */
+	/*
 	public function feed_remove()
 	{
 		$fid = intval(v('fid'));
@@ -2057,7 +2106,7 @@ class apiController extends appController
         }
         else
             return $this -> send_result( $data );
-	}
+	}*/
 
 	
 	public function user_online()

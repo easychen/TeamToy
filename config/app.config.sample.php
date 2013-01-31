@@ -11,12 +11,13 @@ $GLOBALS['config']['api_server'] = $GLOBALS['config']['site_url'] . '/index.php'
 $GLOBALS['config']['api_check_new_verison'] = true;
 $GLOBALS['config']['teamtoy_url'] = 'http://tt2net.sinaapp.com';
 $GLOBALS['config']['at_short_name'] = true ;
+$GLOBALS['config']['can_modify_password'] = true ;
 
 // session time
 // you need change session lifetime in php.ini to0
 $GLOBALS['config']['session_time'] = 60*60*24*3 ;
 
 $GLOBALS['config']['plugin_path'] = AROOT . DS . 'plugin' . DS ;
-$GLOBALS['config']['plugins'] = array( 'css_modifier' , 'simple_token' );
+$GLOBALS['config']['plugins'] = array( 'css_modifier' , 'simple_token');
 
 

@@ -184,7 +184,11 @@ function send_notice( $uid , $content , $type = 1 , $data = null )
 	run_sql( $sql );
 	
 	if( db_errno() != 0 ) die( db_error() );
-	else return true;
+	else
+	{
+		do_action('SEND_NOTICE_AFTER', array( 'uid' => $uid , 'content' => $content , 'type' => $type , 'data' => $data ) );
+		return true;
+	} 
 }
 
 function add_history( $tid , $content )
@@ -200,14 +204,30 @@ function publish_feed( $content , $uid , $type = 0 , $tid = 0  )
 	if( is_mobile_request() ) $device = 'mobile';
 	else $device = 'web';
 
-	$sql = "INSERT INTO `feed` ( `content` , `tid` , `uid` , `type` ,`timeline` , `device` ) VALUES ( '" . s($content) . "' , '" . intval( $tid ) . "', '" . intval( $uid ) . "'  , '" . intval( $type ) . "' , NOW() , '" . s( $device ) . "' )";
-		
+	$tid = intval($tid);
+	if( $type == 2 && $tid > 0 )
+		$comment_count = get_var( "SELECT COUNT(*) FROM `todo_history` WHERE `tid` = '" . intval($tid) . "' AND `type` = 2 " , db()) ;
+	else
+		$comment_count = 0;
+
+	$sql = "INSERT INTO `feed` ( `content` , `tid` , `uid` , `type` ,`timeline` , `device` , `comment_count` ) VALUES ( '" . s($content) . "' , '" . intval( $tid ) . "', '" . intval( $uid ) . "'  , '" . intval( $type ) . "' , NOW() , '" . s( $device ) . "' , '" . intval( $comment_count ) . "' )";
 	run_sql( $sql );
+
+	$lid = last_id();
 	
 	if( db_errno() != 0 )
 		return  false;
 	else
-		return last_id();
+	{
+		if( $comment_count > 0 && $type == 2 && $tid > 0 )
+		{
+			$sql = "UPDATE `feed` SET `comment_count` = '" . intval( $comment_count ) . "' WHERE `tid` = '" . intval( $tid ) . "' AND `comment_count` != '" . intval( $comment_count )  . "' ";
+			run_sql( $sql );	
+		}
+		
+		return $lid ;
+	}
+		
 }
 
 

@@ -43,6 +43,8 @@ setInterval( check_notice , 100000 );
 setTimeout( check_online , 1000 );
 setInterval( check_online , 100000 );
 
+<?php do_action( 'UI_COMMON_SCRIPT' ); ?>
+
 
 var site_url = '<?=c('site_url')?>';
 var favicon = site_url + '/<?=c('favicon')?>';

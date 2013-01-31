@@ -27,7 +27,7 @@
 	<?php endif; ?>	
 	
 
-	<li class="owner"><a href="#" class="namecard"><?=$data['owner']['name']?></a></li>
+	<li class="owner"><a href="javascript:void(0);" class="namecard" uid="<?=$data['owner']['uid']?>"><?=$data['owner']['name']?></a></li>
 <?php else: ?>	
 <li class="forward"><a href="javascript:todo_forward( '<?=$data['tid']?>','?c=dashboard&a=people_box&jsfunc=todo_assign&tid=<?=$data['tid']?>');" >转让</a></li>
 <?php if( intval($data['details']['is_public']) == 1 ): ?>

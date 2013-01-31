@@ -52,6 +52,10 @@ class dashboardController extends appController
 
 		$sql = "ALTER TABLE  `comment` ADD  `device` varchar(16) NOT NULL ";
 		run_sql( $sql );	
+
+		$sql = "ALTER TABLE  `keyvalue` CHANGE  `key`  `key` VARCHAR( 64 ) NOT NULL";
+		run_sql( $sql );
+	
 		
 
 		$sql = "CREATE TABLE IF NOT EXISTS `online` (
@@ -73,6 +77,10 @@ PRIMARY KEY (  `folder_name` )
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8";
 	
 		run_sql( $sql );
+
+		$sql = "ALTER TABLE  `todo` ADD  `comment_count` INT NOT NULL DEFAULT  '0' ";
+		run_sql( $sql );
+		
 		
 		return info_page('更新完成，请<a href="?c=dashboard">用力刷新页面以保证新代码正常工作</a>');	
 		

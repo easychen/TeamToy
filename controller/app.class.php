@@ -36,6 +36,7 @@ class appController extends coreController
 		}
 
 		$GLOBALS['config']['plugins'] = $plugins;
+
 		// update config for this time
 
 		// 载入默认的

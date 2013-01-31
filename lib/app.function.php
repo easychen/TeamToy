@@ -21,6 +21,11 @@ function on_sae()
     return defined('SAE_ACCESSKEY') && (substr( SAE_ACCESSKEY , 0 , 4 ) != 'kapp') ;
 }
 
+function is_online( $uid )
+{
+    $sql = "SELECT * FROM `online` WHERE `uid` = '" . intval( $uid ) . "' AND `last_active` > '" . date( "Y-m-d H:i:s" , strtotime("-5 minutes") ) . "' LIMIT 1";
+    return get_line( $sql );
+}
 
 function is_installed()
 {
@@ -242,6 +247,12 @@ function render_html( $data , $tpl )
 	// 
 }
 
+function read_class( $is_read )
+{
+    if( intval($is_read) == 1 ) return  'read' ; 
+    else return  'unread';
+}
+
 function feed_class(  $type )
 {
 	switch( $type )
@@ -368,7 +379,8 @@ function find_at( $text )
 
 function jpeg_up( $source , $dest )
 {
-	$img_info = @exif_read_data( $source , ANY_TAG  );
+	if( !function_exists('exif_read_data') ) return copy( $source , $dest );
+    $img_info = @exif_read_data( $source , ANY_TAG  );
   	switch( $img_info['Orientation'] )
   	{
   	  	case 6:
@@ -613,6 +625,41 @@ function build_hook_id( $tag , $function )
     }
 }
 
+function scan_plugin_info()
+{
+    if( file_exists( c('plugin_path') ) )
+    foreach( glob( c('plugin_path') . DS . "*" , GLOB_ONLYDIR ) as $pfold  )
+    {
+        $app_file = $pfold .DS .'app.php';
+        if( file_exists( $app_file ) )
+            if($pinfo = get_plugin_info( file_get_contents( $app_file ) ))
+            $plist[] = $pinfo;
+    }
+    return isset( $plist ) ? $plist : false;
+}
+
+function get_plugin_info( $content )
+{
+    $reg = '/\*\*\*\s+(.+)\s+\*\*\*/is';
+    if( preg_match( $reg , $content , $out ) )
+    {
+        $info_content = $out[1];
+        $lines = explode('##',$info_content);
+        array_shift($lines);
+        foreach( $lines as $line )
+        {
+            $line = trim($line);
+            list( $key , $value ) = explode( ' ' , $line , 2 );
+            $ret[$key] = z(t($value)); 
+        }
+
+        if( isset($ret) )return $ret;
+
+    }
+
+    return false;
+}
+
 // =================================================
 // make mentions
 // =================================================
@@ -649,44 +696,54 @@ function link_at( $str )
 }
 
 
-function scan_plugin_info()
-{
-    if( file_exists( c('plugin_path') ) )
-    foreach( glob( c('plugin_path') . DS . "*" , GLOB_ONLYDIR ) as $pfold  )
-    {
-        $app_file = $pfold .DS .'app.php';
-        if( file_exists( $app_file ) )
-            if($pinfo = get_plugin_info( file_get_contents( $app_file ) ))
-            $plist[] = $pinfo;
-    }
-    return isset( $plist ) ? $plist : false;
-}
 
-function get_plugin_info( $content )
-{
-    $reg = '/\*\*\*\s+(.+)\s+\*\*\*/is';
-    if( preg_match( $reg , $content , $out ) )
-    {
-        $info_content = $out[1];
-        $lines = explode('##',$info_content);
-        array_shift($lines);
-        foreach( $lines as $line )
-        {
-            $line = trim($line);
-            list( $key , $value ) = explode( ' ' , $line , 2 );
-            $ret[$key] = z(t($value)); 
-        }
-
-        if( isset($ret) )return $ret;
-
-    }
-
-    return false;
-}
 
 function array_remove( $value , $array )
 {
     return array_diff($array, array($value));
+}
+
+function phpmailer_send_mail(  $to , $subject , $body , $from ,  $host , $port , $user , $password )
+{
+    if( !isset( $GLOBALS['LP_MAILER'] ) )
+    {
+        include_once( AROOT . 'lib' . DS . 'phpmailer.class.php' );
+        $GLOBALS['LP_MAILER'] = new PHPMailer();
+    }
+
+    $mail = $GLOBALS['LP_MAILER'];
+    $mail->CharSet = 'UTF-8';
+    $mail->Encoding = 'base64';
+    $mail->IsSMTP(); 
+    $mail->Host = $host;
+    $mail->SMTPAuth = true;   
+    //$mail->SMTPKeepAlive = true;
+    $mail->Port = $port;
+    $mail->Username = $user;
+    $mail->Password = $password;
+    $mail->SetFrom($from );
+    $mail->AddReplyTo($from);
+
+    $mail->Subject = $subject ;
+    $mail->WordWrap = 50;
+    $mail->MsgHTML($body);
+    $mail->AddAddress( $to );
+
+    if(!$mail->Send())
+    {
+        //echo $mail->ErrorInfo;
+        return false;
+    }
+    else
+    {
+        $mail->ClearAddresses();
+        return true;
+    }
+   
+
+
+    
+
 }
 
 

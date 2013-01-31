@@ -179,7 +179,7 @@ function load_inbox( max_id )
 		bind_notice();
 		namecard();
 		done();
-		
+		$.post( '?c=inbox&a=mark_read' , {}  );
 	} );
 	doing();
 }
@@ -450,6 +450,33 @@ function todo_clean()
 }
 
 // $("li#fid-"+fid+" span.cnt").text( parseInt( $("li#fid-"+fid+" span.cnt").text() ) + 1 );
+function feed_remove( fid )
+{
+	if( confirm( '广播删除后不可恢复，继续？' ) )
+	{
+		var url = '?c=feed&a=feed_remove' ;
+		var params = { 'fid' : fid  };
+		$.post( url , params , function( data )
+		{
+			var data_obj = $.parseJSON( data );
+			 
+			if( data_obj.err_code == 0 )
+			{
+				$('#fid-'+fid).remove();
+			}
+			else
+			{
+				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			}
+			done();
+		} );
+		doing();
+	}
+
+	
+
+}
+
 function feed_remove_comment( cid )
 {
 	if( confirm( '确定删除这条评论？' ) )
@@ -819,6 +846,7 @@ function check_online()
 		if( data_obj.err_code == 0 )
 		{
 			var uids = new Array();
+			if(!data_obj.data) return false;
 			for( var i = 0; i < data_obj.data.length ; i++ )
 			{
 				uids.push(parseInt(data_obj.data[i].uid));
@@ -1144,7 +1172,7 @@ function bind_todo()
 
 function bind_feed()
 {
-	$('#feed_list li.todo').each( function()
+	$('#feed_list li.todo .hotarea').each( function()
 	{
 		$(this).css({'cursor':'pointer'});
 
@@ -1152,12 +1180,12 @@ function bind_feed()
 		$(this).bind( 'click' , function(evt)
 		{
 			evt.stopPropagation();
-			show_todo_detail( $('#'+this.id).attr('tid') );
+			show_todo_detail( $('#'+this.parentNode.id).attr('tid') );
 			return false;
 		} );
 	});
 
-	$('#feed_list li.cast').each( function()
+	$('#feed_list li.cast .hotarea').each( function()
 	{
 		$(this).css({'cursor':'pointer'});
 
@@ -1165,7 +1193,7 @@ function bind_feed()
 		$(this).bind( 'click' , function(evt)
 		{
 			evt.stopPropagation();
-			show_feed_detail( $('#'+this.id).attr('fid') );
+			show_feed_detail( $('#'+this.parentNode.id).attr('fid') );
 			return false;
 		} );
 	});
