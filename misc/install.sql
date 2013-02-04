@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `feed` (
 --
 
 CREATE TABLE IF NOT EXISTS `keyvalue` (
-  `key` varchar(16) NOT NULL,
+  `key` varchar(64) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
   UNIQUE KEY `key` (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

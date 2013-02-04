@@ -59,7 +59,7 @@ class pluglistController extends appController
 			$zip = new dUnzip2( $tmp_name );
 			$zip->debug = false;	
 			$zip->unzipAll( $plug_path  );
-			chmod( $plug_path , 0755 );
+			@chmod( $plug_path , 0755 );
 			$info_file = $plug_path . DS . 'app.php';
 			if( file_exists( $info_file ) )
 			{

@@ -1,3 +1,8 @@
+$.ajaxSetup
+({
+  dataType: "text"
+});
+
 /*
 send form data via ajax and return the data to callback function 
 */

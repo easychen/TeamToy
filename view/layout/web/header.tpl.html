@@ -35,7 +35,10 @@
 			  <ul class="dropdown-menu">
         <li><a href="http://teamtoy.net" target="_blank">TeamToy V<?=local_version()?></a></li>
         <?php if( is_admin() ): ?>
+        <?php if( is_writable(AROOT) ): ?>
         <li><a href="javascript:check_version();void(0);" target="_blank">版本升级</a></li>
+        <?php else: ?>
+        <?php endif; ?>
         <?php do_action( 'UI_USERMENU_ADMIN_LAST' ); ?> 
         <?php endif; ?>
         <li class="divider"></li>

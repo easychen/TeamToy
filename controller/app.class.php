@@ -9,33 +9,41 @@ class appController extends coreController
 {
 	function __construct()
 	{
-		// 载入插件
-		$plugins = c('plugins');
-		if( mysql_query("SHOW COLUMNS FROM `plugin`",db()) )
-		if($pinfos = get_data("SELECT * FROM `plugin`"))
+		// 安装时不启用插件
+		if(g('c')!= 'install')
 		{
-			foreach( $pinfos as $pinfo )
+			// 载入插件
+			$plugins = c('plugins');
+			
+			if( mysql_query("SHOW COLUMNS FROM `plugin`",db()) )
+			if($pinfos = get_data("SELECT * FROM `plugin`"))
 			{
-				if( intval($pinfo['on']) == 0 )
-					$plugins = array_remove( $pinfo['folder_name'] , $plugins );
-				elseif( !in_array( $pinfo['folder_name'] , $plugins ) )
-					$plugins[] = $pinfo['folder_name'];	
+				foreach( $pinfos as $pinfo )
+				{
+					if( intval($pinfo['on']) == 0 )
+						$plugins = array_remove( $pinfo['folder_name'] , $plugins );
+					elseif( !in_array( $pinfo['folder_name'] , $plugins ) )
+						$plugins[] = $pinfo['folder_name'];	
+				}
 			}
+
+			if( is_array($plugins) ) $plugins = array_unique( $plugins );
+			if( isset($plugins) && is_array( $plugins ) )
+			{
+				
+				foreach( $plugins as $plugin )
+				{
+					$plugin_file = c('plugin_path') . DS . basename($plugin) . DS . 'app.php';				
+					if( file_exists( $plugin_file ) )
+						require_once( $plugin_file );
+				}
+			}
+
+			$GLOBALS['config']['plugins'] = $plugins;	
 		}
 		
-		if( is_array($plugins) ) $plugins = array_unique( $plugins );
-		if( isset($plugins) && is_array( $plugins ) )
-		{
-			
-			foreach( $plugins as $plugin )
-			{
-				$plugin_file = c('plugin_path') . DS . basename($plugin) . DS . 'app.php';				
-				if( file_exists( $plugin_file ) )
-					require_once( $plugin_file );
-			}
-		}
-
-		$GLOBALS['config']['plugins'] = $plugins;
+		
+		
 
 		// update config for this time
 

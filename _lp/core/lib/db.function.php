@@ -23,7 +23,9 @@ function db( $host = null , $port = null , $user = null , $password = null , $db
 		if( !$GLOBALS['LP_'.$db_key] = mysql_connect( $host.':'.$port , $user , $password , true ) )
 		{
 			//
-			echo 'can\'t connect to database';
+			//echo 'can\'t connect to database';
+			$GLOBALS['LP_DB_CONNECT_ERROR'] = true;
+			$GLOBALS['LP_DB_CONNECT_ERROR_INFO'] = 'can\'t connect to database';
 			return false;
 		}
 		else
@@ -32,13 +34,19 @@ function db( $host = null , $port = null , $user = null , $password = null , $db
 			{
 				if( !mysql_select_db( $db_name , $GLOBALS['LP_'.$db_key] ) )
 				{
-					echo 'can\'t select database ' . $db_name ;
+					//echo 'can\'t select database ' . $db_name ;
+					$GLOBALS['LP_DB_CONNECT_ERROR'] = true;
+					$GLOBALS['LP_DB_CONNECT_ERROR_INFO'] = 'can\'t select database ' . $db_name ;
 					return false;
 				}
 			}
 		}
 		
-		mysql_query( "SET NAMES 'UTF8'" , $GLOBALS['LP_'.$db_key] );
+		if(@mysql_query( "SET NAMES 'UTF8'" , $GLOBALS['LP_'.$db_key] ))
+		{
+			$GLOBALS['LP_DB_CONNECT_ERROR'] = false;
+			$GLOBALS['LP_DB_CONNECT_ERROR_INFO'] = '' ;
+		}
 	}
 	
 	return $GLOBALS['LP_'.$db_key];

@@ -1571,30 +1571,30 @@ div.upgrade a.btn
 	padding-left:2px;
 }
 
-.table-plugin
+.table-plugin,.table-install
 {
 	background-color: white;
 	color:#333;
 	margin-top:20px;
 }
 
-.table-plugin a
+.table-plugin a,.table-install a
 {
 	color:gray;
 }
 
-.table-plugin thead
+.table-plugin thead,.table-install thead
 {
 	color:white;
 	background-color: #273342;
 }
 
-.table-plugin td,.table-plugin th
+.table-plugin td,.table-plugin th,.table-install td,.table-install th
 {
 	padding:15px;
 }
 
-.table-plugin th
+.table-plugin th , .table-install th
 {
 	padding-top:8px;
 	padding-bottom:8px;
@@ -1604,6 +1604,17 @@ div.upgrade a.btn
 {
 	text-align:center;
 }
+
+.table-install tbody tr
+{
+	color:gray;
+}
+
+.table-install tr.bad
+{
+	color:red;
+}
+
 
 @media (max-width: 480px) 
 {	

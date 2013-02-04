@@ -2589,7 +2589,11 @@ class apiController extends appController
         if( g('API_EMBED_MODE') == 1 )
         	return json_encode( $obj );
         else
-        	die( json_encode( $obj ) );
+		 {
+			header('Content-type: application/json');
+			die( json_encode( $obj ) );
+		 }
+		 	
     }
     
     /*
@@ -2607,7 +2611,10 @@ class apiController extends appController
         if( g('API_EMBED_MODE') == 1 )
         	return json_encode( $obj );
         else
-        	die( json_encode( $obj ) );
+		 {
+			header('Content-type: application/json');
+			die( json_encode( $obj ) );
+		 }
     }
 }
 ?>

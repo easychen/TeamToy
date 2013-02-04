@@ -304,8 +304,6 @@ PRIMARY KEY (  `folder_name` )
 
 	function update_password()
 	{
-		return  render( array( 'code' => 100002 , 'message' => 'demo cannot modify password' ) , 'rest' );
-
 		$opassword = z(t(v('oldpassword')));
 		if( strlen($opassword) < 1 ) return  render( array( 'code' => 100002 , 'message' => 'bad args,old password required' ) , 'rest' );
 		

@@ -29,6 +29,7 @@ function is_online( $uid )
 
 function is_installed()
 {
+    if( !db()) return false;
     return mysql_query("SHOW COLUMNS FROM `user`",db());
 }
 
@@ -301,17 +302,19 @@ function get_device()
 
 function login( $email , $password )
 {
-	if($content = file_get_contents( c('api_server') . '?c=api&a=user_get_token&email=' . u($email) . '&password=' .u($password) ))
-	{
-		$data = json_decode( $content , 1 );
-		if( ($data['err_code'] == 0) && is_array( $data['data'] ) )
-			return $data['data'];
-		else
-			return false;
-	}
-	return null;
-	
-	
+    $params = array();
+    $params['email'] = $email;
+    $params['password'] = $password;
+
+    if($content = send_request( 'user_get_token' ,  $params ))
+    {
+        $data = json_decode( $content , 1 );
+        if( ($data['err_code'] == 0) && is_array( $data['data'] ) )
+            return $data['data'];
+        else
+            return false;
+    }
+    return null;
 }
 
 function token()
@@ -319,7 +322,7 @@ function token()
 	return $_SESSION['token'];
 }
 
-function send_request( $action , $param , $token )
+function send_request( $action , $param , $token = null )
 {
 	require_once( AROOT . 'controller' . DS . 'api.class.php' );
     require_once( AROOT . 'model' . DS . 'api.function.php' );
@@ -329,7 +332,8 @@ function send_request( $action , $param , $token )
     $bake_request = $_REQUEST;
     $_REQUEST['c'] = 'api';
     $_REQUEST['a'] = $action;
-    $_REQUEST['token'] = $token;
+    if( $token !== null )
+        $_REQUEST['token'] = $token;
 
     if( (is_array( $param )) && (count($param) > 0) )
         foreach( $param as $key => $value )

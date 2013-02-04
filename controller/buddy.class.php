@@ -38,6 +38,8 @@ class buddyController extends appController
 
 		//ajax_echo( print_r( $_REQUEST , 1 ) );
 		$name = z(t(v('name')));
+		// remove spaces in name
+		$name = str_replace( ' ' , '' , $name );
 		if( strlen($name) < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
 
 		$email = z(t(v('email')));

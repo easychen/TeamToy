@@ -48,6 +48,8 @@ $magic_controllers = array( 'api' , 'plugin' );
 $o = new $class_name;
 if( !method_exists( $o , $a ) && !in_array( $c , $magic_controllers ) ) die('Can\'t find method - '   . $a . ' ');
 
+if( strlen(c('timezone')) > 1 && function_exists('date_default_timezone_set') )
+@date_default_timezone_set( c('timezone') );
 
 if(strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE && @ini_get("zlib.output_compression")) ob_start("ob_gzhandler");
 call_user_func( array( $o , $a ) );
