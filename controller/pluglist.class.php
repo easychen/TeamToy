@@ -7,6 +7,7 @@ class pluglistController extends appController
 	function __construct()
 	{
 		parent::__construct();
+		$this->check_login();
 	}
 	
 	function index()
@@ -40,12 +41,18 @@ class pluglistController extends appController
 
 	function upload()
 	{
+		if( !is_admin() ) 
+			return info_page('只有管理员才能进入此页面，<a href="?c=guest&a=logout">请先用管理员账户登入</a>');
+
 		$data = array();
 		return render( $data , 'ajax' );
 	}
 
 	function uploaded()
 	{
+		if( !is_admin() ) 
+			return info_page('只有管理员才能进入此页面，<a href="?c=guest&a=logout">请先用管理员账户登入</a>');
+		
 		if( $_FILES['pfile']['error'] != 0 )
 			return info_page('文件上传错误，请重新上传');
 		
