@@ -65,7 +65,13 @@ class appController extends coreController
 		$not_check = array();
 		$not_check = apply_filter('CTRL_PLUGIN_LOGIN_FILTER' , $not_check );
 
-		if( !in_array( g('a') , $not_check ))
+		if( strtolower(g('c')) == 'plugin' && in_array( g('a') , $not_check ))
+		{
+			// for some plugin no need to login
+			// not check
+
+		}
+		else
 		{
 			if( !is_login() ) return info_page('您访问的页面需要先<a href="?c=guest">登入</a>');	
 		}
