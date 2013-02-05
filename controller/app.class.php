@@ -42,14 +42,12 @@ class appController extends coreController
 			$GLOBALS['config']['plugins'] = $plugins;	
 		}
 		
-		
-		
-
 		// update config for this time
 
 		// 载入默认的
 		parent::__construct();
-
+		
+		do_action( 'CTRL_ALL' );
 		apply_filter( 'CTRL_' . g('c').'_'.g('a') .'_INPUT_FILTER' );
 		
 		if( g('c') != 'api' )
@@ -57,7 +55,9 @@ class appController extends coreController
 			// set session time
 			session_set_cookie_params( c('session_time') );
 			@session_start();
-		} 
+		}
+		do_action( 'CTRL_SESSION_STARTED' );
+				
 	}
 	
 	function check_login()

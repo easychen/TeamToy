@@ -996,6 +996,7 @@ function alert_message( uids )
 		$('#im_blist_'+this).remove();
 		$('#im_buddy_list').data('jsp').getContentPane().prepend( tmp );
 		$('#im_buddy_list').data('jsp').reinitialise();
+		$('#im_buddy_list').data('jsp').scrollToY(0);
 		
 		// 重新绑定事件
 		$('#im_buddy_list li').unbind('click');
