@@ -302,6 +302,38 @@ class apiController extends appController
         }
     }
 
+    /**
+     * 重置密码
+     *
+     * 只有管理员token才能调用
+     *
+     * @param string token , 必填  
+     * @param string uid
+     * @return msg array( 'newpass'=>newpass )
+     * @author EasyChen
+     */
+    function user_reset_password()
+    {
+    	if( $_SESSION['level'] != '9' )
+		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+
+		$uid = intval(v('uid'));
+		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+
+		if( $uid == uid() ) return $this->send_error( LR_API_ARGS_ERROR , 'CAN\'T RESET YOUR OWN PASSWORD' );
+
+		$rnd = rand( 1 , 10 );
+		$newpass = substr( md5($uid.time().rand( 1 , 9999 )) , $rnd , 15 );
+
+		$sql = "UPDATE `user` SET `password` = '". md5($newpass)."' WHERE `id` = '" . intval( $uid ) . "' LIMIT 1";
+		run_sql( $sql );
+
+		if( db_errno() != 0 )
+			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+		else
+			return $this->send_result( array( 'newpass' => $newpass ) );	
+    }
+
      /**
      * 在线升级
      *
@@ -1615,7 +1647,7 @@ class apiController extends appController
 			{
 				if( $ats = find_at($content) )
 				{
-					$sql = "SELECT `id` FROM `user` WHERE ";
+					$sql = "SELECT `id` FROM `user` WHERE (`level` > 0 AND `is_closed` != 1 )  ";
 					foreach( $ats as $at )
 					{
 						$at =z(t($at));
@@ -1632,7 +1664,7 @@ class apiController extends appController
 					
 					if( isset( $wsql ) && is_array( $wsql ) )
 					{
-						$sql = $sql . join( ' OR ' , $wsql );
+						$sql = $sql . ' AND ( ' . join( ' OR ' , $wsql ) . ' ) ';
 
 						if( $udata = get_data( $sql ) )
 							foreach( $udata as $uitem )
@@ -1651,7 +1683,7 @@ class apiController extends appController
 				else
 				{
 					// 如果没有at，则认为是@全部人
-					$sql = "SELECT `id` FROM `user` WHERE `id` !=" . intval(uid());
+					$sql = "SELECT `id` FROM `user` WHERE `level` > 0 AND `is_closed` != 1 AND `id` !=" . intval(uid());
 					if( $udata = get_data( $sql ) )
 					{
 						foreach( $udata as $uitem )

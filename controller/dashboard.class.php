@@ -29,6 +29,21 @@ class dashboardController extends appController
 		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
 	}
 
+	function user_reset_password()
+	{
+		$params = array();
+		$params['uid'] = intval(v('uid'));
+
+		
+		if($content = send_request( 'user_reset_password' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			return render( array( 'code' => 0 , 'data' => $data['data'] ) , 'rest' );
+		}
+
+		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+	}
+
 	function user_tooltips()
 	{
 		$params = array();
@@ -619,7 +634,7 @@ PRIMARY KEY (  `folder_name` )
 	function todo_add_comment()
 	{
 		$text = z(t(v('text')));
-		if( strlen( $text ) < 1 ) render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( strlen( $text ) < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
 
 		$tid = intval(v('tid'));
 		if( $tid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );

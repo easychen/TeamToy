@@ -20,7 +20,7 @@ function get_full_info_by_email_password( $email , $password )
 
 function close_user_by_id( $uid )
 {
-	$sql = "UPDATE `user` SET `is_closed` = '1' WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
+	$sql = "UPDATE `user` SET `is_closed` = '1' AND `level` = 0  WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
 	run_sql( $sql );
 }
 

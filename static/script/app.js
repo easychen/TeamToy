@@ -1626,6 +1626,43 @@ function show_im_box( uid )
 	//alert( uid );
 }
 
+function user_reset_password( uid , uname )
+{
+	if( confirm( '确定要重置'+uname+'的密码？' ) )
+	{
+		var url = '?c=dashboard&a=user_reset_password&uid=' + uid ;
+		var params = {};
+		$.post( url , params , function( data )
+		{
+			var data_obj = $.parseJSON( data );
+			//console.log( data_obj );
+			 
+			if( data_obj.err_code == 0 )
+			{
+				// 显示新密码
+				noty(
+				{
+					layout:'topRight',
+					text:uname+'的密码已经被重置为' + data_obj.data.newpass,
+					closeWith:['button'],
+					buttons: [
+				    {
+				    	addClass: 'btn btn-primary btn-small', text: '关闭', onClick: function($noty) 
+				    	{
+				    		$noty.close()
+				      	}
+				    }]
+				});
+			}
+			else
+			{
+				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			}
+		});
+
+	}
+}
+
 function check_im( uid )
 {
 	var url = '?c=dashboard&a=get_fresh_chat&uid=' + uid ;

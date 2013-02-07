@@ -1,5 +1,5 @@
 <div class="p20">
-<?php do_action( 'UI_TODO_DETAIL_TITLE_BEFORE' ); ?>	
+<?php do_action( 'UI_TODO_DETAIL_TITLE_BEFORE', $data ); ?>	
 <?php if( $data['owner_uid'] != uid() ): ?>
 	<a class="close pull-right"  href="javascript:tdboard_close();" title="收起TODO详情">&minus;</a>
 	<h2 class="side_board side_long " title="<?=$data['content']?>"><?=$data['content']?></h2>
@@ -9,9 +9,9 @@
 	<h2 class="side_board side_long inline_edit" title="点击修改 - <?=$data['content']?>" onclick="$('#todo_title_online_edit').load('?c=dashboard&a=todo_edit&tid=<?=$data['tid']?>&text=<?=u($data['content'])?>')"><?=$data['content']?></h2>
 </div>
 <?php endif; ?>	
-<?php do_action( 'UI_TODO_DETAIL_TITLE_AFTER' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_TITLE_AFTER', $data ); ?>
 
-<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_BEFORE' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_BEFORE', $data ); ?>
 <ul class="gbox">
 <?php if( $data['owner_uid'] != uid() ): ?>
 	<?php if( intval($data['details']['is_follow']) == 1 ): ?>
@@ -56,9 +56,9 @@
 <?php endif; ?>	
 </ul>
 <script>bind_gbox( '<?=$data['tid']?>' );</script>
-<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_AFTER' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_AFTER' , $data ); ?>
 
-<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_BEFORE' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_BEFORE' , $data ); ?>
 <?php if( isset( $data['people'] ) && is_array( $data['people'] ) ): ?>	
 <div class="line"></div>
 <h2 class="side_board">谁在关注</h2>
@@ -68,11 +68,11 @@
 <?php endforeach; ?>
 </ul>
 <?php endif; ?>
-<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_AFTER' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_AFTER' , $data ); ?>
 
 <div class="line"></div>
 
-<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_BEFORE' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_BEFORE' , $data ); ?>
 <h2 class="side_board">讨论</h2>
 <div class="comment_box">
 <form class="form-inline" action="javascript:todo_add_comment( <?=$data['tid']?> , $('#comment_text').val() );void(0);" method="post" id="comment_form">
@@ -82,7 +82,7 @@
 </div>	
 </form>	
 </div>
-<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_AFTER' ); ?>
+<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_AFTER' , $data ); ?>
 
 <div class="line"></div>
 

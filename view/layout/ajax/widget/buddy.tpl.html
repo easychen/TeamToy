@@ -11,10 +11,13 @@
  		<li ><?=$item['name']?> 
  		<?php if( $_SESSION['level'] == 9  ): ?>	
  			<?php if( $item['level'] == 9 ): ?>
- 				<i class="icon-star"></i><a href="javascript:admin_user_off(<?=$item['id']?>);void(0);" class="side_link">降为普通用户</a></li>
+ 				<i class="icon-star"></i><a href="javascript:admin_user_off(<?=$item['id']?>);void(0);" class="side_link">降为普通用户</a>
  			<?php else: ?>
- 				<a href="javascript:admin_user_on(<?=$item['id']?>);void(0);" class="side_link">升为管理员</a></li>
+ 				<a href="javascript:admin_user_on(<?=$item['id']?>);void(0);" class="side_link">升为管理员</a>
  			<?php endif; ?>	
+ 			<?php if( $item['id'] != uid() ): ?><a href="javascript:user_reset_password(<?=$item['id']?> , '<?=$item['name']?>');void(0);" class="side_link">重置密码</a>
+ 			<?php endif; ?>
+ 			</li>
  		<?php endif; ?>	
 
  		<?php do_action( 'UI_BUDDY_ITEM_INFO_FIRST' , $item ); ?>

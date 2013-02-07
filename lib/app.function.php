@@ -340,7 +340,8 @@ function send_request( $action , $param , $token = null )
             $_REQUEST[$key] =  $value ;
 
     $api = new apiController();
-    if( method_exists($api, $action) )
+    // magic call
+    if( method_exists($api, $action) || has_hook('API_'.$action) )
     {
         $content = $api->$action();
         $_REQUEST = $bake_request;
@@ -348,6 +349,10 @@ function send_request( $action , $param , $token = null )
         return $content;
         //if($data = json_decode( $content , 1 ))
         //return json_encode($data['data']);
+    }
+    else
+    {
+        return 'API_'.$action . ' NOT EXISTS';
     }
    
     return null;
