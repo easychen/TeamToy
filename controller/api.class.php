@@ -209,6 +209,9 @@ class apiController extends appController
 			$ctx=stream_context_create(array('http'=>array( 'timeout' => 3 )));
 			// send domain and uid to help teamtoy.net anti-cc attack
 			$url = c('teamtoy_url') . '/?a=last_version&domain=' . c('site_domain') . '&uid=' . $user[ 'id' ];
+			
+			if( c('dev_version') ) $url = $url . '&dev=1';
+
 			$new = false;
 			if($info = @file_get_contents($url , 0 , $ctx))
 			{

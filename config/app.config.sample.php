@@ -13,6 +13,7 @@ $GLOBALS['config']['teamtoy_url'] = 'http://tt2net.sinaapp.com';
 $GLOBALS['config']['at_short_name'] = true ;
 $GLOBALS['config']['can_modify_password'] = true ;
 $GLOBALS['config']['timezone'] = 'Asia/Chongqing' ;
+$GLOBALS['config']['dev_version'] = false ;
 
 // session time
 // you need change session lifetime in php.ini to0
