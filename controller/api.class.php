@@ -352,7 +352,10 @@ class apiController extends appController
     	if( $_SESSION['level'] != '9' )
 		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 
-    	$info = json_decode( file_get_contents( c('teamtoy_url') . '/?a=last_version&domain=' . c('site_domain') . '&uid=' . uid() ) , true);
+    	$url = c('teamtoy_url') . '/?a=last_version&domain=' . c('site_domain') . '&uid=' . uid();
+    	if( c('dev_version') ) $url = $url . '&dev=1';
+
+    	$info = json_decode( file_get_contents( $url ) , true);
     	if( !isset($info['url']) ) return  $this -> send_error( LR_API_UPGRADE_ERROR , ' JSON DATA ERROR' );
     	$url = t($info['url']);
 

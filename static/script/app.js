@@ -1119,8 +1119,7 @@ function bind_todo()
 		// this -- > a 
 		// this.parentNode --> .todo_row
 		// this.parentNode.parentNode ---> .todo_fav
-		// this.parentNode.parentNode.parentNode -----> li
-
+		// this.parentNode.parentNode.parentNode -----> li		
 
 		$(this.parentNode).unbind( 'click' );
 		$(this.parentNode).bind( 'click' , function(evt)
