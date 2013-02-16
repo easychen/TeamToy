@@ -1165,6 +1165,35 @@ class apiController extends appController
 		}*/
 			
 	}
+
+	/**
+     * TODO进行中
+     *
+     *
+     * @param string token , 必填
+     * @param string tid - TODO id , 必填
+     * @return todo array
+     * @author EasyChen
+     */
+
+	public function todo_start()
+	{
+		return $this->todo_set_value( 'status' , 2 );
+	}
+	
+	/**
+     * TODO暂停
+     *
+     *
+     * @param string token , 必填
+     * @param string tid - TODO id , 必填
+     * @return todo array
+     * @author EasyChen
+     */
+	public function todo_pause()
+	{
+		return $this->todo_set_value( 'status' , 1 );
+	}
 	
 	/**
      * TODO加星

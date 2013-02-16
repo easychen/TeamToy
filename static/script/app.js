@@ -1114,7 +1114,56 @@ function bind_follow_todo()
 function bind_todo()
 {
 	//alert('in');
-	$('#todo_list_star li a,#todo_list_normal li a,#todo_list_done li a').each( function()
+	$('li a.todo_play').unbind('click');
+	$('li a.todo_play').bind('click' , function(evt)
+	{
+		var mtype;
+
+		if( $(this.parentNode).hasClass('ing') )
+			mtype = 'pause';
+		else
+			mtype = 'start';
+		
+		var tid = $(this).attr('tid');
+		var url = '?c=dashboard&a=todo_start&tid=' + tid + '&type=' + mtype  ;
+	
+		var params = {};
+		$.post( url , params , function( data )
+		{
+			var data_obj = $.parseJSON( data );
+				 
+			if( data_obj.err_code == 0 )
+			{
+				if( mtype == 'pause' )
+				{
+					$('#t-'+tid).removeClass('ing');
+					console.log('remove class');
+				}
+					
+				else
+				{
+					$('#t-'+tid).addClass('ing');
+					console.log('add class');
+				}
+					
+				// buddy_click();
+				done();
+
+			}
+			else
+			{
+				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			}
+		} );
+
+		doing();
+		evt.stopPropagation();
+		
+	});
+
+
+
+	$('#todo_list_star li a.item,#todo_list_normal li a.item,#todo_list_done li a.item').each( function()
 	{
 		// this -- > a 
 		// this.parentNode --> .todo_row

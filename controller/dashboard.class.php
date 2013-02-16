@@ -484,6 +484,27 @@ PRIMARY KEY (  `folder_name` )
 		
 	}
 
+	function todo_start()
+	{
+		$tid = intval(v('tid'));
+		if( $tid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		
+		if( t(v('type')) == 'pause' ) $action = 'todo_pause';
+		else $action = 'todo_start';
+
+		$params = array();
+		$params['tid'] = $tid;
+
+		if($content = send_request( $action ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			return render( array( 'code' => 0 , 'data' => $data['data'] ) , 'rest' );
+		}
+
+		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+
+	}
+
 	function todo_public()
 	{
 		$tid = intval(v('tid'));
