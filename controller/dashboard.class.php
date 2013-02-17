@@ -70,6 +70,10 @@ class dashboardController extends appController
 
 		$sql = "ALTER TABLE  `keyvalue` CHANGE  `key`  `key` VARCHAR( 64 ) NOT NULL";
 		run_sql( $sql );
+
+		$sql = "ALTER TABLE  `user` ADD  `groups` VARCHAR( 255 ) NOT NULL AFTER  `desp` ,
+ADD INDEX (  `groups` )";
+		run_sql( $sql );
 	
 		
 

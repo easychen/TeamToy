@@ -1,10 +1,15 @@
 <?php
-define( 'USER_INFO' , "`id` ,  `id` as  `uid` , `name` , `mobile` , `tel` , `eid` , `weibo` , `desp` , `pinyin` , `email` , `avatar_small` , `avatar_normal` , `level` , `timeline` , `is_closed`" );
+define( 'USER_INFO' , "`id` ,  `id` as  `uid` , `name` , `mobile` , `tel` , `eid` , `weibo` , `desp` , `groups` , `pinyin` , `email` , `avatar_small` , `avatar_normal` , `level` , `timeline` , `is_closed`" );
 
 
 function get_user_info_by_id( $uid )
 {
-	return get_line( "SELECT " . USER_INFO . " FROM `user` WHERE `id` = '" . intval( $uid ) . "'" );
+	if( $data = get_line( "SELECT " . USER_INFO . " FROM `user` WHERE `id` = '" . intval( $uid ) . "'" , db() ) )
+		if( strlen( $data['groups'] ) > 0 ) 
+			$data['groups'] = explode('|', trim( $data['groups'] , '|' )) ;
+	
+	return $data;
+	
 }
 
 function get_user_full_info_by_id( $uid )
@@ -20,7 +25,7 @@ function get_full_info_by_email_password( $email , $password )
 
 function close_user_by_id( $uid )
 {
-	$sql = "UPDATE `user` SET `is_closed` = '1' AND `level` = 0  WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
+	$sql = "UPDATE `user` SET `is_closed` = '1' , `level` = 0  WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
 	run_sql( $sql );
 }
 
@@ -35,6 +40,44 @@ function get_user_settings_by_id( $uid )
 		echo 'DBERROR-' . db_errno();	
 		
 	return false;
+}
+
+function get_group_unames( $group )
+{
+	$sql = "SELECT `name` FROM `user` WHERE `is_closed` = 0 AND `groups` LIKE '%|" . s(strtoupper($group)) . "|%'";
+	if( $data = get_data( $sql ) )
+		foreach( $data as $item )
+			$unames[] = $item['name'];
+
+	return isset($unames)?$unames:false;	
+}
+
+function get_group_names()
+{
+	if( !isset($GLOBALS['TT2_GNAMES']) )
+	{
+		$sql = "SELECT `groups` FROM `user` WHERE `is_closed` = 0 ";
+		$groupstring = '|';
+		if( $data = get_data( $sql ) )
+			foreach( $data as $item  )
+				if( strlen(trim($item['groups'])) > 1 )
+					$groupstring = $groupstring . strtoupper($item['groups']).'|';
+
+		if( $groupstring == '|' ) 
+			$groups = null;
+		else 
+			$groups = explode( '|' ,  trim( $groupstring , '|' ) );
+
+		$groups  = array_unique($groups);
+		foreach(  $groups as $k => $v )
+			if( strlen(trim($v)) < 1 )
+				unset($groups[$k]);	
+
+		$GLOBALS['TT2_GNAMES'] = $groups;	
+	}
+	
+
+	return $GLOBALS['TT2_GNAMES']	;
 }
 
 function update_user_settings_array( $array )

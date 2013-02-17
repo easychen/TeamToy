@@ -249,10 +249,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `eid` varchar(32) DEFAULT NULL COMMENT '员工号',
   `weibo` varchar(32) DEFAULT NULL,
   `desp` text,
+  `groups` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`),
-  KEY `is_closed` (`is_closed`)
+  KEY `is_closed` (`is_closed`),
+  KEY `groups` (`groups`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 INSERT INTO `user` (`id`, `name`, `pinyin`, `email`, `password`, `avatar_small`, `avatar_normal`, `level`, `timeline`, `settings`, `is_closed`, `mobile`, `tel`, `eid`, `weibo`, `desp`) VALUES

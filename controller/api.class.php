@@ -160,6 +160,39 @@ class apiController extends appController
 			
         
     }
+
+    /**
+     * 更新当前用户分组
+     *
+     * @param string uid 
+     * @param string groups , 多个group用|分割 
+     * @param string token , 必填
+     * @return user array
+     * @author EasyChen
+     */
+    public function user_update_groups()
+    {
+    	// 管理员权限
+    	if( $_SESSION['level'] != '9' )
+		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+
+		$uid = intval(v('uid'));
+		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+
+		$groups = strtoupper(z(t(v('groups'))));
+		
+		if( strlen( $groups ) > 0 ) 
+			$groups = '|' . trim( $groups , '|'  ) . '|';
+
+		$sql = "UPDATE `user` SET `groups` = '" . s( $groups ) . "' WHERE `id` = '" . intval($uid) . "' LIMIT 1";
+		run_sql( $sql );
+
+		if( db_errno() != 0 )
+			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+		else
+			return $this->send_result( get_user_info_by_id($uid) );
+
+    }
 	
 	/**
      * 终止当前token
@@ -856,9 +889,33 @@ class apiController extends appController
 			if( $ats = find_at($content) )
 			{
 				$sql = "SELECT `id` FROM `user` WHERE ";
+				
 				foreach( $ats as $at )
 				{
 					$at =z(t($at));
+					$gname = get_group_names();
+					if( in_array(strtoupper($at),$gname) )
+					{
+						if( $ndata = get_group_unames($at) )
+						foreach( $ndata as $nname )
+							$names[] = $nname;
+					}
+					else
+					{
+						$names[] = $at;
+					}
+				}
+
+				foreach( $names as $at )
+				{
+					$at =z(t($at));
+					$gname = get_group_names();
+					if( in_array(strtoupper($at),$gname) )
+					{
+
+					}
+
+
 					if( mb_strlen($at, 'UTF-8') < 2 ) continue;
 
 					$wsql[] = " `name` = '" . s(t($at)) . "' ";
@@ -1683,7 +1740,24 @@ class apiController extends appController
 				if( $ats = find_at($content) )
 				{
 					$sql = "SELECT `id` FROM `user` WHERE (`level` > 0 AND `is_closed` != 1 )  ";
+
 					foreach( $ats as $at )
+					{
+						$at =z(t($at));
+						$gname = get_group_names();
+						if( in_array(strtoupper($at),$gname) )
+						{
+							if( $ndata = get_group_unames($at) )
+							foreach( $ndata as $nname )
+								$names[] = $nname;
+						}
+						else
+						{
+							$names[] = $at;
+						}
+					}
+
+					foreach( $names as $at )
 					{
 						$at =z(t($at));
 						if( mb_strlen($at, 'UTF-8') < 2 ) continue;
@@ -2017,7 +2091,24 @@ class apiController extends appController
 			if( $ats = find_at($content) )
 			{
 				$sql = "SELECT `id` FROM `user` WHERE ";
+
 				foreach( $ats as $at )
+				{
+					$at =z(t($at));
+					$gname = get_group_names();
+					if( in_array(strtoupper($at),$gname) )
+					{
+						if( $ndata = get_group_unames($at) )
+						foreach( $ndata as $nname )
+							$names[] = $nname;
+					}
+					else
+					{
+						$names[] = $at;
+					}
+				}
+					
+				foreach( $names as $at )
 				{
 					$at =z(t($at));
 					if( mb_strlen($at, 'UTF-8') < 2 ) continue;
@@ -2615,12 +2706,28 @@ class apiController extends appController
 		{
 			$data[$k]['password'] = null;
 			unset($data[$k]['password']);
+			if( strlen($data[$k]['groups']) > 0 ) $data[$k]['groups'] = explode('|', trim( $data[$k]['groups'] , '|' )) ;
 		}
 		
 		return $this->send_result( $data );
 			
 		
 			
+	}
+
+	/* ============ groups  =============== */
+	/**
+     * 分组列表
+     *
+     * 显示所有分组名
+     *
+     * @param string token , 必填
+     * @return group array 
+     * @author EasyChen
+     */
+	public function groups()
+	{
+		return $this->send_result( get_group_names() );
 	}
     
     /*

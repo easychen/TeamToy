@@ -48,6 +48,29 @@
  			<li><i class="icon-asterisk" ></i>&nbsp;备注 - <?=nl2br($item['desp'])?></li>
  		<?php endif; ?>
 
+ 		<?php if( is_array($item['groups']) ): ?>
+ 			<li id="t-tags-<?=$item['id']?>"><i class="icon-tags" ></i>&nbsp;
+ 			<?foreach( $item['groups'] as $group ):?>
+ 			<span class="label label-info"><?=$group?></span>&nbsp;
+ 			<?endforeach;?>	
+ 			</li>
+ 		<?php endif; ?>
+
+ 		<?php if( is_admin() ): ?>
+ 		<li id="t-tags-edit-<?=$item['id']?>" style="display:none">
+ 			<div>
+ 			<input id="t-tags-input-<?=$item['id']?>" value="<?=@join(',',$item['groups'])?>" />
+ 			<br/><a href="javascript:save_tag('<?=$item['id']?>');void(0);" class="btn btn-primary">保存</a>&nbsp;&nbsp;<a href="javascript:cancel_tag('<?=$item['id']?>');void(0);" class="btn">取消</a>
+ 			</div>
+ 		</li>	
+ 		<li>
+ 			<a class="side_link" href="javascript:edit_tag( '<?=$item['id']?>');void(0);" id="t-tags-link-<?=$item['id']?>">编辑用户所属分组</a>&nbsp;
+ 		</li>
+ 		<?php else: ?>
+ 		<li>&nbsp;</li>
+ 		<?php endif; ?>
+
+
  		<?php do_action( 'UI_BUDDY_ITEM_INFO_LAST' , $item ); ?>
  	</ul>	
  </il>

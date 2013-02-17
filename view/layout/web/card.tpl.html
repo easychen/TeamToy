@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="static/css/font-awesome-ie7.css" type="text/css" >
   <![endif]-->
 	
-  <link rel="stylesheet" href="static/css/style.css" type="text/css" >
+  <link rel="stylesheet" href="static/css/style.css?v=<?=local_version();?>" type="text/css" >
 
   <?php if( isset($css) && is_array( $css ) ): ?>
         <?php foreach( $css as $cfile ): ?><link rel="stylesheet" type="text/css" href="static/css/<?=$cfile?>">

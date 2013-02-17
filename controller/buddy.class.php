@@ -13,6 +13,7 @@ class buddyController extends appController
 	function index()
 	{
 		$data['title'] = $data['top_title'] = '团队成员';
+		$data['js'][] = 'jquery.tagsinput.js';
 		render( $data , 'web' , 'card' );
 	}
 
@@ -23,7 +24,7 @@ class buddyController extends appController
 		if($content = send_request( 'team_members' ,  $params , token()  ))
 		{
 			$data = json_decode($content , 1);
-			if( intval($data['error_code']) != 0 ) 
+			if( intval($data['err_code']) != 0 ) 
 				return false;
 			
 			return render( $data , 'ajax' , 'raw'  );
@@ -31,6 +32,49 @@ class buddyController extends appController
 		}
 
 		return null;
+	}
+
+	function groups()
+	{
+		$params = array();
+		
+		if($content = send_request( 'groups' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			
+			if( $data['err_code'] != 0 ) return render( array( 'code' => $data['err_code'] , 'message' => $data['err_msg'] ) , 'rest' );
+			return render( array( 'code' => 0 , 'data' => $data['data'] ) , 'rest' );
+
+		}
+
+		return null;
+	}
+
+	function update_groups()
+	{
+		$uid = intval(v('uid'));
+		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+
+		$groups = z(t(v('groups')));
+		// remove spaces in name
+		$groups = str_replace( ',' , '|' , $groups );
+		
+		$params = array();
+		$params['uid'] = $uid;
+		$params['groups'] = $groups;
+		
+		if($content = send_request( 'user_update_groups' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			
+			if( $data['err_code'] != 0 ) return render( array( 'code' => $data['err_code'] , 'message' => $data['err_msg'] ) , 'rest' );
+
+			return render( array( 'code' => 0 , 'data' =>  array( 'html' => render_html( array( 'item' => $data['data'] ) , AROOT . 'view' 
+						. DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'buddy.tpl.html'  ) ) ) , 'rest' );
+		}
+
+		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+
 	}
 
 	function add()

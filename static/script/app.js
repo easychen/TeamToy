@@ -1088,7 +1088,12 @@ function fdboard_close()
 
 function bind_follow_todo()
 {
-	$('#todo_list_follow li a').each( function()
+	// this -- > a 
+	// this.parentNode --> .todo_row
+	// this.parentNode.parentNode ---> .todo_fav
+	// this.parentNode.parentNode.parentNode -----> li	
+
+	$('#todo_list_follow li a.item').each( function()
 	{
 		$(this.parentNode).unbind( 'click' );
 		$(this.parentNode).bind( 'click' , function(evt)
@@ -1097,16 +1102,19 @@ function bind_follow_todo()
 			show_todo_detail( $('#'+this.parentNode.parentNode.id).attr('tid') );
 			return false;
 		} );
-		
-		
+
 		$('#'+this.parentNode.parentNode.parentNode.id).unbind('click');
 		$('#'+this.parentNode.parentNode.parentNode.id).bind('click' , 	function( )
 		{
 			if( $(this).hasClass('nofollow') )
 				todo_follow( $(this).attr('tid') );
 			else
-				todo_unfollow( $(this).attr('tid') );
+				todo_unfollow( $(this).attr('tid') );	
+
 		});
+		
+		
+		
 		
 	});
 }
@@ -1568,6 +1576,21 @@ function load_im_buddy_list()
 								} );			
 			});
 
+			// add groups
+			var url = '?c=buddy&a=groups' ;
+			$.post( url , {} , function( data2 )
+			{
+				var data_obj2 = $.parseJSON( data2 );
+				if( data_obj2 && data_obj2.err_code == 0 )
+				{
+					$.each(data_obj2.data , function(k,v)
+					{
+						at_users.push({'name':v});
+					});
+				}
+			});
+
+
 			if( $('#cast_text') ) enable_at('cast_text');
 		}
 		else
@@ -1767,33 +1790,33 @@ function check_version()
 {
 	var url = '?c=dashboard&a=check_version' ;
 	
-		var params = {};
-		$.post( url , params , function( data )
+	var params = {};
+	$.post( url , params , function( data )
+	{
+		var data_obj = $.parseJSON( data );
+		 
+		done();
+		if( data_obj.err_code == 0 )
 		{
-			var data_obj = $.parseJSON( data );
-			 
-			done();
-			if( data_obj.err_code == 0 )
+			// error in ie , becoz .new 
+			if( data_obj.data.new && parseInt( data_obj.data.new )  == 1 )
 			{
-				// error in ie , becoz .new 
-				if( data_obj.data.new && parseInt( data_obj.data.new )  == 1 )
+				if( confirm( '有新的版本'+data_obj.data.version + '['+ data_obj.data.info +']。升级到最新版？' ) )
 				{
-					if( confirm( '有新的版本'+data_obj.data.version + '['+ data_obj.data.info +']。升级到最新版？' ) )
-					{
-						location = '?c=dashboard&a=upgrade';
-					}
-				}
-				else
-				{
-					alert('当前版本已经是最新了');
+					location = '?c=dashboard&a=upgrade';
 				}
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert('当前版本已经是最新了');
 			}
-		} );
-		doing();	
+		}
+		else
+		{
+			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+		}
+	} );
+	doing();	
 }
 
 function user_added( data )
@@ -1831,6 +1854,48 @@ function user_added( data )
 	}
 
 		
+}
+
+
+function edit_tag( uid )
+{
+	$('#t-tags-'+uid).hide();
+	$('#t-tags-link-'+uid).hide();
+	$('#t-tags-edit-'+uid).show();
+	
+	if( $('#t-tags-input-'+uid+'_tag').length < 1 )
+		$('#t-tags-input-'+uid).tagsInput({'defaultText':'添加分组名称'});
+}
+
+function save_tag( uid )
+{
+	var url = '?c=buddy&a=update_groups&uid='+uid+'&groups='+encodeURIComponent($('#t-tags-input-'+uid).val()) ;
+	
+	var params = {};
+	$.post( url , params , function( data )
+	{
+		var data_obj = $.parseJSON( data );
+		 
+		done();
+		if( data_obj.err_code == 0 )
+		{
+			$('#uid-'+uid).replaceWith( $(data_obj.data.html) );
+		}
+		else
+		{
+			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+		}
+	} );
+
+	doing();	
+
+}
+
+function cancel_tag( uid )
+{
+	$('#t-tags-'+uid).show();
+	$('#t-tags-link-'+uid).show();
+	$('#t-tags-edit-'+uid).hide();
 }
 
 function doing()
