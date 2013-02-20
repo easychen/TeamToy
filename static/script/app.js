@@ -1581,7 +1581,7 @@ function load_im_buddy_list()
 			$.post( url , {} , function( data2 )
 			{
 				var data_obj2 = $.parseJSON( data2 );
-				if( data_obj2 && data_obj2.err_code == 0 )
+				if( data_obj2 && data_obj2.err_code == 0 && data_obj2.data != null )
 				{
 					$.each(data_obj2.data , function(k,v)
 					{

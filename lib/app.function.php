@@ -423,7 +423,11 @@ function upload_as_form( $url , $data )
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
     curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data); 
+
+    $ch = apply_filter( 'UPLOAD_CURL_SETTINGS' , $ch );
+
     $response = curl_exec($ch);
     return $response;
 }

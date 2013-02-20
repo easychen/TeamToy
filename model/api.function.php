@@ -65,13 +65,19 @@ function get_group_names()
 
 		if( $groupstring == '|' ) 
 			$groups = null;
-		else 
+		else
+		{
 			$groups = explode( '|' ,  trim( $groupstring , '|' ) );
-
-		$groups  = array_unique($groups);
-		foreach(  $groups as $k => $v )
-			if( strlen(trim($v)) < 1 )
-				unset($groups[$k]);	
+			if( is_array( $groups ) )
+			{
+				$groups  = array_unique($groups);
+				foreach(  $groups as $k => $v )
+					if( strlen(trim($v)) < 1 )
+						unset($groups[$k]);		
+			}
+			
+		} 
+		
 
 		$GLOBALS['TT2_GNAMES'] = $groups;	
 	}

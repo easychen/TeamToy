@@ -310,7 +310,7 @@ PRIMARY KEY (  `folder_name` )
 		{
 			$data = json_decode($content , 1);
 			if( $data['err_code'] == 0 )
-				return info_page('<a href="?c=buddy">头像更新成功，由于浏览器缓存的关系，您可能看到的还是旧头像，可强制刷新或清空缓存。</a>');
+				return info_page('<a href="?c=buddy">头像更新成功，由于浏览器缓存的关系，您可能看到的还是旧头像，可强制刷新或清空缓存。</a>' );
 			else
 				return info_page('头像更新失败，错误码-'.$data['err_code'].'，错误信息-'.$data['err_msg']);
 		}

@@ -2,6 +2,8 @@
 
 function transcribe($aList, $aIsTopLevel = true) 
 {
+   if( !function_exists('get_magic_quotes_gpc') ) return $aList;
+
    $gpcList = array();
    $isMagic = get_magic_quotes_gpc();
   

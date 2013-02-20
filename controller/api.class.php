@@ -80,13 +80,13 @@ class apiController extends appController
      */
 	public function user_sign_up()
     {
-		if( !not_empty( v( 'name' ) )) return $this -> send_error( LR_API_ARGS_ERROR , 'name FIELD REQUIRED' );
+		if( !not_empty( v( 'name' ) )) return self::send_error( LR_API_ARGS_ERROR , 'name FIELD REQUIRED' );
         
 		
-		if( !is_email( v( 'email' ) ) ) return $this -> send_error( LR_API_ARGS_ERROR , 'email FORMAT ERROR' );
+		if( !is_email( v( 'email' ) ) ) return self::send_error( LR_API_ARGS_ERROR , 'email FORMAT ERROR' );
         
 		
-		if( strlen( v( 'password' ) ) < 1 ) return $this -> send_error( LR_API_ARGS_ERROR , 'password FIELD REQUIRED' );// actions
+		if( strlen( v( 'password' ) ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'password FIELD REQUIRED' );// actions
 		
 		
 		// admin add user derictly
@@ -106,19 +106,19 @@ class apiController extends appController
         if( !$jump )
         {
         
-			if( !not_empty( v( 'code' ) )) return $this -> send_error( LR_API_ARGS_ERROR , 'activecode REQUIRED' );
+			if( !not_empty( v( 'code' ) )) return self::send_error( LR_API_ARGS_ERROR , 'activecode REQUIRED' );
 		
         	$code = z(t(v('code')));
 		
 			if( get_var( "SELECT COUNT(*) FROM `activecode` WHERE `code` = '" . s($code) . "' AND `timeline` > '" . date( "Y-m-d H:i:s " , strtotime("-1day")) . "'" ) < 1  )
-			return $this -> send_error( LR_API_ARGS_ERROR , 'activecode error or expired' );	
+			return self::send_error( LR_API_ARGS_ERROR , 'activecode error or expired' );	
         }
 
         
 		
 		
 		if( get_var("SELECT COUNT(*) FROM `user` WHERE `email` = '" . s( t(v('email')) ) . "'") > 0 )
-		return $this -> send_error( LR_API_ARGS_ERROR , 'email EXISTS' );
+		return self::send_error( LR_API_ARGS_ERROR , 'email EXISTS' );
 		
 		$dsql = array();
 		
@@ -134,18 +134,18 @@ class apiController extends appController
         
         if( db_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
         }
         
         $lid = last_id();
         
         if( $lid < 1 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
         }
         
         if( !$data = get_user_info_by_id( $lid ) )
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
         else
 		{
 			// one code for multi-people
@@ -155,7 +155,7 @@ class apiController extends appController
 			*/
 			
 			publish_feed( $data['name'] . '加入了TeamToy' , $data['uid'] , 3  );
-			return $this -> send_result( $data );
+			return self::send_result( $data );
 		}
 			
         
@@ -174,10 +174,10 @@ class apiController extends appController
     {
     	// 管理员权限
     	if( $_SESSION['level'] != '9' )
-		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+		return self::send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
 
 		$groups = strtoupper(z(t(v('groups'))));
 		
@@ -188,9 +188,9 @@ class apiController extends appController
 		run_sql( $sql );
 
 		if( db_errno() != 0 )
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		else
-			return $this->send_result( get_user_info_by_id($uid) );
+			return self::send_result( get_user_info_by_id($uid) );
 
     }
 	
@@ -216,7 +216,7 @@ class apiController extends appController
 		
 		session_destroy();
 		
-		return $this -> send_result( $data );
+		return self::send_result( $data );
 			
 	}
 	
@@ -292,9 +292,9 @@ class apiController extends appController
 			if( !$in )
 			{
 				if( $new  )
-					return $this->send_result( array('new'=>1 ,'info' => $info_array['desp'] , 'version' => $info_array['version'] )  );
+					return self::send_result( array('new'=>1 ,'info' => $info_array['desp'] , 'version' => $info_array['version'] )  );
 				else
-					return $this->send_result( array('new'=>0 )  );
+					return self::send_result( array('new'=>0 )  );
 			}
 		}
 
@@ -316,7 +316,7 @@ class apiController extends appController
 		if( $user = get_full_info_by_email_password( $email , $password ) )
         {
             if( $user['is_closed'] == '1' )
-				return $this->send_error( LR_API_USER_CLOSED , 'USER CLOSED BY ADMIN' );
+				return self::send_error( LR_API_USER_CLOSED , 'USER CLOSED BY ADMIN' );
 		
 			session_set_cookie_params( c('session_time') );
 			@session_start();
@@ -330,11 +330,11 @@ class apiController extends appController
 			if( c('api_check_new_verison') )
 				$this->check_new_verison( true );
 			
-			return $this -> send_result( $_SESSION );
+			return self::send_result( $_SESSION );
         }
         else
         {
-            return $this -> send_error( LR_API_TOKEN_ERROR , 'BAD ACCOUNT OR PASSWORD' );
+            return self::send_error( LR_API_TOKEN_ERROR , 'BAD ACCOUNT OR PASSWORD' );
         }
     }
 
@@ -351,12 +351,12 @@ class apiController extends appController
     function user_reset_password()
     {
     	if( $_SESSION['level'] != '9' )
-		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+		return self::send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
 
-		if( $uid == uid() ) return $this->send_error( LR_API_ARGS_ERROR , 'CAN\'T RESET YOUR OWN PASSWORD' );
+		if( $uid == uid() ) return self::send_error( LR_API_ARGS_ERROR , 'CAN\'T RESET YOUR OWN PASSWORD' );
 
 		$rnd = rand( 1 , 10 );
 		$newpass = substr( md5($uid.time().rand( 1 , 9999 )) , $rnd , 15 );
@@ -365,9 +365,9 @@ class apiController extends appController
 		run_sql( $sql );
 
 		if( db_errno() != 0 )
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		else
-			return $this->send_result( array( 'newpass' => $newpass ) );	
+			return self::send_result( array( 'newpass' => $newpass ) );	
     }
 
      /**
@@ -383,22 +383,22 @@ class apiController extends appController
     function upgrade()
     {
     	if( $_SESSION['level'] != '9' )
-		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+		return self::send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 
     	$url = c('teamtoy_url') . '/?a=last_version&domain=' . c('site_domain') . '&uid=' . uid();
     	if( c('dev_version') ) $url = $url . '&dev=1';
 
     	$info = json_decode( file_get_contents( $url ) , true);
-    	if( !isset($info['url']) ) return  $this -> send_error( LR_API_UPGRADE_ERROR , ' JSON DATA ERROR' );
+    	if( !isset($info['url']) ) return  self::send_error( LR_API_UPGRADE_ERROR , ' JSON DATA ERROR' );
     	$url = t($info['url']);
 
 
 		$vid = intval($info['version']);
-		if( $vid < 1 ) return  $this -> send_error( LR_API_UPGRADE_ERROR , ' JSON DATA ERROR' );
+		if( $vid < 1 ) return  self::send_error( LR_API_UPGRADE_ERROR , ' JSON DATA ERROR' );
 
 		if( $vid == local_version() )
 		{
-			return  $this -> send_error( LR_API_UPGRADE_ABORT , ' ALREADY LATEST VERSION' );
+			return  self::send_error( LR_API_UPGRADE_ABORT , ' ALREADY LATEST VERSION' );
 		}
 
 		$zip_tmp = SAE_TMP_PATH . DS . 'teamtoy2-' . intval($vid) . '.zip';
@@ -420,17 +420,17 @@ class apiController extends appController
 				if( $pscript )
 					send_notice( uid() , 'TeamToy代码已经更新到' . $vid . ',<a href="'. c('site_url') . $pscript .'">请立即升级数据表</a>' , 0  );
 				
-				return $this->send_result( array('msg'=>'ok','post_script'=>$pscript) );
+				return self::send_result( array('msg'=>'ok','post_script'=>$pscript) );
 			}
 				
 			else
-				return  $this -> send_error( LR_API_UPGRADE_ERROR , ' FILE UNZIP ERROR' );
+				return  self::send_error( LR_API_UPGRADE_ERROR , ' FILE UNZIP ERROR' );
 
 			
 		}
 		else
 		{
-			return  $this -> send_error( LR_API_UPGRADE_ERROR , ' COPY REMOTE FILE ERROR' );
+			return  self::send_error( LR_API_UPGRADE_ERROR , ' COPY REMOTE FILE ERROR' );
 		}
     }
 	
@@ -447,9 +447,9 @@ class apiController extends appController
     function user_profile()
     {
     	$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
 
-		return $this->send_result( get_user_info_by_id($uid) );
+		return self::send_result( get_user_info_by_id($uid) );
 
     }
 
@@ -477,8 +477,8 @@ class apiController extends appController
 		$desp = z(t(v('desp')));
 		$email = z(t(v('email')));
 		
-		if( !not_empty($email) ) return $this -> send_error( LR_API_ARGS_ERROR , 'email FIELD REQUIRED' );
-		if( !not_empty($mobile) ) return $this -> send_error( LR_API_ARGS_ERROR , 'mobile FIELD REQUIRED' );
+		if( !not_empty($email) ) return self::send_error( LR_API_ARGS_ERROR , 'email FIELD REQUIRED' );
+		if( !not_empty($mobile) ) return self::send_error( LR_API_ARGS_ERROR , 'mobile FIELD REQUIRED' );
 			
 		
 		$sql = "UPDATE `user` SET "
@@ -492,9 +492,9 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( db_errno() != 0 )
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		else
-			return $this->send_result( get_user_info_by_id(uid()) );
+			return self::send_result( get_user_info_by_id(uid()) );
 		
 	}
 	
@@ -506,9 +506,9 @@ class apiController extends appController
 	function user_settings()
 	{
 		if(!is_array( $settings = get_user_settings_by_id( $_SESSION['uid'] ) ))
-			return $this->send_error( LR_API_DB_ERROR , 'CAN\'T FIND DATA' );
+			return self::send_error( LR_API_DB_ERROR , 'CAN\'T FIND DATA' );
 		else
-			return $this->send_result( $settings );	
+			return self::send_result( $settings );	
 	}
 	
 	 /**
@@ -524,29 +524,29 @@ class apiController extends appController
 	function user_update_password()
 	{
 		
-		if( !c('can_modify_password') ) return $this -> send_error( LR_API_ARGS_ERROR , 'CANNOT MODITY PASSWORD IN THIS MODE' );
+		if( !c('can_modify_password') ) return self::send_error( LR_API_ARGS_ERROR , 'CANNOT MODITY PASSWORD IN THIS MODE' );
 
 		$opassword = z(t(v('opassword')));
-		if( !not_empty($opassword) ) return $this -> send_error( LR_API_ARGS_ERROR , 'old password FIELD REQUIRED' );
+		if( !not_empty($opassword) ) return self::send_error( LR_API_ARGS_ERROR , 'old password FIELD REQUIRED' );
 		
 		$password = z(t(v('password')));
-		if( !not_empty($password) ) return $this -> send_error( LR_API_ARGS_ERROR , 'password FIELD REQUIRED' );
+		if( !not_empty($password) ) return self::send_error( LR_API_ARGS_ERROR , 'password FIELD REQUIRED' );
 		
-		if( $opassword == $password ) return $this -> send_error( LR_API_ARGS_ERROR , 'password and old password are the same' );
+		if( $opassword == $password ) return self::send_error( LR_API_ARGS_ERROR , 'password and old password are the same' );
 		
 		$sql = "SELECT COUNT(*) FROM `user` WHERE `id` = '" . intval( uid() ) . "' AND `password` = '" . md5( $opassword ) . "' ";
 		
 		if( get_var( $sql ) < 1 )
-			return $this -> send_error( LR_API_ARGS_ERROR , 'Old password wrong' );
+			return self::send_error( LR_API_ARGS_ERROR , 'Old password wrong' );
 			
 		$sql = "UPDATE	`user` SET `password` = MD5('" . s($password) . "') WHERE `id` = '" . intval( uid() ) . "' AND `password` = '" . md5( $opassword ) . "' LIMIT 1";
 		
 		run_sql( $sql );
 		
 		if( db_errno() != 0 )
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		else
-			return $this->send_result( array('msg'=>'ok') );
+			return self::send_result( array('msg'=>'ok') );
 		
 
 		
@@ -560,32 +560,32 @@ class apiController extends appController
 	function user_update_settings()
 	{
 		$key = z(t(v('key')));
-		if( !not_empty($key) ) return $this -> send_error( LR_API_ARGS_ERROR , 'key FIELD REQUIRED' );
+		if( !not_empty($key) ) return self::send_error( LR_API_ARGS_ERROR , 'key FIELD REQUIRED' );
 		
 		if(!$value = unserialize(v('value')))
 		{
 			$value = z(t(v('value')));
-			if( !not_empty($value) ) return $this -> send_error( LR_API_ARGS_ERROR , 'value FIELD REQUIRED' );
+			if( !not_empty($value) ) return self::send_error( LR_API_ARGS_ERROR , 'value FIELD REQUIRED' );
 		}
 		else
 		{
-			if( !is_array($value) ) return $this -> send_error( LR_API_ARGS_ERROR , 'value FIELD REQUIRED' );
+			if( !is_array($value) ) return self::send_error( LR_API_ARGS_ERROR , 'value FIELD REQUIRED' );
 		
 		}
 		
 		
 		
 		if(!is_array( $settings = get_user_settings_by_id( $_SESSION['uid'] ) ))
-			return $this->send_error( LR_API_DB_ERROR , 'CAN\'T FIND DATA' );
+			return self::send_error( LR_API_DB_ERROR , 'CAN\'T FIND DATA' );
 		else
 		{
 			$settings[$key] = $value;
 			update_user_settings_array( $settings );
 			
 			if( db_errno() != 0 )
-				return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 			else
-				return $this->send_result( $settings );
+				return self::send_result( $settings );
 			
 		}	
 		
@@ -604,18 +604,18 @@ class apiController extends appController
 	function user_level()
 	{
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
 		
-		if( $uid == uid() ) return $this->send_error( LR_API_ARGS_ERROR , 'CANNOT CHANGE YOUR SELF' );
+		if( $uid == uid() ) return self::send_error( LR_API_ARGS_ERROR , 'CANNOT CHANGE YOUR SELF' );
 		
 		if(!$user = get_user_info_by_id( $uid ))
-		return $this->send_error( LR_API_ARGS_ERROR , 'UID NOT EXISTS' );
+		return self::send_error( LR_API_ARGS_ERROR , 'UID NOT EXISTS' );
 		
 		$level = intval(v('level'));
 		
 		
 		if( $_SESSION['level'] != '9' )
-		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+		return self::send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 		
 		if( $level == 0 ) $more = " , `is_closed` = 1 ";
 		else $more = "";	
@@ -627,19 +627,19 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( db_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
         else
 		{
 			if( $level == 0 )
 			{
 				publish_feed( uname().'关闭了账号【'. $user['name'] .'】' , uid() , 1 );
 				$user['level'] = 0;
-				return $this->send_result( $user );
+				return self::send_result( $user );
 			}
 			else
 			{
 				publish_feed( uname().'修改了账号【'. $user['name'] .'】权限为'.$level , uid() , 1 );
-				return $this->send_result( get_user_info_by_id($uid) );
+				return self::send_result( get_user_info_by_id($uid) );
 			
 			}
 			
@@ -660,32 +660,32 @@ class apiController extends appController
 	function user_close()
 	{
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UID CAN\'T BE EMPTY' );
 		
 		if(!$user = get_user_info_by_id( $uid ))
-		return $this->send_error( LR_API_ARGS_ERROR , 'UID NOT EXISTS' );
+		return self::send_error( LR_API_ARGS_ERROR , 'UID NOT EXISTS' );
 		
 		if( $_SESSION['level'] != '9' )
-		return $this->send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
+		return self::send_error( LR_API_FORBIDDEN , 'ONLY ADMIN CAN DO THIS' );
 		
 		if( $user['is_closed'] == '1' )
-			return $this->send_error( LR_API_USER_CLOSED , 'USER CLOSED BY ADMIN' );
+			return self::send_error( LR_API_USER_CLOSED , 'USER CLOSED BY ADMIN' );
 		
 		if( $_SESSION['level'] == '9' && $uid == uid() )
 		{
 			$admin_num = get_var( "SELECT COUNT(*) FROM `user` WHERE `is_closed` = 0 AND `level` = 9 " );
-			if( $admin_num < 2 ) return $this->send_error( LR_API_FORBIDDEN , 'CANNOT CLOSE THE ONLY ADMIN' );
+			if( $admin_num < 2 ) return self::send_error( LR_API_FORBIDDEN , 'CANNOT CLOSE THE ONLY ADMIN' );
 
 		}
 		
 		close_user_by_id($uid);
 		
 		if( db_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
         else
 		{
 			publish_feed( uname().'关闭了账号【'. $user['name'] .'】' , uid() , 1 );
-			return $this->send_result( $user );
+			return self::send_result( $user );
 		
 		}
 		
@@ -707,7 +707,7 @@ class apiController extends appController
 	public function todo_add()
 	{
 		$content = z(t(v('text')));
-		if( !not_empty($content) ) return $this->send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
+		if( !not_empty($content) ) return self::send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
 		
 		
 		$is_public = intval(v('is_public'));
@@ -722,7 +722,7 @@ class apiController extends appController
 		if( $todo = get_line($sql) )
 		{
 			if( get_var( "SELECT COUNT(*) FROM `todo_user` WHERE `tid` = '" . intval( $todo['id'] ) . "' AND `uid` = '" . intval( uid() ) . "' AND `status` != 3 " ) > 0 )
-			return $this-> send_error( LR_API_ARGS_ERROR , 'TODO EXISTS ' );
+			return self::send_error( LR_API_ARGS_ERROR , 'TODO EXISTS ' );
 			
 		}
 		
@@ -731,7 +731,7 @@ class apiController extends appController
 		
 		if( !$tid = add_todo( $content , $is_public ))
 		{
-			return $this-> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		}
 
 		$tinfo = get_todo_info_by_id( $tid );
@@ -748,7 +748,7 @@ class apiController extends appController
 		}
 			
 		
-		return $this->send_result( $tinfo );
+		return self::send_result( $tinfo );
 		      
 	}
 	
@@ -764,26 +764,26 @@ class apiController extends appController
 	public function todo_remove_comment()
 	{
 		$hid = intval(v('hid'));
-		if( intval( $hid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'HID NOT EXISTS' );
+		if( intval( $hid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'HID NOT EXISTS' );
 		
 		$sql = "SELECT *,`id` as `hid` FROM `todo_history` WHERE `id` = '" . intval( $hid ) . "' LIMIT 1";
 		if( !$hitem = get_line( $sql ) )
 		{
 			if( db_errno() != 0 )
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 				else
-					return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+					return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 		}
 		else
 		{
 			if( ($hitem['uid'] != $_SESSION['uid']) && $_SESSION['level'] < 9 )
 			{
-				return $this->send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S COMMENT' );
+				return self::send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S COMMENT' );
 			}
 			
 			if( $hitem['type'] != 2 )
 			{
-				return $this->send_error( LR_API_ARGS_ERROR , 'HTYPE ERROR' );
+				return self::send_error( LR_API_ARGS_ERROR , 'HTYPE ERROR' );
 			}
 			
 			$sql = "DELETE FROM `todo_history` WHERE `id` = '" . intval($hid) . "' LIMIT 1";
@@ -791,7 +791,7 @@ class apiController extends appController
 			run_sql( $sql );
 
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
 			{
 				// 更新todo 评论计数
@@ -803,7 +803,7 @@ class apiController extends appController
 				$sql = "UPDATE `feed` SET `comment_count` = '" . intval( $count ) . "' WHERE `tid` = '" . intval( $tid ) . "' AND `comment_count` != '" . intval( $count )  . "' ";
 				run_sql( $sql );		
 
-				return $this->send_result( $hitem );
+				return self::send_result( $hitem );
 			}
 				
 		}
@@ -825,10 +825,10 @@ class apiController extends appController
 	public function todo_add_comment()
 	{
 		$content = z(t(v('text')));
-		if( !not_empty($content) ) return $this->send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
+		if( !not_empty($content) ) return self::send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
 		
 		$tid = intval(v('tid'));
-		if( intval( $tid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
+		if( intval( $tid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
 		
 		$tinfo = get_line("SELECT * FROM `todo` WHERE `id` = '" . intval( $tid ) . "' LIMIT 1");
 		
@@ -842,7 +842,7 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( db_errno() != 0 )
-			return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 		else
 		{
 			$lid = last_id();
@@ -956,14 +956,14 @@ class apiController extends appController
 				if($tinfo['is_public'] == 1)
 					publish_feed( uname().'评论了TODO【'. $tinfo['content'] .'】: '.$content , uid() , 2  , $tid );
 				
-				return $this->send_result( $comment );
+				return self::send_result( $comment );
 			}
 			else
 			{
 				if( db_errno() != 0 )
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 				else
-					return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+					return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 			}
 			
 			
@@ -985,18 +985,18 @@ class apiController extends appController
 	public function todo_detail()
 	{
 		$tid = intval(v('tid'));
-		if( intval( $tid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
+		if( intval( $tid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
 		
 		if( $tinfo = get_todo_info_by_id( $tid ) )
 		{
-			return $this->send_result( $tinfo );
+			return self::send_result( $tinfo );
 		}
 		else
 		{
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 		}
 	}
 	
@@ -1014,24 +1014,24 @@ class apiController extends appController
 	public function todo_assign( $tid = false , $uid = false , $in = false )
 	{
 		if( !$tid ) $tid = intval(v('tid'));
-		if( intval( $tid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
+		if( intval( $tid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'TID NOT EXISTS' );
 		
 		if( !$uid ) $uid = intval(v('uid'));
-		if( intval( $uid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'UIDS ERROR' );
+		if( intval( $uid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'UIDS ERROR' );
 		
 		
-		if( $uid == $_SESSION['uid'] ) return $this->send_error( LR_API_ARGS_ERROR , 'ASSIGN TO SELF' );
+		if( $uid == $_SESSION['uid'] ) return self::send_error( LR_API_ARGS_ERROR , 'ASSIGN TO SELF' );
 		
 		if( !$tinfo = get_line( "SELECT * FROM `todo_user` WHERE `tid` = '" . intval($tid) . "' AND `uid` = '" . uid() . "' LIMIT 1" ) )
 		{
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 		}
 		else
 		{
-			if( $tinfo['uid'] != uid() ) return $this->send_error( LR_API_FORBIDDEN , 'CANNOT ASSING OTHER\'S TODO' );
+			if( $tinfo['uid'] != uid() ) return self::send_error( LR_API_FORBIDDEN , 'CANNOT ASSING OTHER\'S TODO' );
 			
 			// 更新todo表
 			$sql = "UPDATE `todo` SET `owner_uid` = '" . intval( $uid ) . "' WHERE `id` = '" . intval($tid) . "' LIMIT 1";
@@ -1040,7 +1040,7 @@ class apiController extends appController
 				if( $in )
 					return false;
 				else
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 
 			
 			// 将新的uid加入 todo_user 表
@@ -1051,7 +1051,7 @@ class apiController extends appController
 				if( $in )
 					return false;
 				else
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			
 			// 将现有uid 变为follow状态
 			$sql = "UPDATE `todo_user` SET `is_follow` = 1 WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1";
@@ -1063,7 +1063,7 @@ class apiController extends appController
 				if( $in )
 					return false;
 				else
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 				
 			// 获取被转让人的信息
 			$uinfo = get_user_info_by_id($uid);	
@@ -1093,7 +1093,7 @@ class apiController extends appController
 			if( $in )
 					return get_todo_info_by_id( $tid ) ;
 				else
-					return $this->send_result( get_todo_info_by_id( $tid ) );
+					return self::send_result( get_todo_info_by_id( $tid ) );
 		}
 		
 		
@@ -1154,10 +1154,10 @@ class apiController extends appController
 	   $sql = $sql . $wsql . $osql . " LIMIT " . $count ;
 	   
 		
-		if( !$data = get_data( $sql ) ) return $this->send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
+		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
-			return $this->send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
+			return self::send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
 		
 		
 		$tids = array();
@@ -1182,7 +1182,7 @@ class apiController extends appController
 			// todo : sort it 
 			
 			if( intval(v('group')) != 1 )
-				return $this->send_result(array_values($todos));
+				return self::send_result(array_values($todos));
 			else
 			{
 				$ret = Array();
@@ -1199,26 +1199,26 @@ class apiController extends appController
 						$ret['normal'][] = $tt;
 				}
 				
-				return $this->send_result($ret);
+				return self::send_result($ret);
 			}	
 			
 		}
 		else
 		{
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 		} 	
 		
 		/*
 		if( $data = get_user_todo_list_by_uid() )
 		{
-			return $this->send_result( $data );
+			return self::send_result( $data );
 		}
 		else
 		{
-			return $this-> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		}*/
 			
 	}
@@ -1344,12 +1344,12 @@ class apiController extends appController
 	{
 		$tid = intval(v('tid'));
 		
-		if( $tid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $tid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
 		
 		$sql = "SELECT * FROM `todo_user` WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1" ;
         
 		if( !$data = get_line( $sql ))
-			return $this->send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
+			return self::send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
 			
 		// delete uid and limit 1
 		// to make all record updated at sametime
@@ -1359,7 +1359,7 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( mysql_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         else
 		{
 			$todoinfo = get_todo_info_by_id( $tid , true );
@@ -1391,7 +1391,7 @@ class apiController extends appController
 			}
 			
 			
-			return $this -> send_result( $todoinfo ); 
+			return self::send_result( $todoinfo ); 
 
 		}
 		
@@ -1410,13 +1410,13 @@ class apiController extends appController
 	public function todo_unfollow()
 	{
 		$tid = intval(v('tid'));
-		if( $tid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $tid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
 		
 		$sql = "SELECT * FROM `todo_user` WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1" ;
 		
 		if( !$data = get_line( $sql ))
 		{
-			return $this->send_error( LR_API_ARGS_ERROR , 'TID NOT EXSITS' );
+			return self::send_error( LR_API_ARGS_ERROR , 'TID NOT EXSITS' );
 		}
 		else
 		{
@@ -1424,10 +1424,10 @@ class apiController extends appController
 			run_sql( $sql );
 			
 			if( db_errno() != 0 )
-            	return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            	return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         	else
         	{	
-        		return $this -> send_result(get_todo_info_by_id( $tid , true )); 
+        		return self::send_result(get_todo_info_by_id( $tid , true )); 
         	}
 			
 			
@@ -1448,7 +1448,7 @@ class apiController extends appController
 	{
 		$tid = intval(v('tid'));
 		
-		if( $tid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $tid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
 		
 		$sql = "SELECT * FROM `todo_user` WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1" ;
 		
@@ -1460,15 +1460,15 @@ class apiController extends appController
 			run_sql( $sql );
 			
 			if( db_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         else
-			return $this -> send_result(get_todo_info_by_id( $tid , true )); 
+			return self::send_result(get_todo_info_by_id( $tid , true )); 
 			
 
 		}
 		else
 		{
-			return $this->send_error( LR_API_ARGS_ERROR , 'TID exists' );
+			return self::send_error( LR_API_ARGS_ERROR , 'TID exists' );
 		}
 				
 			
@@ -1492,28 +1492,28 @@ class apiController extends appController
 	{
 		$tid = intval(v('tid'));
 		
-		if( $tid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $tid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
         
 		// check user
 		//$sql = "SELECT * FROM `todo_user` WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1" ;
         $sql = "SELECT * FROM `todo` WHERE `id` = '" . intval($tid) . "' AND `owner_uid` = '" . intval(uid()) . "' LIMIT 1";
 		
 		if( !$data = get_line( $sql ))
-			return $this->send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
+			return self::send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
 		
 		$content = z(t(v('text')));
-		if( !not_empty($content) ) return $this->send_error( LR_API_ARGS_ERROR , 'text FIELD REQUIRED' );
+		if( !not_empty($content) ) return self::send_error( LR_API_ARGS_ERROR , 'text FIELD REQUIRED' );
 		
 		$sql = "UPDATE `todo` SET `content` = '" . s($content) . "' WHERE `id` = '" . intval($tid) . "' LIMIT 1";
 		run_sql( $sql );
 		
 		if( mysql_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         else
 		{
 			run_sql( "UPDATE `todo_user` SET `last_action_at` = NOW() WHERE `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1");
 			
-			return $this -> send_result(get_todo_info_by_id( $tid , true )); 
+			return self::send_result(get_todo_info_by_id( $tid , true )); 
 		}
 		
 	}
@@ -1535,10 +1535,10 @@ class apiController extends appController
 		
 		if( mysql_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         }
         else
-            return $this -> send_result( array('msg'=>'ok')  );
+            return self::send_result( array('msg'=>'ok')  );
 	}
 
 	/**
@@ -1558,10 +1558,10 @@ class apiController extends appController
 		
 		if( mysql_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         }
         else
-            return $this -> send_result( array('msg'=>'ok')  );
+            return self::send_result( array('msg'=>'ok')  );
 	}
 	
 	/**
@@ -1577,7 +1577,7 @@ class apiController extends appController
 	{
 		$tid = intval(v('tid'));
 		
-		if( $tid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $tid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
         
         
         $old = get_todo_info_by_id( $tid );
@@ -1587,10 +1587,10 @@ class apiController extends appController
         
         if( mysql_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         }
         else
-            return $this -> send_result( $old  );
+            return self::send_result( $old  );
 	}
 	
 	
@@ -1606,7 +1606,7 @@ class apiController extends appController
 		// 然后根据tid 判断是更新还是添加操作
 		// 
 		$content = z(t(v('text')));
-		if( !not_empty( $content ) ) return $this->send_error( LR_API_ARGS_ERROR , 'TEXT CANNOT BE EMPTY' );
+		if( !not_empty( $content ) ) return self::send_error( LR_API_ARGS_ERROR , 'TEXT CANNOT BE EMPTY' );
 		
 		$tid = intval(v('tid'));
 		if( $tid < 0 )
@@ -1614,7 +1614,7 @@ class apiController extends appController
 			if( intval(v('is_delete')) == 1 )
 			{
 				// 在本地添加后又在本地删除了
-				return $this->send_result( array( 'msg' => 'already delete local' ) );
+				return self::send_result( array( 'msg' => 'already delete local' ) );
 			}
 			// add
 			return $this->todo_add();
@@ -1625,7 +1625,7 @@ class apiController extends appController
 			$sql = "SELECT * FROM `todo_user` WHERE  `tid` = '" . intval($tid) . "' AND `uid` = '" . intval($_SESSION['uid']) . "' LIMIT 1" ;
         
 			if( !$data = get_line( $sql ))
-			return $this->send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
+			return self::send_error( LR_API_FORBIDDEN , 'YOU CANNOT UPDATE OTHERS TODO' );
 			
 			// 判断最后更新时间
 			// 
@@ -1650,7 +1650,7 @@ class apiController extends appController
 				
 				
 				if( strtotime( $client_last_action_at ) - strtotime( $data['last_action_at']) + $offset  <= 0 )
-					return $this->send_result( array( 'msg' => 'new action happend' ) );
+					return self::send_result( array( 'msg' => 'new action happend' ) );
 			}
 			
 			// update
@@ -1676,7 +1676,7 @@ class apiController extends appController
 
 				run_sql( $sql );
 				
-				return $this -> send_result(get_todo_info_by_id( $tid , true )); 
+				return self::send_result(get_todo_info_by_id( $tid , true )); 
 			}
 			
 		}
@@ -1698,7 +1698,7 @@ class apiController extends appController
 	public function feed_publish()
 	{
 		$content = z(t(v('text')));
-		if( !not_empty($content) ) return $this->send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
+		if( !not_empty($content) ) return self::send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
 		
 		$reblog_id = intval(v('fid'));
 		
@@ -1725,11 +1725,11 @@ class apiController extends appController
 		
 		run_sql( $sql );
 		if( db_errno() != 0 )
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		
 		$lid = last_id();
 		if( intval($lid) < 1 ) 
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR NO LASTID' );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR NO LASTID' );
 		
 		if($feed = get_feed_by_id( $lid , db() ))
 		{
@@ -1818,11 +1818,11 @@ class apiController extends appController
 
 
 
-			return $this->send_result( $feed );
+			return self::send_result( $feed );
 		}
 		else
 		{
-			return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		}
 			
 	}
@@ -1882,9 +1882,9 @@ class apiController extends appController
 		{
 			
 			if( db_errno() == 0 )
-				return $this -> send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 			else
-				return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		}
 		else
 		{
@@ -1934,7 +1934,7 @@ class apiController extends appController
 				}
 			
 			}
-			return $this->send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
+			return self::send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
 			
 		}
 	}
@@ -1951,21 +1951,21 @@ class apiController extends appController
 	public function feed_remove_comment( $cid = flase )
 	{
 		$cid = intval(v('cid'));
-		if( intval( $cid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'HCD NOT EXISTS' );
+		if( intval( $cid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'HCD NOT EXISTS' );
 		
 		$sql = "SELECT *,`id` as `cid` FROM `comment` WHERE `id` = '" . intval( $cid ) . "' LIMIT 1";
 		if( !$citem = get_line( $sql ) )
 		{
 			if( db_errno() != 0 )
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 				else
-					return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+					return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 		}
 		else
 		{
 			if( ($citem['uid'] != $_SESSION['uid']) && $_SESSION['level'] < 9 )
 			{
-				return $this->send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S COMMENT' );
+				return self::send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S COMMENT' );
 			}
 			
 			
@@ -1979,9 +1979,9 @@ class apiController extends appController
 			run_sql( $sql );
 
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_result( $citem );
+				return self::send_result( $citem );
 		}
 	}
 
@@ -1997,11 +1997,11 @@ class apiController extends appController
 	public function feed_remove( $fid = false )
 	{
 		if( !$fid ) $fid = intval(v('fid'));
-		if( intval( $fid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'FID NOT EXISTS' );
+		if( intval( $fid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'FID NOT EXISTS' );
 
 		$finfo = get_line("SELECT * FROM `feed` WHERE `id` = '" . intval( $fid ) . "' LIMIT 1");
 		if( $finfo['uid'] != uid() && !is_admin() ) 
-			return $this->send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S FEED' );
+			return self::send_error( LR_API_FORBIDDEN , 'CANNOT REMOVE OTHER\'S FEED' );
 
 		$sql = "DELETE FROM `feed` WHERE `id` = '" . intval( $fid ) . "' LIMIT 1";
 		run_sql( $sql );
@@ -2010,9 +2010,9 @@ class apiController extends appController
 		run_sql( $sql );
 
 		if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_result( $finfo );
+				return self::send_result( $finfo );
 
 
 	}
@@ -2032,11 +2032,11 @@ class apiController extends appController
 		if( !$text )
 		$content = $text = z(t(v('text')));
 		
-		if( !not_empty($content) ) return $this->send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
+		if( !not_empty($content) ) return self::send_error(  LR_API_ARGS_ERROR , 'TEXT CAN\'T EMPTY' );
 		
 		if( !$fid )
 		$fid = intval(v('fid'));
-		if( intval( $fid ) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'FID NOT EXISTS' );
+		if( intval( $fid ) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'FID NOT EXISTS' );
 		
 		
 		$finfo = get_line("SELECT * FROM `feed` WHERE `id` = '" . intval( $fid ) . "' LIMIT 1");
@@ -2050,7 +2050,7 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( db_errno() != 0 )
-			return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 		else
 		{
 			$lid = last_id();
@@ -2146,14 +2146,14 @@ class apiController extends appController
 			{
 				$comment['user'] = get_user_info_by_id( $_SESSION['uid'] );
 				
-				return $this->send_result( $comment );
+				return self::send_result( $comment );
 			}
 			else
 			{
 				if( db_errno() != 0 )
-					return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+					return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 				else
-					return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+					return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
 			}
 			
 			
@@ -2174,16 +2174,16 @@ class apiController extends appController
 	{
 		$fid = intval(v('fid'));
 		
-		if( $fid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $fid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
     
 		$sql = "SELECT * FROM `feed` WHERE  `id` = '" . intval($fid) . "' LIMIT 1" ;
 		
 		if( !$data = get_line( $sql ) )
         {
 			if( db_errno() != 0 )
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 			else
-				return $this->send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'DATA NOT EXISTS' );
         }
 		else
 		{
@@ -2229,7 +2229,7 @@ class apiController extends appController
 			$data['comment'] = $cdata;
 
 
-			return $this->send_result( $data );
+			return self::send_result( $data );
 				
 				
 		}	
@@ -2243,7 +2243,7 @@ class apiController extends appController
 	{
 		$fid = intval(v('fid'));
 		
-		if( $fid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $fid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
         
         
         $sql = "SELECT * FROM `feed` WHERE  `id` = '" . intval($fid) . "' LIMIT 1" ;
@@ -2252,7 +2252,7 @@ class apiController extends appController
         
         if( mysql_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         }
         
         $sql = "DELETE FROM `feed` WHERE  `id` = '" . intval($fid) . "' LIMIT 1" ;
@@ -2260,10 +2260,10 @@ class apiController extends appController
         
         if( mysql_errno() != 0 )
         {
-            return $this -> send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+            return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
         }
         else
-            return $this -> send_result( $data );
+            return self::send_result( $data );
 	}*/
 
 	
@@ -2271,11 +2271,11 @@ class apiController extends appController
 	{
 		// 5分钟内有过活动的都算
 		$sql = "SELECT * FROM `online` WHERE `last_active` > '" . date( "Y-m-d H:i:s" , strtotime("-5 minutes") ) . "'";
-		if( !$data = get_data( $sql ) ) return $this->send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
+		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
-			return $this->send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
-		else return $this->send_result( $data );
+			return self::send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
+		else return self::send_result( $data );
 
 	}
 	
@@ -2322,7 +2322,7 @@ class apiController extends appController
 		$sql = "REPLACE `online` ( `uid` , `session` , `last_active` , `device` ) VALUES ( '" . intval(uid()) . "' , '"  . s( session_id() ) . "' , NOW() , '" . get_device() . "' ) ";
 		run_sql($sql);
 
-		return $this->send_result( 
+		return self::send_result( 
 			array(
 					'all'=> $message_count+$notice_count,
 					'message'=>$message_count,
@@ -2368,10 +2368,10 @@ class apiController extends appController
 		
 		$sql = $sql . $wsql . $osql . " LIMIT " . $count ;
 		 
-		if( !$data = get_data( $sql ) ) return $this->send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
+		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
-			return $this->send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
+			return self::send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
 		else
 		{
 			$more = 1;
@@ -2393,7 +2393,7 @@ class apiController extends appController
 				}
 			}
 			
-			return $this->send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
+			return self::send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
 		}
 			
 	}
@@ -2416,9 +2416,9 @@ class apiController extends appController
 		run_sql( $sql );
 		
 		if( db_errno() == 0  )
-				return $this->send_result( array('msg'=>'done') );
+				return self::send_result( array('msg'=>'done') );
 			else	
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 	}
 
 	/**
@@ -2433,7 +2433,7 @@ class apiController extends appController
 	public function user_update_avatar()
 	{
 		if( $_FILES['file']['error'] != 0 ) 
-			return $this->send_error( OP_API_UPLOAD_ERROR , 'UPLOAD ERROR ' . $_FILES['file']['error'] ); 
+			return self::send_error( OP_API_UPLOAD_ERROR , 'UPLOAD ERROR ' . $_FILES['file']['error'] ); 
 						
 						
 		$tmp_image_name =  SAE_TMP_PATH . md5(time().rand(1,99999)) . '.tmp.jpg';
@@ -2463,7 +2463,7 @@ class apiController extends appController
 			$s = new SaeStorage();
 			if(!$thumb_url = $s->write( 'upload' , $file_thumb_name , file_get_contents($tmp_file) ))
 			{
-				return $this->send_error( OP_API_STORAGE_ERROR , 'SAVE ERROR ' . $s->errmsg() );
+				return self::send_error( OP_API_STORAGE_ERROR , 'SAVE ERROR ' . $s->errmsg() );
 			}
 		}
 		else
@@ -2474,7 +2474,7 @@ class apiController extends appController
 			$thumb_url = $local_storage_url . $file_thumb_name;
 
 			if( !copy( $tmp_file , $thumb_path ) )
-				return $this->send_error( OP_API_STORAGE_ERROR , 'SAVE ERROR '  );
+				return self::send_error( OP_API_STORAGE_ERROR , 'SAVE ERROR '  );
 		}
 		
 
@@ -2486,11 +2486,11 @@ class apiController extends appController
 				 
 		if( mysql_errno() != 0 )
 		{
-			return $this->send_error( OP_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+			return self::send_error( OP_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 		}
 		else
 		{
-			return $this->send_result(get_user_info_by_id(intval(uid())));
+			return self::send_result(get_user_info_by_id(intval(uid())));
 		 
 		}		 
 
@@ -2511,11 +2511,11 @@ class apiController extends appController
 	public function im_send( $uid = false , $text = false )
 	{
 		if( !$uid ) $uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
-		if( $uid == uid() ) return $this->send_error( LR_API_ARGS_ERROR , 'NO NEED TO SPEAK TO UR SELF' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $uid == uid() ) return self::send_error( LR_API_ARGS_ERROR , 'NO NEED TO SPEAK TO UR SELF' );
 
 		if( !$text ) $text = z(t(v('text')));
-		if( strlen($text) < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'text FIELD REQUIRED' );
+		if( strlen($text) < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'text FIELD REQUIRED' );
 
 		$sql = "INSERT INTO `message` ( `from_uid` , `to_uid` , `timeline` , `content` ) VALUES ( '" . intval(uid()) . "' 
 		, '" . intval($uid) . "' , NOW() , '" . s( $text ) . "' ) ";
@@ -2523,11 +2523,11 @@ class apiController extends appController
 
 		if( mysql_errno() != 0 )
 		{
-			return $this->send_error( OP_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+			return self::send_error( OP_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 		}
 		else
 		{
-			return $this->send_result( array( 'msg' => 'ok' ) );
+			return self::send_result( array( 'msg' => 'ok' ) );
 		}	
         	
 	}
@@ -2545,8 +2545,8 @@ class apiController extends appController
 	public function im_history( $uid = false )
 	{
 		if( !$uid ) $uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
-		if( $uid == uid() ) return $this->send_error( LR_API_ARGS_ERROR , 'NO NEED TO SPEAK TO UR SELF' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $uid == uid() ) return self::send_error( LR_API_ARGS_ERROR , 'NO NEED TO SPEAK TO UR SELF' );
 
 		$since_id = intval( v( 'since_id' ) );
         $max_id = intval( v( 'max_id' ) );
@@ -2572,10 +2572,10 @@ class apiController extends appController
 		$sql = $sql . $wsql . $osql . " LIMIT " . $count ;
 		//sae_debug( 'sql=' . $sql );
 
-		if( !$data = get_data( $sql ) ) return $this->send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
+		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
-			return $this->send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
+			return self::send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
 		else
 		{
 			$more = 1;
@@ -2593,7 +2593,7 @@ class apiController extends appController
 				}
 			}
 			
-			return $this->send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
+			return self::send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
 		}
 
 
@@ -2612,7 +2612,7 @@ class apiController extends appController
 	public function get_fresh_chat()
 	{
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return $this->send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
+		if( $uid < 1 ) return self::send_error( LR_API_ARGS_ERROR , 'id FIELD REQUIRED' );
 
 		$since_id = intval(v('since_id'));
 		if( $since_id > 0 ) $wsql = "AND `id` > '" . $since_id . "' " ; 
@@ -2620,10 +2620,10 @@ class apiController extends appController
 
 		$sql = "SELECT * FROM `message` WHERE `to_uid` = '" . intval(uid()) . "' AND `from_uid` = '" . intval($uid) . "' AND `is_read` = 0 " . $wsql . " ORDER BY `id` DESC LIMIT 100";
 
-		if( !$data = get_data( $sql ) ) return $this->send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
+		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
-			return $this->send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
+			return self::send_error(  LR_API_DB_ERROR , 'DATABASE ERROR '   );
 		else
 		{
 			$more = 1;
@@ -2644,7 +2644,7 @@ class apiController extends appController
 			$sql = "UPDATE `message` SET `is_read` = 1 WHERE `to_uid` = '" . intval(uid()) . "' AND `from_uid` = '" . intval($uid) . "' LIMIT 100";
 			run_sql( $sql );
 			
-			return $this->send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
+			return self::send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );
 		}
 	}
 	
@@ -2673,11 +2673,11 @@ class apiController extends appController
 		
 		if( db_errno() != 0 )
 		{
-			return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
+			return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . db_error() );
 		}
 		else
 		{
-			return $this->send_result( array('activecode'=>$string) );
+			return self::send_result( array('activecode'=>$string) );
 		}
 	}
 	
@@ -2696,9 +2696,9 @@ class apiController extends appController
 		if( !$data = get_data( $sql ) )
 		{
 			if( db_errno() == 0  )
-				return $this->send_error( LR_API_DB_EMPTY_RESULT , 'NO DATA' );
+				return self::send_error( LR_API_DB_EMPTY_RESULT , 'NO DATA' );
 			else	
-				return $this->send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
+				return self::send_error( LR_API_DB_ERROR , 'DATABASE ERROR ' . mysql_error() );
 		}
 		
 		// clean password field
@@ -2709,7 +2709,7 @@ class apiController extends appController
 			if( strlen($data[$k]['groups']) > 0 ) $data[$k]['groups'] = explode('|', trim( $data[$k]['groups'] , '|' )) ;
 		}
 		
-		return $this->send_result( $data );
+		return self::send_result( $data );
 			
 		
 			
@@ -2727,7 +2727,7 @@ class apiController extends appController
      */
 	public function groups()
 	{
-		return $this->send_result( get_group_names() );
+		return self::send_result( get_group_names() );
 	}
     
     /*
@@ -2739,7 +2739,7 @@ class apiController extends appController
         
         if( strlen( $token ) < 2 )
         {
-            return $this -> send_error( LR_API_TOKEN_ERROR , 'NO TOKEN' );
+            return self::send_error( LR_API_TOKEN_ERROR , 'NO TOKEN' );
         }
         
         session_id( $token );
@@ -2748,14 +2748,14 @@ class apiController extends appController
         
         if( $_SESSION[ 'token' ] != $token )
         {
-            return $this -> send_error( LR_API_TOKEN_ERROR , 'BAD TOKEN' );
+            return self::send_error( LR_API_TOKEN_ERROR , 'BAD TOKEN' );
         }
     }
 
     /*
 	 * ignore
      */
-    public function send_error( $number , $msg )
+    public static function send_error( $number , $msg )
     {
         $obj = array();
         $obj[ 'err_code' ] = intval( $number );
@@ -2773,7 +2773,7 @@ class apiController extends appController
     /*
 	 * ignore
      */
-    public function send_result( $data )
+    public static function send_result( $data )
     {
         $data = apply_filter( 'API_' . g('a') .'_OUTPUT_FILTER' , $data );
         
