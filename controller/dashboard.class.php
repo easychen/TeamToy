@@ -154,17 +154,77 @@ PRIMARY KEY (  `folder_name` )
 		return null;
 	}
 
+	function im_all_json()
+	{
+		$params = array();
+		$params['max_id'] = intval(v('max_id'));
+		$params['word'] = z(t(v('keyword')));
+		$params['read_all'] = 1;
+		$params['count'] = 100;
+
+		if($content = send_request( 'im_history' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			if( $data['err_code'] == 0 )
+			{
+				$data['data']['items'] = array_reverse($data['data']['items']);
+				return render( 
+				array( 	'code' => 0 , 
+						'data' =>  
+							array( 	'min'=> $data['data']['min'],
+									'more' => $data['data']['more'],
+									'html' => render_html( 
+										array(	'data' => $data['data'] ) , 
+										AROOT . 'view' . DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'im_history_large.tpl.html'  
+										) 
+								)) , 'rest' );
+			}
+			else
+				return render( array( 'code' => 100002 , 'message' => 'can not save data' ) , 'rest' );
+		}	
+	}
+
+
+	function im_all()
+	{
+		$params = array();
+		$params['max_id'] = intval(v('max_id'));
+		$params['word'] = z(t(v('keyword')));
+		$params['uid'] = intval(v('uid'));
+		$params['read_all'] = 1;
+		$params['count'] = 100;
+
+
+		if($content = send_request( 'im_history' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			if( intval($data['err_code']) != 0 && intval($data['err_code']) != LR_API_DB_EMPTY_RESULT ) 
+				return ajax_echo('无法载入数据请稍后重试');
+
+			if( isset( $data['data']['items'] ) )
+			 $data['data']['items'] = array_reverse($data['data']['items']);
+			
+			return render( $data , 'ajax' , 'raw'  );
+
+		}
+
+		return info_page('无法载入数据请稍后重试');
+	}
+
+
 	function im_history()
 	{
 		$params = array();
 		$params['max_id'] = intval(v('max_id'));
 		$params['since_id'] = intval(v('since_id'));
+		$params['uid'] = intval(v('uid'));
 		
 		// mark all chat as read so we can list it in "history"
 		$content = send_request( 'get_fresh_chat' ,  $params , token() );
 		if($content = send_request( 'im_history' ,  $params , token()  ))
 		{
 			$data = json_decode($content , 1);
+			//print_r( $data );
 			if( intval($data['err_code']) != 0 ) 
 				return false;
 

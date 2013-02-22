@@ -337,7 +337,10 @@ function send_request( $action , $param , $token = null )
 
     if( (is_array( $param )) && (count($param) > 0) )
         foreach( $param as $key => $value )
+        {
             $_REQUEST[$key] =  $value ;
+        }
+            
 
     $api = new apiController();
     // magic call

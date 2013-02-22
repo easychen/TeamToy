@@ -1231,11 +1231,31 @@ div.upgrade a.btn
 .im_history
 {
 	background: white;
-	height: 200px;
+	height: 180px;
 	max-height: 200px;
 	overflow: auto; 
 	position: relative;
 	width:318px;
+}
+
+#im_all_text_div
+{
+	background: white;
+	max-height: 200px;
+	overflow: auto; 
+	position: relative;
+	width:525px;
+}
+
+.im_history.large
+{
+	background: white;
+	height: auto;
+	overflow: auto; 
+	position: relative;
+	width:100%;
+	list-style:none;
+	display: inline-block;
 }
 
 .im_history .others
@@ -1325,10 +1345,35 @@ div.upgrade a.btn
 
 .im_divider
 {
-	background: #e8e8e8;
-	height:5px;
+	background: #273342;
+	height:25px;
+	line-height: 25px;
+	padding-left:5px;
 }
 
+.im_divider a
+{
+	color:white;
+	text-decoration: none;
+}
+
+#im_keyword
+{
+	width:325px;
+}
+
+.im_all_text
+{
+	height:400px;
+	overflow-y:scroll;
+	border:1px solid #ccc;
+	margin-bottom:10px; 
+}
+
+.im_form_textarea:focus 
+{
+	outline:none!important;
+}
 
 #im_box
 {

@@ -1,0 +1,17 @@
+<div class="im_all_text" id="im_all_text_div">
+<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'im_history_large.tpl.html' ); ?>
+</div>
+<div class="form-inline">
+	<div class="input-append" id="im_keyword_box">
+	  <input id="im_keyword" type="text">
+	  <button class="btn" type="button" onclick="im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() );void(0);">查找聊天记录</button>
+	</div>
+	<a href="javascript:im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() , im_his_min );void(0);" class="btn" id="im_next_link">下一页</a>
+</div>
+<script type="text/javascript">
+var im_his_min = '<?=intval($data['min'])?>';
+var im_his_more = '<?=intval($data['more'])?>';
+im_next_btn();
+
+
+</script>

@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `eid` varchar(32) DEFAULT NULL COMMENT '员工号',
   `weibo` varchar(32) DEFAULT NULL,
   `desp` text,
-  `groups` varchar(255) NOT NULL,
+  `groups` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`),

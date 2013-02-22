@@ -1898,6 +1898,61 @@ function cancel_tag( uid )
 	$('#t-tags-edit-'+uid).hide();
 }
 
+function show_im_all_history( uid , uname )
+{
+	show_float_box( '我和'+ uname +'的聊天记录' , '?c=dashboard&a=im_all&uid='+uid );
+}
+
+function im_next_btn()
+{
+	if( parseInt(im_his_more) == 1 )
+	{
+		$('#im_next_link').addClass('btn-primary');
+		$('#im_next_link').removeClass('disable');
+	}
+	else
+	{
+		$('#im_next_link').removeClass('btn-primary');
+		$('#im_next_link').addClass('disable');
+	} 
+}
+
+function im_all_update( uid , keyword , max )
+{
+	// im_all_json
+	var url = '?c=dashboard&a=im_all_json&uid='+uid+'&keyword='+encodeURIComponent(keyword)+'&max_id='+max ;
+	
+	var params = {};
+	$.post( url , params , function( data )
+	{
+		var data_obj = $.parseJSON( data );
+		 
+		done();
+		if( data_obj.err_code == 0 )
+		{
+			$('#im_all_text_div').html( $(data_obj.data.html) );
+			$('#im_all_text_div').animate
+			({
+        		scrollTop: 0},
+        	'fast');
+
+			im_his_min = parseInt(data_obj.data.min);
+			im_his_more = parseInt(data_obj.data.more);
+			im_next_btn();
+
+			
+			
+		}
+		else
+		{
+			//alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+		}
+	} );
+
+	doing();
+}
+
+
 function doing()
 {
 	$("li#doing_gif").show();

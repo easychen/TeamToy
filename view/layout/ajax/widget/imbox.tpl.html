@@ -7,7 +7,14 @@
 			
 		</div>
 		<div class="im_form">
-			<div class="im_divider"></div>
+			<div class="im_divider">
+				<?php do_action( 'UI_IM_TEXT_TOOLBAR_LIST_BEFORE' ); ?>
+				
+				<?php if( $item['id'] != uid() ):?>
+				<a href="javascript:show_im_all_history('<?=$item['id']?>','<?=$item['name']?>');void(0);" title="聊天记录"><i class="icon-time"></i></a>
+				<?php endif; ?>
+
+				<?php do_action( 'UI_IM_TEXT_TOOLBAR_LIST_AFTER' ); ?></div>
 			<?php if( $item['id'] == uid() ):?>
 				<textarea class="im_form_textarea" disabled="disabled" uid="<?=$item['id']?>" autofocus="autofocus">亲，自言自语就不用发到服务器啦~</textarea>
 			<?php else: ?>

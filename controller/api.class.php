@@ -1916,7 +1916,11 @@ class apiController extends appController
 				{
 					foreach( $udata as $uitem )
 					{
+						if( strlen( $uitem['groups'] ) > 0 ) 
+							$uitem['groups'] = explode('|', trim( $uitem['groups'] , '|' )) ;
+						
 						$uarray[$uitem['id']] = $uitem;
+
 					}
 					
 					//print_r( $uarray );
@@ -1926,7 +1930,10 @@ class apiController extends appController
 						foreach( $data as $k=>$hitem )
 						{
 							if( isset( $uarray[$hitem['uid']] ) )
+							{
 								$data[$k]['user'] = $uarray[$hitem['uid']];
+							}
+								
 						}
 					}
 					
@@ -2205,6 +2212,9 @@ class apiController extends appController
 				{
 					foreach( $udata as $uitem )
 					{
+						if( strlen( $uitem['groups'] ) > 0 ) 
+							$uitem['groups'] = explode('|', trim( $uitem['groups'] , '|' )) ;
+						
 						$uarray[$uitem['id']] = $uitem;
 					}
 					
@@ -2270,7 +2280,7 @@ class apiController extends appController
 	public function user_online()
 	{
 		// 5分钟内有过活动的都算
-		$sql = "SELECT * FROM `online` WHERE `last_active` > '" . date( "Y-m-d H:i:s" , strtotime("-5 minutes") ) . "'";
+		$sql = "SELECT `uid` , `last_active` , `device` , `place` FROM `online` WHERE `last_active` > '" . date( "Y-m-d H:i:s" , strtotime("-5 minutes") ) . "'";
 		if( !$data = get_data( $sql ) ) return self::send_error( LR_API_DB_EMPTY_RESULT , 'EMPTY RESULT' );
 		
 		if( db_errno() != 0 )
@@ -2550,24 +2560,37 @@ class apiController extends appController
 
 		$since_id = intval( v( 'since_id' ) );
         $max_id = intval( v( 'max_id' ) );
-        
-		$count = intval( v( 'count' ) );
+
+        $count = intval( v( 'count' ) );
 		if( $count < 1 ) $count = 10;
         if( $count > 100 ) $count = 100;
+
+        /*
+        $all = intval(v('read_all'));
+        if( $all != 1 )
+        	$wwsql = " AND `is_read` = 1 ";
+        else
+        	$wwsql = "";
+
+		*/
+        	
+		$wsql = '';
 		
 		if( $since_id > 0 )
-            $wsql = " AND `id` > '" . intval( $since_id ) . "' ";
+            $wsql .= " AND `id` > '" . intval( $since_id ) . "' ";
         elseif( $max_id > 0 )
-            $wsql = " AND `id` < '" . intval( $max_id ) . "' ";
-        else
-       		$wsql = '';
+            $wsql .= " AND `id` < '" . intval( $max_id ) . "' ";
+        
+
+       	$word = z(t(v('word')));
+       	if( strlen( $word ) > 0 ) $wsql .= $wsql . " AND `content` LIKE '%" . s($word) . "%' ";
 	   
 		$osql = " ORDER BY `id` DESC ";	
 
 
 
-		$sql = "SELECT * FROM `message` WHERE `is_read` = 1 AND ( `from_uid` = '" . intval($uid) . "' AND `to_uid` = '" . uid() . "' ) ";
-		$sql .= " OR ( `from_uid` = '" . uid() . "' AND `to_uid` = '" . intval($uid) . "' ) ";
+		$sql = "SELECT * FROM `message` WHERE 1 AND (( `from_uid` = '" . intval($uid) . "' AND `to_uid` = '" . uid() . "' ) ";
+		$sql .= " OR ( `from_uid` = '" . uid() . "' AND `to_uid` = '" . intval($uid) . "' )) ";
 
 		$sql = $sql . $wsql . $osql . " LIMIT " . $count ;
 		//sae_debug( 'sql=' . $sql );
