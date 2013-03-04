@@ -125,7 +125,7 @@ PRIMARY KEY (  `folder_name` )
 				if( $data['data']['pscript'] )
 					return info_page( '代码更新成功，请<a href="' . $data['data']['pscript'] . '">点击这里升级数据表</a>' );
 				else	
-					return info_page( '成功更新，请<a href="/">用力刷新页面以保证新代码正常工作</a>' );
+					return info_page( '成功更新，请<a href="?c=inbox">用力刷新页面以保证新代码正常工作</a>' );
 			}
 				
 		}
@@ -521,6 +521,27 @@ PRIMARY KEY (  `folder_name` )
 
 
 
+
+	}
+
+	function todo_center()
+	{
+		$tid = intval(v('tid'));
+		if( $tid < 1 ) return info_page('加载todo失败，请重试');
+
+		$params = array();
+		$params['tid'] = $tid;
+		
+		if($content = send_request( 'todo_detail' ,  $params , token()  ))
+		{
+			$data = json_decode($content , 1);
+			if( intval($data['err_code']) != 0 ) 
+				return false;
+			else
+				return render( $data , 'ajax' , 'raw'  );
+		}
+
+		return info_page('加载todo失败，请重试');
 
 	}
 

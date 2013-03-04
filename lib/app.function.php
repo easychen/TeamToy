@@ -331,7 +331,7 @@ function send_request( $action , $param , $token = null )
     // local request
     $bake_request = $_REQUEST;
     $_REQUEST['c'] = 'api';
-    $_REQUEST['a'] = $action;
+    $GLOBALS['a'] = $_REQUEST['a'] = $action;
     if( $token !== null )
         $_REQUEST['token'] = $token;
 
@@ -348,6 +348,7 @@ function send_request( $action , $param , $token = null )
     {
         $content = $api->$action();
         $_REQUEST = $bake_request;
+        $GLOBALS['a'] = $_REQUEST['a'];
        
         return $content;
         //if($data = json_decode( $content , 1 ))
@@ -711,7 +712,21 @@ function link_at( $str )
     return str_replace( $to_replace , $replace_to , $str );
 }
 
+function find_links( $html )
+{
+    $reg = '/(http:\/\/(.+?))((\s+)|$)/is';
+    if( preg_match_all( $reg , $html , $out ) )
+    {
+        foreach( $out[0] as $item )
+        {
+            $ret[] = trim($item);
+        }
 
+        $ret = array_unique($ret);
+        return $ret;
+    }
+    return false;
+}
 
 
 function array_remove( $value , $array )

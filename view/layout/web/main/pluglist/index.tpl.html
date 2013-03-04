@@ -2,7 +2,10 @@
 <?php do_action( 'UI_PLUGINLIST_BEFORE' );  ?>
 <div class="row-fluid">
 <div class="span12">
-	<h2 class="main_board">插件管理&nbsp;<?php if( is_writable( c('plugin_path') )  ): ?><a href="javascript:show_float_box('上传插件' , '?c=pluglist&a=upload');void(0);" class="side_link">上传插件</a><?php endif; ?> </h2>
+	<h2 class="main_board">
+	<a href="https://github.com/easychen/TeamToy-Plugins" target="_blank" class="side_link pull-right">更多插件</a> 	
+		插件管理&nbsp;<?php if( is_writable( c('plugin_path') )  ): ?><a href="javascript:show_float_box('上传插件' , '?c=pluglist&a=upload');void(0);" class="side_link">上传插件</a><?php endif; ?>
+	</h2>
 	<?php do_action( 'UI_PLUGIN_TABLE_BEFORE' ); ?>
 	<?php if( $plist && is_array( $plist ) ): ?>
 	<table class="table table-hover table-plugin">

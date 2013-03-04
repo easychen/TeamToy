@@ -40,6 +40,11 @@
 	margin-bottom: 10px;
 }
 
+#global_footer
+{
+	display: none;
+}
+
 #lp_pop_box
 {
 	position:absolute;
@@ -807,6 +812,10 @@ ul.history li,ul.fcomment li
 	margin-bottom: 5px;
 	font-size: 16px;
 	position: relative;
+
+	white-space: wrap;
+	word-wrap: break-word;
+	word-break: break-all;
 }
 
 ul.history li a.close,ul.fcomment li a.close
@@ -1734,6 +1743,27 @@ div.tagsinput div { display:block; float: left; }
 .table-install tr.bad
 {
 	color:red;
+}
+
+.todo_elink a
+{
+	margin-right:5px;
+} 
+
+.todo_elink
+{
+	margin-bottom: 5px;
+} 
+
+#to_top
+{
+	display: none;
+	position: fixed;
+	right:20px;
+	top:15px;
+	color:white;
+	z-index: 9999;
+	cursor: pointer;
 }
 
 

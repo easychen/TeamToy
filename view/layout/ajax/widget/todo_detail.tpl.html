@@ -1,0 +1,84 @@
+<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_BEFORE', $data ); ?>
+<ul class="gbox">
+<?php if( $data['owner_uid'] != uid() ): ?>
+	<?php if( intval($data['details']['is_follow']) == 1 ): ?>
+	<li class="follow"><a href="javascript:void(0);">关注</a></li>
+	<?php else: ?>
+	<li class="nofollow"><a href="javascript:void(0);">关注</a></li>
+	<?php endif; ?>	
+
+	<?php if( intval($data['details']['status']) == 3 ): ?>
+	<li class="done"><a href="javascript:void(0);">完成</a></li>
+	<?php else: ?>
+	<li class="notdone"><a href="javascript:void(0);">完成</a></li>
+	<?php endif; ?>	
+	
+
+	<li class="owner"><a href="javascript:void(0);" class="namecard" uid="<?=$data['owner']['uid']?>"><?=$data['owner']['name']?></a></li>
+<?php else: ?>	
+<li class="forward"><a href="javascript:todo_forward( '<?=$data['tid']?>','?c=dashboard&a=people_box&jsfunc=todo_assign&tid=<?=$data['tid']?>');" >转让</a></li>
+<?php if( intval($data['details']['is_public']) == 1 ): ?>
+<li class="public"><a href="javascript:void(0);">私密</a></li>
+<?php else: ?>
+<li class="private"><a href="javascript:void(0);">私密</a></li>
+<?php endif; ?>	
+
+<?php if( intval($data['details']['is_star']) == 1 ): ?>
+
+	<?php if( intval($data['details']['is_public']) == 1 ): ?>
+	<li class="star public"><a href="javascript:void(0);">星标</a></li>
+	<?php else: ?>
+	<li class="star private"><a href="javascript:void(0);">星标</a></li>
+	<?php endif; ?>
+
+<?php else: ?>
+
+	<?php if( intval($data['details']['is_public']) == 1 ): ?>
+	<li class="nostar pub"><a href="javascript:void(0);">星标</a></li>
+	<?php else: ?>
+	<li class="nostar pri"><a href="javascript:void(0);">星标</a></li>
+	<?php endif; ?>
+
+<?php endif; ?>	
+<?php endif; ?>	
+</ul>
+<script>bind_gbox( '<?=$data['tid']?>' );</script>
+<?php do_action( 'UI_TODO_DETAIL_ACTIONBOX_AFTER' , $data ); ?>
+
+<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_BEFORE' , $data ); ?>
+<?php if( isset( $data['people'] ) && is_array( $data['people'] ) ): ?>	
+<div class="line"></div>
+<h2 class="side_board">谁在关注</h2>
+<ul class="follower">
+<?php foreach( $data['people'] as $user ): ?>
+<li><img src="<?=avatar($user['avatar_small'])?>" title="<?=$user['name']?>" /></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php do_action( 'UI_TODO_DETAIL_FOLLOWER_AFTER' , $data ); ?>
+
+<div class="line"></div>
+
+<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_BEFORE' , $data ); ?>
+<h2 class="side_board">讨论</h2>
+<div class="comment_box">
+<form class="form-inline" action="javascript:todo_add_comment( <?=$data['tid']?> , $('#comment_text').val() );void(0);" method="post" id="comment_form">
+<div class="input-append">
+  <input class="side_board_input" id="comment_text" type="text" placeholder="请输入评论内容">
+  <button class="btn" type="submit">发布</button>
+</div>	
+</form>	
+</div>
+<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_AFTER' , $data ); ?>
+
+<div class="line"></div>
+
+<?php do_action( 'UI_TODO_DETAIL_COMMENTLIST_BEFORE' ); ?>
+<ul class="history" id="todo_history">
+<?php if( isset( $data['history'] ) && is_array( $data['history'] ) ):  ?>
+	<?php foreach( $data['history'] as $item ): ?>
+	<?php require( AROOT . 'view' . DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'history.tpl.html' ); ?>
+	<?php endforeach; ?>
+<?php endif; ?>
+</ul>	
+<?php do_action( 'UI_TODO_DETAIL_COMMENTLIST_AFTER' ); ?>

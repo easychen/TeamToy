@@ -64,7 +64,7 @@ function get_group_names()
 					$groupstring = $groupstring . strtoupper($item['groups']).'|';
 
 		if( $groupstring == '|' ) 
-			$groups = null;
+			$groups = false;
 		else
 		{
 			$groups = explode( '|' ,  trim( $groupstring , '|' ) );

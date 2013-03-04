@@ -1,0 +1,11 @@
+<?php $GLOBALS['TODO_CENTER_MODE'] = 1; ?>
+<?php do_action( 'UI_TODO_DETAIL_CENTER_TITLE_BEFORE', $data ); ?>	
+<h2 class="side_board " title="<?=$data['content']?>"><?=$data['content']?></h2>
+<?php do_action( 'UI_TODO_DETAIL_CENTER_TITLE_AFTER', $data ); ?>
+
+<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'todo_detail.tpl.html' ); ?>
+<script type="text/javascript">
+bind_gbox(<?=$data['id']?>,<?=intval($data['details']['is_public'])?>);
+namecard();
+enable_at('comment_text');
+</script>

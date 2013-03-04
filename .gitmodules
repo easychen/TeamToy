@@ -1,3 +1,6 @@
 [submodule "plugin"]
 	path = plugin
 	url = https://github.com/easychen/TeamToy-Plugins.git
+[submodule "client"]
+	path = client
+	url = https://github.com/easychen/TeamToy-Pocket.git

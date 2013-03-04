@@ -30,6 +30,11 @@
 </div>
 <!--  / float box  -->
 
+<!--  to top  -->
+<div id="to_top"><i class="icon-arrow-up"></i> Top</div>
+<!--  /to top button  -->
+
+
 <audio id='ttsoundplayer'  preload='auto'>
   <source src='static/sound/dididi.wav' type='audio/wav'>
 </audio> 
@@ -37,6 +42,21 @@
 
 
 <script>
+
+$(function() {
+  $(window).scroll(function() {
+    if($(this).scrollTop() != 0) {
+      $('#to_top').fadeIn(); 
+    } else {
+      $('#to_top').fadeOut();
+    }
+  });
+ 
+  $('#to_top').click(function() {
+    $('body,html').animate({scrollTop:0},100);
+  }); 
+});
+
 setTimeout( check_notice , 2000 );
 setInterval( check_notice , 100000 );
 

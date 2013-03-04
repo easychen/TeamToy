@@ -265,13 +265,13 @@ function todo_public( tid , type )
 		{
 			if( type == 'public' )
 			{
-				$("#tdboard li.private").removeClass('private').addClass('public');
+				$("ul.gbox li.private").removeClass('private').addClass('public');
 				bind_gbox( tid );
 				$("#t-"+tid).removeClass('red').addClass('blue');
 			}	
 			else
 			{
-				$("#tdboard li.public").removeClass('public').addClass('private');
+				$("ul.gbox li.public").removeClass('public').addClass('private');
 				bind_gbox( tid );
 				$("#t-"+tid).removeClass('blue').addClass('red');
 			}
@@ -368,9 +368,9 @@ function todo_star( tid , type , is_public )
 			if( type == 'add' )
 			{
 				if( is_public == 1 )
-					$("#tdboard li.nostar").removeClass('nostar pub pri').addClass('star public');
+					$("ul.gbox li.nostar").removeClass('nostar pub pri').addClass('star public');
 				else
-					$("#tdboard li.nostar").removeClass('nostar pub pri').addClass('star private');
+					$("ul.gbox li.nostar").removeClass('nostar pub pri').addClass('star private');
 
 				$('#todo_list_star').prepend( $("#t-"+tid) );
 				bind_todo();
@@ -379,9 +379,9 @@ function todo_star( tid , type , is_public )
 			else
 			{
 				if( is_public == 1 )
-					$("#tdboard li.star").removeClass('public private star').addClass('nostar pub');
+					$("ul.gbox li.star").removeClass('public private star').addClass('nostar pub');
 				else
-					$("#tdboard li.star").removeClass('public private star').addClass('nostar pri');
+					$("ul.gbox li.star").removeClass('public private star').addClass('nostar pri');
 				$('#todo_list_normal').prepend( $("#t-"+tid) );
 				bind_todo();
 				bind_gbox( tid );
@@ -794,6 +794,11 @@ function enable_at( name )
 	{
 		$('#'+name).atWho( '@' , { 'data': at_users  } );
 	}
+}
+
+function show_todo_detail_center( tid )
+{
+	show_float_box( 'TODO详情' , '?c=dashboard&a=todo_center&tid=' + tid );
 }
 
 function show_todo_detail( tid )

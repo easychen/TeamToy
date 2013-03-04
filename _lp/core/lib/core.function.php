@@ -228,10 +228,14 @@ function load( $file_path )
 // ===========================================
 // load db functions
 // ===========================================
-if( defined('SAE_APPNAME') )
-	include_once( CROOT .  'lib/db.sae.function.php' );
-else
-	include_once( CROOT .  'lib/db.function.php' );
+
+//if( defined('SAE_APPNAME') )
+//	include_once( CROOT .  'lib/db.sae.function.php' );
+//else
+//	include_once( CROOT .  'lib/db.function.php' );
+
+// use master db on sae to void sync problem
+include_once( CROOT .  'lib/db.function.php' );
 
 if (!function_exists('_'))
 {

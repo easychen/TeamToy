@@ -1,10 +1,10 @@
 <div class="p20">
-<?php do_action( 'UI_FEED_DETAIL_TITLE_BEFORE' ); ?>	
+<?php do_action( 'UI_FEED_DETAIL_TITLE_BEFORE' , $data ); ?>	
 <a class="close pull-right"  href="javascript:fdboard_close();" title="收起动态详情">&minus;</a>
 <div class="fd_cast_title side_long " title="<?=$data['content']?>">
 	<?=$data['content']?>
 </div>
-<?php do_action( 'UI_FEED_DETAIL_TITLE_AFTER' ); ?>	
+<?php do_action( 'UI_FEED_DETAIL_TITLE_AFTER' , $data ); ?>	
 
 <?php do_action( 'UI_FEED_DETAIL_COMMENTBOX_BEFORE' ); ?>	
 <div class="comment_box">
