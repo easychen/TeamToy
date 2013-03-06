@@ -2,21 +2,21 @@
       <div class="navbar-inner navbar-tt">
         <div class="container">
           <div class="mycontainer">
-          <a class="brand" href="?c=dashboard" title="首页"></a>
+          <a class="brand" href="?c=dashboard" title="<?=__('INDEX_PAGE')?>"></a>
          <?php if(is_login()): ?>
           <div >
             <?php do_action( 'UI_NAVLIST_BEFORE' ); ?>
             <ul class="nav" id="tt_menu_list">
               <li<?php if( g('c') == 'dashboard' ): ?> class="active"<?php endif; ?>><a href="?c=dashboard"><img src="<?=image('tt2.menu.todo.png')?>" title="Todo"/></a></li>
-              <li<?php if( g('c') == 'feed' ): ?> class="active"<?php endif; ?>><a href="?c=feed"><img src="<?=image('tt2.menu.feed.png')?>" title="团队动态"/></a></li>
-              <li<?php if( g('c') == 'buddy' ): ?> class="active"<?php endif; ?>><a href="?c=buddy"><img src="<?=image('tt2.menu.buddy.png')?>" title="成员管理"/></a></li>
-              <li<?php if( g('c') == 'inbox' ): ?> class="active "<?php endif; ?>><a href="?c=inbox" title="收件箱" ><div class="inbox"><img src="<?=image('reddot.png')?>" class="reddot" /></div></a></li>
+              <li<?php if( g('c') == 'feed' ): ?> class="active"<?php endif; ?>><a href="?c=feed"><img src="<?=image('tt2.menu.feed.png')?>" title="<?=__('TEAM_FEED')?>"/></a></li>
+              <li<?php if( g('c') == 'buddy' ): ?> class="active"<?php endif; ?>><a href="?c=buddy"><img src="<?=image('tt2.menu.buddy.png')?>" title="<?=__('TEAM_MEMBER')?>"/></a></li>
+              <li<?php if( g('c') == 'inbox' ): ?> class="active "<?php endif; ?>><a href="?c=inbox" title="<?=__('INBOX')?>" ><div class="inbox"><img src="<?=image('reddot.png')?>" class="reddot" /></div></a></li>
 
               <?php if( is_admin() ): ?>
-               <li<?php if( g('c') == 'pluglist' ): ?> class="active"<?php endif; ?>><a href="?c=pluglist"><img src="<?=image('tt2.menu.plugin.png')?>" title="插件管理"/></a></li> 
+               <li<?php if( g('c') == 'pluglist' ): ?> class="active"<?php endif; ?>><a href="?c=pluglist"><img src="<?=image('tt2.menu.plugin.png')?>" title="<?=__('PLUGIN_LIST')?>"/></a></li> 
               <?php endif; ?>
 
-              <li class="visible-phone"><a href="?c=guest&a=logout" title="退出" ><img src="<?=image('tt2.menu.logout.png')?>" /></a></li>
+              <li class="visible-phone"><a href="?c=guest&a=logout" title="<?=__('LOGOUT')?>" ><img src="<?=image('tt2.menu.logout.png')?>" /></a></li>
 
               <?php do_action( 'UI_NAVLIST_LAST' ); ?>
 
@@ -36,23 +36,23 @@
         <li><a href="http://teamtoy.net" target="_blank">TeamToy V<?=local_version()?></a></li>
         <?php if( is_admin() ): ?>
         <?php if( is_writable(AROOT) ): ?>
-        <li><a href="javascript:check_version();void(0);" target="_blank">版本升级</a></li>
+        <li><a href="javascript:check_version();void(0);" target="_blank"><?=__('CHECK_NEW_VERSION')?></a></li>
         <?php else: ?>
         <?php endif; ?>
         <?php do_action( 'UI_USERMENU_ADMIN_LAST' ); ?> 
         <?php endif; ?>
         <li class="divider"></li>
 				<?php do_action( 'UI_USERMENU_TOP' ); ?> 
-         <li><a href="javascript:void(0);"><label class="checkbox"><input type="checkbox" name="sound-enable" value="1" class="remember">消息提示音</label></a></li>
+         <li><a href="javascript:void(0);"><label class="checkbox"><input type="checkbox" name="sound-enable" value="1" class="remember"><?=__('MESSAGE_SOUND')?></label></a></li>
         <li class="divider"></li>
-        <li><a href="javascript:show_float_box( '更新个人资料' , '?c=dashboard&a=profile' );void(0);">更新个人资料</a></li>
-				<li><a href="javascript:show_float_box( '更换头像' , '?c=dashboard&a=avatar' );void(0);">更换头像</a></li>
-        <li><a href="javascript:show_float_box( '修改密码' , '?c=dashboard&a=password' );void(0);">修改密码</a></li>
+        <li><a href="javascript:show_float_box( '<?=__('UPDATE_PROFILE')?>' , '?c=dashboard&a=profile' );void(0);"><?=__('UPDATE_PROFILE')?></a></li>
+				<li><a href="javascript:show_float_box( '<?=__('UPDATE_AVATAR')?>' , '?c=dashboard&a=avatar' );void(0);"><?=__('UPDATE_AVATAR')?></a></li>
+        <li><a href="javascript:show_float_box( '<?=__('UPDATE_PASSWORD')?>' , '?c=dashboard&a=password' );void(0);"><?=__('UPDATE_PASSWORD')?></a></li>
 				<li class="divider"></li>
-				<li><a href="javascript:show_float_box( '通过二维码登入' , '?c=inbox&a=qrlogin' );void(0);">通过二维码登入</a></li>
+				<li><a href="javascript:show_float_box( '<?=__('LOGIN_VIA_QR_CODE')?>' , '?c=inbox&a=qrlogin' );void(0);"><?=__('LOGIN_VIA_QR_CODE')?></a></li>
 				<?php do_action( 'UI_USERMENU_BOTTOM' ); ?> 
         <li class="divider"></li>
-				<li><a href="?c=guest&a=logout">退出</a></li>
+				<li><a href="?c=guest&a=logout"><?=__('LOGOUT')?></a></li>
 			  </ul>
         <?php do_action( 'UI_USERMENU_AFTER' ); ?>
 			</div>

@@ -2,12 +2,12 @@
 <div class="p20">
 <?php do_action( 'UI_TODO_DETAIL_TITLE_BEFORE', $data ); ?>	
 <?php if( $data['owner_uid'] != uid() ): ?>
-	<a class="close pull-right"  href="javascript:tdboard_close();" title="收起TODO详情">&minus;</a>
+	<a class="close pull-right"  href="javascript:tdboard_close();" title="<?=__('TODO_DETAIL_CLOSE')?>">&minus;</a>
 	<h2 class="side_board side_long " title="<?=$data['content']?>"><?=$data['content']?></h2>
 <?php else: ?>		
 <div id="todo_title_online_edit">
-	<a class="close pull-right"  href="javascript:tdboard_close();" title="收起TODO详情">&minus;</a>
-	<h2 class="side_board side_long inline_edit" title="点击修改 - <?=$data['content']?>" onclick="$('#todo_title_online_edit').load('?c=dashboard&a=todo_edit&tid=<?=$data['tid']?>&text=<?=u($data['content'])?>')"><?=$data['content']?></h2>
+	<a class="close pull-right"  href="javascript:tdboard_close();" title="<?=__('TODO_DETAIL_CLOSE')?>">&minus;</a>
+	<h2 class="side_board side_long inline_edit" title="<?=__('CLICK_TO_EDIT')?> - <?=$data['content']?>" onclick="$('#todo_title_online_edit').load('?c=dashboard&a=todo_edit&tid=<?=$data['tid']?>&text=<?=u($data['content'])?>')"><?=$data['content']?></h2>
 </div>
 <?php endif; ?>	
 <?php do_action( 'UI_TODO_DETAIL_TITLE_AFTER', $data ); ?>

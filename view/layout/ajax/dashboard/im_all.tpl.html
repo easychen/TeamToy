@@ -4,9 +4,9 @@
 <div class="form-inline">
 	<div class="input-append" id="im_keyword_box">
 	  <input id="im_keyword" type="text">
-	  <button class="btn" type="button" onclick="im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() );void(0);">查找聊天记录</button>
+	  <button class="btn" type="button" onclick="im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() );void(0);"><?=__('FIND_CHAT_HISTORY')?></button>
 	</div>
-	<a href="javascript:im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() , im_his_min );void(0);" class="btn" id="im_next_link">下一页</a>
+	<a href="javascript:im_all_update( '<?=intval(v('uid'))?>' , $('#im_keyword').val() , im_his_min );void(0);" class="btn" id="im_next_link"><?=__('NEXT_PAGE')?></a>
 </div>
 <script type="text/javascript">
 var im_his_min = '<?=intval($data['min'])?>';

@@ -9,6 +9,11 @@ class appController extends coreController
 {
 	function __construct()
 	{
+		// 检测语言
+		if( isset($_COOKIE['tt2_lang']) ) $GLOBALS['i18n'] = z(t(basename($_COOKIE['tt2_lang'])));
+		else $GLOBALS['i18n'] = c('default_language');
+
+
 		// 安装时不启用插件
 		if(g('c')!= 'install')
 		{

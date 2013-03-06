@@ -612,7 +612,7 @@ function todo_follow( tid )
 			bind_follow_todo();
 
 
-			$("#tdboard li.nofollow").removeClass('nofollow').addClass('follow');
+			$(".gbox li.nofollow").removeClass('nofollow').addClass('follow');
 			bind_gbox( tid );
 		}
 		else
@@ -638,7 +638,7 @@ function todo_unfollow( tid )
 			$('#t-'+tid).removeClass('follow').addClass('nofollow');
 			bind_follow_todo();
 
-			$("#tdboard li.follow").removeClass('follow').addClass('nofollow');
+			$(".gbox li.follow").removeClass('follow').addClass('nofollow');
 			bind_gbox( tid );
 		}
 		else

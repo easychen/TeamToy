@@ -4,7 +4,7 @@
 <div class="ppfliter inline-form" >
 <div class="input-prepend ">
 	<span class="add-on"><i class="icon-search"></i></span>
-	<input id="ppkeyword" type="text" placeholder="通过姓名或拼音查找">
+	<input id="ppkeyword" type="text" placeholder="<?=__('FIND_BY_NAME_OR_PINYIN')?>">
 </div>
 <span id="ppuname_selected" ></span>
 </div>
@@ -36,7 +36,7 @@
 
 <?php if(intval(v('multi')) == 1 ):  ?>
 <div class="modal-footer mywhite">
-    <a href="#" class="btn btn-primary" id="pp_multi_ok_btn">确定</a>
+    <a href="#" class="btn btn-primary" id="pp_multi_ok_btn"><?=__('OK')?></a>
 </div>
 <script type="text/javascript">
 
@@ -47,7 +47,7 @@ $('.pplist .multi').bind( 'click' , function()
 	$("#ppuname_selected").empty();
 	if( $('.pplist .multi.pp-selected').size() > 0 )
 	{
-		$("#ppuname_selected").html('已选同事 - ');
+		$("#ppuname_selected").html('<?=__('SELECTED_PEOPLE')?> - ');
 		$('.pplist .multi.pp-selected').each( function()
 		{
 			$("#ppuname_selected").append( $('<span class="nameitem" uid="' + $(this).attr('uid') + '"><i class="icon-user"></i>'+ $(this).attr('uname') +'</span> &nbsp;') );
@@ -63,7 +63,7 @@ $('#pp_multi_ok_btn').bind( 'click' , function()
 {
 	if( $('.pp-selected').size() < 1 )
 	{
-		alert('请至少选择一位同事');
+		alert('<?=__('ONE_PEOPLE_LEAST')?>');
 		return false;
 	}
 	

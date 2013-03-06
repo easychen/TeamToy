@@ -633,12 +633,12 @@ ul.gbox li a
 	overflow: hidden;
 }
 
-ul.gbox li.nofollow,ul.gbox li.follow:hover
+ul.gbox li.nofollow
 {
 	background: url( ../image/tt2.listen.gray.small.png ) no-repeat ;
 }
 
-ul.gbox li.follow,ul.gbox li.nofollow:hover
+ul.gbox li.follow
 {
 	background: url( ../image/tt2.listen.blue.small.png ) no-repeat ;
 }
@@ -669,6 +669,7 @@ ul.gbox li.star.private
 	background: url( ../image/tt2.star.red.small.png ) no-repeat ;
 }
 
+/*
 ul.gbox li.nostar.pub:hover
 {
 	background: url( ../image/tt2.star.blue.small.png ) no-repeat ;
@@ -683,7 +684,7 @@ ul.gbox li.star:hover
 {
 	background: url( ../image/tt2.star.gray.small.png ) no-repeat ;
 }
-
+*/
 
 
 
@@ -702,16 +703,19 @@ ul.gbox li.private
 	background: url( ../image/tt2.lock.red.small.png ) no-repeat ;
 }
 
+/*
+
 ul.gbox li.private:hover
 {
 	background: url( ../image/tt2.lock.gray.small.png ) no-repeat ;
-}
+}*/
 
 ul.gbox li.public
 {
 	background: url( ../image/tt2.lock.gray.small.png ) no-repeat ;
 }
 
+/*
 ul.gbox li.public:hover
 {
 	background: url( ../image/tt2.lock.red.small.png ) no-repeat ;
@@ -726,6 +730,7 @@ ul.gbox li.star.public:hover
 {
 	background: url( ../image/tt2.star.gray.small.png ) no-repeat ;
 }
+*/
 
 ul.gbox li.owner
 {

@@ -6,26 +6,52 @@
 <form class="form-horizontal" action="?c=guest&a=login" method="post" id="login_form" onsubmit="send_form_in('login_form');return false;void(0);">
 <div class="input-prepend">
   <span class="add-on"><img src="<?=image('login.mail.png')?>" class="licon"/></span>
-  <input  name="email" type="text" placeholder="电邮地址" value="<?=v('email')?>">
+  <input  name="email" type="text" placeholder="<?=__('EMAIL')?>" value="<?=v('email')?>">
 </div>  
 <div class="line-large"></div>
 <div class="input-prepend">
   <span class="add-on"><img src="<?=image('login.lock.png')?>" class="licon"/></span>
-  <input  name="password" type="password" placeholder="密码" value="<?=v('password')?>">
-</div>  
+  <input  name="password" type="password" placeholder="<?=__('PASSWORD')?>" value="<?=v('password')?>">
+</div> 
+
+
+<?php if( isset( $langs ) && intval(v('lang')) == 1   ): ?>
+	<div class="line-large"></div>
+	<div class="line-large"></div>
+	<select onchange="set_lang();" id="tt2_lang_select">
+	<?php foreach( $langs as $lang ): ?>
+	<?php $lname = str_replace( '.lang.php' , '' , basename(z(t($lang))) ); ?>
+	 <option value="<?=$lname?>" <?php if( $lname == g('i18n') ) echo ' selected '; ?> ><?=$lname?></option>
+ 	<?php endforeach;?>
+	</select>
+<?php endif; ?>	
+
+ 
 <div class="line-large"></div>
 <div class="line-large"></div>
 <div>
-<button class="btn btn-large btn-inverse login" type="submit" >登入</button>
+<button class="btn btn-large btn-inverse login" type="submit" ><?=__('LOGIN')?></button>
 </div>
+
+
+<div></div>	
 </form>
 </div>
 </center>
+
+
 </div>
 </div>
 <script type="text/javascript">
 if( $.browser.msie )
 {
-	$('#login_form').html('<h3 style="color:white">不支持IE系浏览器<br/><br/>请换用Chome、Firefox或者Safari</h3>');	
+	$('#login_form').html('<h3 style="color:white"><?=__('NO_IE_NOTICE')?></h3>');	
 }
+
+function set_lang()
+{
+	$.cookie( 'tt2_lang' , $('#tt2_lang_select option:selected').attr('value') );
+	window.location.reload();
+}
+
 </script>

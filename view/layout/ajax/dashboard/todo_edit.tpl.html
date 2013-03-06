@@ -2,12 +2,12 @@
 <div class="input-append">
   <input  id="todo_edit_text" type="text" value="<?=$text?>" class="side_edit" autofocus="autofocus"	>
   <div class="btn-group left_square">
-	<button class="btn" >保存</button>
+	<button class="btn" ><?=__('SAVE')?></button>
     <button class="btn dropdown-toggle" data-toggle="dropdown">
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu short_menu">
-    	<li><a tabindex="-1" href="javascript:show_todo_detail(<?=$tid?>)">取消</a></li>
+    	<li><a tabindex="-1" href="javascript:show_todo_detail(<?=$tid?>)"><?=__('CANCEL')?></a></li>
     </ul>
   </div>
 </div>

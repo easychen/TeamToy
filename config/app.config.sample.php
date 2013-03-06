@@ -14,6 +14,7 @@ $GLOBALS['config']['at_short_name'] = true ;
 $GLOBALS['config']['can_modify_password'] = true ;
 $GLOBALS['config']['timezone'] = 'Asia/Chongqing' ;
 $GLOBALS['config']['dev_version'] = false ;
+$GLOBALS['config']['default_language'] = 'zh_cn' ;
 
 // session time
 // you need change session lifetime in php.ini to0

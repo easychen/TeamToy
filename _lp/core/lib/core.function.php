@@ -237,15 +237,20 @@ function load( $file_path )
 // use master db on sae to void sync problem
 include_once( CROOT .  'lib/db.function.php' );
 
-if (!function_exists('_'))
+if (!function_exists('__'))
 {
-	function _( $string , $data = null )
+	function __( $string , $data = null )
 	{
 		if( !isset($GLOBALS['i18n']) )
 		{
 			$c = c('default_language');
-			if( strlen($c) < 1 ) $c = 'zh_cn';
-			
+			if( strlen($c) < 1 ) $c = 'zh_cn';	
+		}
+		else
+			$c = z(t($GLOBALS['i18n']));
+
+		if( !isset(  $GLOBALS['language'][$c] ) )
+		{
 			$lang_file = AROOT . 'local' . DS . basename($c) . '.lang.php';
 			if( file_exists( $lang_file ) )
 			{
@@ -253,12 +258,9 @@ if (!function_exists('_'))
 				$GLOBALS['i18n'] = $c;
 			}
 			else
-				$GLOBALS['i18n'] = 'zh_cn';
-			
-			
+			$GLOBALS['i18n'] = 'zh_cn';
 		}
 		
-		//print_r( $GLOBALS['language'][$GLOBALS['i18n']] );
 		
 		
 		
