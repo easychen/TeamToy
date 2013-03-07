@@ -721,7 +721,7 @@ class apiController extends appController
 		$uid = intval(v('uid'));
 		$owner_uid=$uid>0?$uid:uid();
 
-		
+		$owner_uid=$uid>0?$uid:uid();	
 		// 检查是否已经存在
 		$sql = "SELECT * FROM `todo` WHERE `content` = '" . s( $content ) . "' AND `owner_uid` = '" . intval($owner_uid) . "' LIMIT 1";
 		
