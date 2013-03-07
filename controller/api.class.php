@@ -720,13 +720,13 @@ class apiController extends appController
 		
 		$uid = intval(v('uid'));
 
-		
+		$owner_uid=$uid>0?$uid:uid();	
 		// 检查是否已经存在
-		$sql = "SELECT * FROM `todo` WHERE `content` = '" . s( $content ) . "' AND `owner_uid` = '" . intval(uid()) . "' LIMIT 1";
+		$sql = "SELECT * FROM `todo` WHERE `content` = '" . s( $content ) . "' AND `owner_uid` = '" . intval($owner_uid) . "' LIMIT 1";
 		
 		if( $todo = get_line($sql) )
 		{
-			if( get_var( "SELECT COUNT(*) FROM `todo_user` WHERE `tid` = '" . intval( $todo['id'] ) . "' AND `uid` = '" . intval( uid() ) . "' AND `status` != 3 " ) > 0 )
+			if( get_var( "SELECT COUNT(*) FROM `todo_user` WHERE `tid` = '" . intval( $todo['id'] ) . "' AND `uid` = '" . intval( $owner_uid ) . "' AND `status` != 3 " ) > 0 )
 			return self::send_error( LR_API_ARGS_ERROR , 'TODO EXISTS ' );
 			
 		}
