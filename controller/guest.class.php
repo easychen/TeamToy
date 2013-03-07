@@ -11,7 +11,7 @@ class guestController extends appController
 	
 	function index()
 	{
-		//if( is_mobile_request() ) return forward( 'client/' );
+		if( is_mobile_request() ) return forward( 'client/' );
 		if( is_login() ) return forward( '?c=dashboard' );
 		
 		// do login

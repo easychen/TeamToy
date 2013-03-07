@@ -376,6 +376,8 @@ PRIMARY KEY (  `folder_name` )
 			else
 				return info_page( __('AVATAR_UPDATE_ERROR') , array( $data['err_code'] , $data['err_msg'] ) );
 		}
+
+		return info_page( __('AVATAR_UPDATE_SUCCESS') );
 	}
 
 	function password()

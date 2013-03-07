@@ -678,6 +678,11 @@ function get_plugin_info( $content )
     return false;
 }
 
+function ttpassv2( $password , $salt = '' )
+{
+    return substr( md5(md5( $password  ) . 'T!e*a-m^T$o#y' . $salt  ) , 0 , 30 );
+}
+
 // =================================================
 // make mentions
 // =================================================

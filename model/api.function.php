@@ -19,9 +19,33 @@ function get_user_full_info_by_id( $uid )
 
 function get_full_info_by_email_password( $email , $password )
 {
-	$sql = "SELECT * FROM `user` WHERE `email` = '" . s( $email ) . "' AND `password` = '" . md5( $password ) . "' LIMIT 1";
-	return get_line( $sql );
+	$sql = "SELECT * FROM `user` WHERE `email` = '" . s( $email ) . "' LIMIT 1";
+	if(!$line = get_line( $sql )) return false;
+
+	$ret = false;
+	
+	$passwordv2 = ttpassv2($line['id']);
+	
+	if( strlen( $line['password'] ) == 32 )
+	{
+		// old password format 
+		$passwordv1 = md5( $password  );
+
+		if( $passwordv1 == $line['password'] ) $ret = $line;
+
+		// change to new password
+		$sql = "UPDATE `user` SET `password` = '" . s( $passwordv2 ) . "' WHERE `id` = '" . intval( $line['id'] ) . "' LIMIT 1";
+		run_sql( $sql );
+
+	}elseif( strlen( $line['password'] ) == 30 )
+	{
+		if( $passwordv2 == $line['password'] ) $ret = $line;
+	}
+
+	return $ret; 
 }
+
+
 
 function close_user_by_id( $uid )
 {

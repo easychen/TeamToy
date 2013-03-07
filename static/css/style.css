@@ -160,6 +160,12 @@ a:hover
 html,body
 {
 	background: url(../image/tt2.board.bg.png) repeat #F1F1F1;
+	font-family: 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI', 'Microsoft Yahei', '微软雅黑', 'Tahoma', 'Arial', 'STHeiti', 'sans-serif';
+}
+
+h1,h2,h3,h4,h5,h6
+{
+	font-weight: normal;
 }
 
 .hero-unit
