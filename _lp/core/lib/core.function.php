@@ -1,27 +1,24 @@
 <?php
 
-function transcribe($aList, $aIsTopLevel = true) 
-{
-   if( !function_exists('get_magic_quotes_gpc') ) return $aList;
+function transcribe($aList, $aIsTopLevel = true) {
 
-   $gpcList = array();
-   $isMagic = get_magic_quotes_gpc();
-  
-   foreach ($aList as $key => $value) {
-       if (is_array($value)) {
-           $decodedKey = ($isMagic && !$aIsTopLevel)?stripslashes($key):$key;
-           $decodedValue = transcribe($value, false);
-       } else {
-           $decodedKey = stripslashes($key);
-           $decodedValue = ($isMagic)?stripslashes($value):$value;
-       }
-       $gpcList[$decodedKey] = $decodedValue;
-   }
-   return $gpcList;
+    $slashList = array();
+    foreach ($aList as $key => $value) {
+        if (is_array($value)) {
+            $decodedKey = (!$aIsTopLevel) ? addslashes($key) : $key;
+            $decodedValue = transcribe($value, false);
+        } else {
+            $decodedKey = addslashes($key);
+            $decodedValue = addslashes($value);
+        }
+        $slashList[$decodedKey] = $decodedValue;
+    }
+    return $slashList;
+
 }
 
-$_GET = transcribe( $_GET ); 
-$_POST = transcribe( $_POST ); 
+$_GET = transcribe( $_GET );
+$_POST = transcribe( $_POST );
 $_REQUEST = transcribe( $_REQUEST );
 
 
@@ -42,7 +39,7 @@ function c( $str )
 
 function g( $str )
 {
-	return isset( $GLOBALS[$str] ) ? $GLOBALS[$str] : false;	
+	return isset( $GLOBALS[$str] ) ? $GLOBALS[$str] : false;
 }
 
 function t( $str )
@@ -73,10 +70,10 @@ function render( $data = NULL , $layout = NULL , $sharp = 'default' , $pathinfo 
 			$layout = 'web';
 		}
 	}
-	
+
 	$GLOBALS['layout'] = $layout;
 	$GLOBALS['sharp'] = $sharp;
-	
+
 	$layout_file = AROOT . 'view/layout/' . $layout . '/' . $sharp . '.tpl.html';
 
 	$data = apply_filter( 'CTRL_' . g('c'). '_' . g('a') .'_RENDER_FILTER' , $data );
@@ -93,7 +90,7 @@ function render( $data = NULL , $layout = NULL , $sharp = 'default' , $pathinfo 
 		{
 			@extract( $data );
 			require( $layout_file );
-		}	
+		}
 	}
 }
 
@@ -106,7 +103,7 @@ function ajax_echo( $info )
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Pragma: no-cache");
 	}
-	
+
 	echo $info;
 }
 
@@ -117,10 +114,10 @@ function info_page( $info , $title = '系统消息' )
 		$layout = 'ajax';
 	else
 		$layout = 'web';
-	
+
 	$data['top_title'] = $data['title'] = $title;
 	$data['info'] = $info;
-	
+
 	render( $data , $layout , 'info' );
 	exit;
 }
@@ -131,45 +128,45 @@ function is_ajax_request()
 	return (isset( $headers['X-Requested-With'] ) && ( $headers['X-Requested-With'] == 'XMLHttpRequest' )) || (isset( $headers['x-requested-with'] ) && ($headers['x-requested-with'] == 'XMLHttpRequest' ));
 }
 
-if (!function_exists('apache_request_headers')) 
-{ 
+if (!function_exists('apache_request_headers'))
+{
 	function apache_request_headers()
-	{ 
+	{
 		foreach($_SERVER as $key=>$value)
-		{ 
+		{
 			if (substr($key,0,5)=="HTTP_")
-			{ 
-				$key=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($key,5))))); 
-                    $out[$key]=$value; 
+			{
+				$key=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($key,5)))));
+                    $out[$key]=$value;
 			}
 			else
-			{ 
-				$out[$key]=$value; 
+			{
+				$out[$key]=$value;
 			}
-       } 
-       
-	   return $out; 
-   } 
-} 
+       }
+
+	   return $out;
+   }
+}
 
 function is_mobile_request()
 {
     $_SERVER['ALL_HTTP'] = isset($_SERVER['ALL_HTTP']) ? $_SERVER['ALL_HTTP'] : '';
- 
+
     $mobile_browser = '0';
- 
+
     if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', strtolower($_SERVER['HTTP_USER_AGENT'])))
         $mobile_browser++;
- 
+
     if((isset($_SERVER['HTTP_ACCEPT'])) and (strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false))
         $mobile_browser++;
- 
+
     if(isset($_SERVER['HTTP_X_WAP_PROFILE']))
         $mobile_browser++;
- 
+
     if(isset($_SERVER['HTTP_PROFILE']))
         $mobile_browser++;
- 
+
     $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'],0,4));
     $mobile_agents = array(
                         'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
@@ -182,21 +179,21 @@ function is_mobile_request()
                         'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
                         'wapr','webc','winw','winw','xda','xda-'
                         );
- 
+
     if(in_array($mobile_ua, $mobile_agents))
         $mobile_browser++;
- 
+
     if(strpos(strtolower($_SERVER['ALL_HTTP']), 'operamini') !== false)
         $mobile_browser++;
- 
+
     // Pre-final check to reset everything if the user is on Windows
     if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
         $mobile_browser=0;
- 
+
     // But WP7 is also Windows, with a slightly different characteristic
     if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows phone') !== false)
         $mobile_browser++;
- 
+
     if($mobile_browser>0)
         return true;
     else
@@ -208,21 +205,21 @@ function uses( $m )
 	load( 'lib/' . basename($m)  );
 }
 
-function load( $file_path ) 
+function load( $file_path )
 {
 	$file = AROOT . $file_path;
 	if( file_exists( $file ) )
 	{
 		//echo $file;
 		require( $file );
-	
+
 	}
 	else
 	{
 		//echo CROOT . $file_path;
 		require( CROOT . $file_path );
 	}
-	
+
 }
 
 // ===========================================
@@ -244,7 +241,7 @@ if (!function_exists('__'))
 		if( !isset($GLOBALS['i18n']) )
 		{
 			$c = c('default_language');
-			if( strlen($c) < 1 ) $c = 'zh_cn';	
+			if( strlen($c) < 1 ) $c = 'zh_cn';
 		}
 		else
 			$c = z(t($GLOBALS['i18n']));
@@ -260,25 +257,25 @@ if (!function_exists('__'))
 			else
 			$GLOBALS['i18n'] = 'zh_cn';
 		}
-		
-		
-		
-		
+
+
+
+
 		if( isset( $GLOBALS['language'][$GLOBALS['i18n']][$string] ) )
 			$to = $GLOBALS['language'][$GLOBALS['i18n']][$string];
 		else
 			$to = $string;
-		
+
 		if( $data == null )
 			return $to;
 		else
 		{
 			if( !is_array( $data ) ) $data = array( $data );
 			return vsprintf( $to , $data );
-		}	
-			
+		}
+
 	}
-} 	
+}
 
 
 
