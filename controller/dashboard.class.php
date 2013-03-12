@@ -346,9 +346,9 @@ PRIMARY KEY (  `folder_name` )
 
 			list($width, $height, $type, $attr)=getimagesize($src); 
 
-			if( strtoupper($type) == 'IMAGETYPE_PNG' )
+			if( $type == IMAGETYPE_PNG )
 				$img_r = imagecreatefrompng($src);
-			elseif( strtoupper($type) == 'IMAGETYPE_GIF' )
+			elseif( $type== IMAGETYPE_GIF )
 				$img_r = ImageCreateFromGIF($src);
 			else
 				$img_r = imagecreatefromjpeg($src);

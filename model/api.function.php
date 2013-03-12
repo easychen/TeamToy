@@ -24,7 +24,19 @@ function get_full_info_by_email_password( $email , $password )
 
 	$ret = false;
 	
-	$passwordv2 = ttpassv2($line['id']);
+	//$passwordv2 = ttpassv2($line['id']);
+	$passwordv2 = ttpassv2( $password ,  $line['id']);
+
+	// ============================
+	// to remove in next version
+	if( ttpassv2($line['id']) == $line['password'] )
+	{
+		$sql = "UPDATE `user` SET `password` = '" . s( $passwordv2 ) . "' WHERE `id` = '" . intval( $line['id'] ) . "' LIMIT 1";
+		run_sql( $sql );
+		return $line;
+	} 
+	// =============================
+	
 	
 	if( strlen( $line['password'] ) == 32 )
 	{
@@ -49,7 +61,7 @@ function get_full_info_by_email_password( $email , $password )
 
 function close_user_by_id( $uid )
 {
-	$sql = "UPDATE `user` SET `is_closed` = '1' , `level` = 0  WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
+	$sql = "UPDATE `user` SET `is_closed` = '1' , `level` = 0  , `email` = CONCAT( `email` , 'closed-" . intval($uid) . '-' . time() . "' ) , `name` = CONCAT( `name` ,'" . intval($uid) . "' ) WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
 	run_sql( $sql );
 }
 

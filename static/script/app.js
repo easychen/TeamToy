@@ -1842,7 +1842,7 @@ function user_added( data )
 
 		$('#buddy_form [type=password]').val('');
 
-		buddy_click();
+		//buddy_click();
 		
 	}
 	else

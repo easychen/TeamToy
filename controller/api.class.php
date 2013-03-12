@@ -123,7 +123,7 @@ class apiController extends appController
 		$dsql = array();
 		
 		$dsql[] = "'" . s( v( 'name' ) ) . "'";
-		$dsql[] = "'" . s( pinyin(v( 'name' )) ) . "'";
+		$dsql[] = "'" . s( pinyin(strtolower(v( 'name' ))) ) . "'";
         $dsql[] = "'" . s( v( 'email' ) ) . "'";
         $dsql[] = "'" . s( md5( v( 'password' ) ) ) . "'";
         $dsql[] = "'" . s( date( "Y-m-d H:i:s" ) ) . "'";
@@ -539,12 +539,17 @@ class apiController extends appController
 		
 		if( $opassword == $password ) return self::send_error( LR_API_ARGS_ERROR , 'password and old password are the same' );
 		
-		$sql = "SELECT COUNT(*) FROM `user` WHERE `id` = '" . intval( uid() ) . "' AND `password` = '" . md5( $opassword ) . "' ";
+		$passwordv1 = md5( $opassword );
+		$passwordv2 = ttpassv2( $opassword , uid() );
+
+
+		$sql = "SELECT COUNT(*) FROM `user` WHERE `id` = '" . intval( uid() ) . "' AND ( `password` = '" . s($passwordv1) . "' OR  `password` = '" . s($passwordv2) . "'  ) ";
 		
 		if( get_var( $sql ) < 1 )
-			return self::send_error( LR_API_ARGS_ERROR , 'Old password wrong' );
+			return self::send_error( LR_API_ARGS_ERROR , 'Old password wrong'.$sql );
 			
-		$sql = "UPDATE	`user` SET `password` = MD5('" . s($password) . "') WHERE `id` = '" . intval( uid() ) . "' AND `password` = '" . md5( $opassword ) . "' LIMIT 1";
+		$newpass = ttpassv2( $password , uid() );
+		$sql = "UPDATE	`user` SET `password` = '" . s($newpass) . "' WHERE `id` = '" . intval( uid() ) . "' AND ( `password` = '" . s($passwordv1) . "' OR  `password` = '" . s($passwordv2) . "'  ) LIMIT 1";
 		
 		run_sql( $sql );
 		
