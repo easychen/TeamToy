@@ -13,7 +13,13 @@ class dashboardController extends appController
 	function index()
 	{
 		$data['title'] = $data['top_title'] = 'TODO';
-		render( $data , 'web' , 'card' );
+		return render( $data , 'web' , 'card' );
+	}
+
+	function about()
+	{
+		$data['title'] = $data['top_title'] = __('TEAMTOY_ABOUT');
+		return render( $data , 'ajax' , 'raw'  );
 	}
 
 	function check_version()

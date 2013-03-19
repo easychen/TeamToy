@@ -97,7 +97,7 @@ function render( $data = NULL , $layout = NULL , $sharp = 'default' , $pathinfo 
 	}
 }
 
-function ajax_echo( $info )
+function ajax_header()
 {
 	if( !headers_sent() )
 	{
@@ -106,7 +106,11 @@ function ajax_echo( $info )
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Pragma: no-cache");
 	}
-	
+}
+
+function ajax_echo( $info )
+{
+	ajax_header();
 	echo $info;
 }
 

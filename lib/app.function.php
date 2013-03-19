@@ -768,6 +768,7 @@ function phpmailer_send_mail(  $to , $subject , $body , $from ,  $host , $port ,
 
     if(!$mail->Send())
     {
+        $GLOBALS['LP_MAILER_ERROR'] = $mail->ErrorInfo;
         //echo $mail->ErrorInfo;
         return false;
     }

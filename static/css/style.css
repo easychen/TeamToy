@@ -143,7 +143,10 @@ a:hover
 	margin-right:5px;
 }
 
-
+a.white
+{
+	color: white!important;
+}
 
 
 .line
@@ -301,7 +304,7 @@ h2.loading
 h2.side_board 
 {
 	font-size:20px;
-	line-height: 24px;
+	line-height: 30px;
 	margin-top:0px;
 	padding-top:0px;
 	margin-bottom: 10px;
@@ -823,6 +826,7 @@ ul.history li,ul.fcomment li
 	margin-bottom: 5px;
 	font-size: 16px;
 	position: relative;
+	line-height: 180%;
 
 	white-space: wrap;
 	word-wrap: break-word;
@@ -935,7 +939,7 @@ ul#feed_list li.cast
 	padding-bottom:20px;
 	padding-left:20px;
 	font-size: 20px;
-	line-height: 25px;
+	line-height: 30px;
 }
 
 ul#feed_list li.more,ul#notice_list li.more
@@ -1775,6 +1779,18 @@ div.tagsinput div { display:block; float: left; }
 	color:white;
 	z-index: 9999;
 	cursor: pointer;
+}
+
+#teamtoy_staff
+{
+	padding:20px;
+	background: black;
+	color: white;
+}
+
+#teamtoy_staff a
+{
+	color:white;
 }
 
 

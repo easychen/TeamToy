@@ -2,6 +2,12 @@
 $GLOBALS['language']['zh_cn'] = array
 (
 	/* ==== All ======  */
+	'ACCOUNT_CLOSED' => '已关闭',
+	'ACCOUNT_SUPER_ADMIN' => '超级管理员',
+
+
+	'TEAMTOY_ABOUT' => '关于TeamToy',
+	'TEAMTOY_ABOUT_WITH_VERSION' => '关于TeamToy[V%s]',
 		
 
 
@@ -46,12 +52,105 @@ $GLOBALS['language']['zh_cn'] = array
 	'API_MESSAGE_SAVE_DATA_ERROR' => '无法保存数据',
 	'API_MESSAGE_CANNOT_CONNECT' => '无法连接API服务器',
 
+
+	'API_MESSAGE_DATABASE_ERROR' => '数据库错误',
+	
+	'API_MESSAGE_ONLY_ADMIN' => '只有管理员才能进行此操作',
+	'API_MESSAGE_USER_CLOSED_BY_ADMIN' => '该用户已被管理员关闭',
+
+	'API_MESSAGE_BAD_ACCOUNT' => '错误的Email地址或密码',
+	'API_MESSAGE_CANNOT_RESET_OWN_PASSWORD' => '不能重置自己的密码',
+
+	'API_MESSAGE_UPGARDE_INFO_DATA_ERROR' => '从升级服务器取回的数据不可用',
+	'API_MESSAGE_UPGARDE_ALREADY_LATEST' => '已经是最新版本',
+
+	'API_MESSAGE_UPGARDE_FILE_UNZIP_ERROR' => '解压升级包失败',
+	'API_MESSAGE_UPGARDE_FILE_FETCH_ERROR' => '下载升级包失败',
+
+	'API_MESSAGE_FETCH_SETTINGS_DATA_ERROR' => '无法获取设置数据',
+
+	'API_MESSAGE_CANNOT_CHANGE_PASSWORD' => '修改密码功能已经被禁用',
+	'API_MESSAGE_SAME_PASSWORD' => '新密码和原密码相同',
+
+
+	'API_MESSAGE_BAD_OPASSWORD' => '原密码错误',
+	'API_MESSAGE_CANNOT_CHANGE_OWN_LEVEL' => '不能修改自己的用户等级',
+	'API_MESSAGE_CANNOT_CLOSE_ONLY_ADMIN' => '不能关闭系统唯一的一个管理员',
+
+
+	'API_MESSAGE_USER_NOT_EXISTS' => '用户不存在',
+	'API_MESSAGE_ACCOUNT_CLOSED' => '%s关闭了账号【%s】',
+	'API_MESSAGE_USER_LEVEL_UPDATED' => '%s将账号【%s】的等级调整为%s',
+
+
+	'API_MESSAGE_TODO_EXISTS' => '相同的TODO已经存在',
+	'API_MESSAGE_EMPTY_RESULT_DATA' => '数据不存在',
+
+	'API_MESSAGE_CANNOT_REMOVE_OTHERS_COMMENT' => '不能删除别人的评论',
+
+	'API_MESSAGE_TODO_ASSIGN_TO_SELF' => 'TODO不能转让给自己',
+
+	'API_MESSAGE_SPEAK_TO_SELF' => '不能向自己发送私信',
+
+	'API_MESSAGE_CANNOT_ASSIGN_OTHERS_TODO' => '不能转让别人的TODO',
+
+
+	'API_MESSAGE_CANNOT_UPDATE_OTHERS_TODO' => '不能更新别人的TODO',
+	'API_MESSAGE_CANNOT_REMOVE_OTHERS_FEED' => '不能删除别人的动态',
+
+	'API_MESSAGE_TODO_ALREADY_FOLLOWED' => '已经关注了此TODO',
+
+	'API_MESSAGE_TODO_ALREADY_DELETE_LOCALLY' => '客户端已经删除了该TODO',
+	'API_MESSAGE_TODO_ALREADY_HAD_OTHER_ACTION' => '和云端的新更新发生冲突',
+
+
+	
+
+	'API_TEXT_JOINT_TEAMTOY' => '%s加入了TeamToy',
+	'API_TEXT_NEW_VERSION' => 'TeamToy%s版已经发布',
+
+
+	'API_TEXT_TODO_ADDED' => '%s添加了TODO【%s】',
+	'API_TEXT_COMMENT_TODO_FOLLOWED' => '%s评论了你关注的TODO【%s】：%s',
+	'API_TEXT_COMMENT_TODO_OWNED' => '%s评论了你的TODO【%s】: %s',
+
+	'API_TEXT_AT_IN_TODO_COMMENT' => '%s在TODO【%s】的评论中@了你：%s',
+	'API_TEXT_AT_IN_CAST_COMMENT' => '%s在动态【%s】的评论中@了你：%s',
+
+	'API_TEXT_COMMENT_TODO' => '%s评论了TODO【%s】：%s',
+
+	'API_TEXT_COMMENT_FEED_OWNED' => '%s评论了你的动态【%s】：%s',
+	'API_TEXT_COMMENT_FEED_IN' => '%s评论了你参与的动态【%s】：%s',
+
+	'API_TEXT_ASSIGN_TODO' => '转让了TODO',
+	'API_TEXT_ASSIGN_TODO_TO_U' => '%s向你转让了TODO【%s】',
+	'API_TEXT_ASSIGN_TODO_FOLLOWED' => '%s将你关注的TODO【%s】转让给了%s',
+
+	'API_TEXT_ASSIGN_TODO_DETAIL' => '%s将TODO【%s】转让给了%s',
+
+	'API_TEXT_FINISH_TODO' => '%s完成了TODO【%s】',
+	'API_TEXT_FINISH_TODO_FOLLOWED' => '%s完成了你关注的TODO【%s】',
+
+	'API_TEXT_AT_IN_CAST' => '%s在广播【%s】中@了你',
+	'API_TEXT_ADD_CAST' => '%s发起了广播【%s】',
+
+
+
+	'API_TEXT_ALREADY_UPGARDE_TO' => '您的TeamToy已经升级至%s版本，<a href="%s">请立即点击这里升级数据表</a>',
+
+
 	'INPUT_CHECK_BAD_ARGS' => '参数错误，%s不能为空',
+	'INPUT_CHECK_BAD_EMAIL' => '参数错误，EMail格式不正确',
+	'INPUT_CHECK_EMAIL_EXISTS' => '参数错误，EMail已经存在',
+	'INPUT_CHECK_BAD_ACTVECODE' => '参数错误，激活码不存在或者已经过期',
+	'INPUT_CHECK_BAD_HTYPE' => '参数错误，HTYPE不正确',
+
+
 	'INPUT_CHECK_NO_OLDPASS' => '参数错误，原始密码不能为空',
 	'INPUT_CHECK_NO_NEWPASS' => '参数错误，新密码不能为空',
 	'INPUT_CHECK_NO_TODO_TITLE' => '参数错误，TODO标题不能为空，请点击左侧TODO重新载入后重试',
 
-	'TODO_LOAD_ERROR' => '加载todo失败，请重试',
+	'TODO_LOAD_ERROR' => '加载TODO失败，请重试',
 
 	// view
 	'SAVE_AS_AVATAR' => '保存为头像',
