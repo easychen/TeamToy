@@ -50,9 +50,9 @@
 
  		<?php if( is_array($item['groups']) ): ?>
  			<li id="t-tags-<?=$item['id']?>"><i class="icon-tags" ></i>&nbsp;
- 			<?foreach( $item['groups'] as $group ):?>
+ 			<?php foreach( $item['groups'] as $group ):?>
  			<span class="label label-info"><?=$group?></span>&nbsp;
- 			<?endforeach;?>	
+ 			<?php endforeach;?>	
  			</li>
  		<?php endif; ?>
 
