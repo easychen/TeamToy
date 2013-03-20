@@ -1,6 +1,6 @@
 <?php do_action( 'UI_TODO_ITEM_BEFORE' , $item ); ?>
 <?php $item = apply_filter( 'UI_TODO_ITEM_FILTER' , $item ); ?>
-<li class="<?php if( $item['is_public'] == 0 ): ?>red<?else:?>blue<?php endif; ?> <?php if( $item['status'] == 3 ): ?>finished<?php elseif( $item['status'] == 2 ): ?>ing<?php endif; ?>" id="t-<?=$item['tid']?>" tid="<?=$item['tid']?>">
+<li class="<?php if( $item['is_public'] == 0 ): ?>red<?php else:?>blue<?php endif; ?> <?php if( $item['status'] == 3 ): ?>finished<?php elseif( $item['status'] == 2 ): ?>ing<?php endif; ?>" id="t-<?=$item['tid']?>" tid="<?=$item['tid']?>">
 	<a class="todo_play" tid="<?=$item['tid']?>" title="点击切换进行状态"><i class="icon-circle-arrow-right"></i></a>
 	<div class="todo_fav" title="星标操作" >
 		<div class="todo_row" title="<?=$item['content']?>">
