@@ -1,0 +1,10 @@
+var tt2_dictionary = {
+    <?php if( isset( $js_items ) && is_array( $js_items ) ): ?>
+    <?php foreach( $js_items as $key => $value ): ?>
+    '<?=$key?>':'<?=addslashes($value)?>',
+    <?php endforeach; ?>
+    <?php endif; ?>
+    'last_one': 'EOF'
+};
+
+$.i18n.setDictionary(tt2_dictionary);

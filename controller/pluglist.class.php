@@ -13,9 +13,9 @@ class pluglistController extends appController
 	function index()
 	{
 		if( !is_admin() ) 
-			return info_page('只有管理员才能进入此页面，<a href="?c=guest&a=logout">请先用管理员账户登入</a>');
+			return info_page(__('ADMIN_ONLY_LOGIN'));
 		
-		$data['top'] = $data['top_title'] = '插件管理';
+		$data['top'] = $data['top_title'] = __('PLUGIN_ADMIN_PAGE_TITLE');
 		$data['plist'] = scan_plugin_info();
 		render( $data , 'web' , 'card' );
 	}
@@ -23,7 +23,7 @@ class pluglistController extends appController
 	function turn()
 	{
 		if( !is_admin() ) 
-			return render( array( 'code' => LR_API_FORBIDDEN , 'message' => 'ONLY ADMIN CAN DO THIS' ) , 'rest' );
+			return render( array( 'code' => LR_API_FORBIDDEN , 'message' => __('API_MESSAGE_ONLY_ADMIN') ) , 'rest' );
 		
 		$on = intval(v('on'));
 		$folder_name = z(t(v('folder_name')));
@@ -42,7 +42,7 @@ class pluglistController extends appController
 	function upload()
 	{
 		if( !is_admin() ) 
-			return info_page('只有管理员才能进入此页面，<a href="?c=guest&a=logout">请先用管理员账户登入</a>');
+			return info_page(__('ADMIN_ONLY_LOGIN'));
 
 		$data = array();
 		return render( $data , 'ajax' );
@@ -51,10 +51,10 @@ class pluglistController extends appController
 	function uploaded()
 	{
 		if( !is_admin() ) 
-			return info_page('只有管理员才能进入此页面，<a href="?c=guest&a=logout">请先用管理员账户登入</a>');
+			return info_page(__('ADMIN_ONLY_LOGIN'));
 		
 		if( $_FILES['pfile']['error'] != 0 )
-			return info_page('文件上传错误，请重新上传');
+			return info_page( __('PLUGIN_UPLOAD_FILE_ERROR_RETRY') );
 		
 		$tmp_name = $_FILES['pfile']['tmp_name'];
 
@@ -86,7 +86,7 @@ class pluglistController extends appController
 						return true;
 					}
 					else 
-						return info_page('尝试获取插件名称失败，启用'.$tname.'作为临时名称，<a href="?c=pluglist">请点击继续</a>');  
+						return info_page( __( 'PLUGIN_GET_NAME_ERROR_RETRY' , $tname )  );  
 
 				}
 			}
@@ -96,12 +96,12 @@ class pluglistController extends appController
 
 			}	
 
-			return 	info_page('找不到插件执行脚本-app.php文件，<a href="?c=pluglist">请重新上传格式正确的插件包</a>');  
+			return 	info_page(__('PLUGIN_PACKAGE_FORMAT_ERROR'));  
 			
 			
 
 		}else 
-			return info_page('创建插件目录失败，请将plugin目录设置为可写后<a href="?c=pluglist">重试</a>');
+			return info_page( __('PLUGIN_CREATE_FOLDER_ERROR') );
 		
 
 	}

@@ -12,6 +12,7 @@ class appController extends coreController
 		// 检测语言
 		if( isset($_COOKIE['tt2_lang']) ) $GLOBALS['i18n'] = z(t(basename($_COOKIE['tt2_lang'])));
 		else $GLOBALS['i18n'] = c('default_language');
+		__('TEST'); // force to load langua array before plugin
 
 
 		// 安装时不启用插件
@@ -78,7 +79,7 @@ class appController extends coreController
 		}
 		else
 		{
-			if( !is_login() ) return info_page('您访问的页面需要先<a href="?c=guest">登入</a>');	
+			if( !is_login() ) return info_page( __('NEED_LOGIN') );	
 		}
 
 		

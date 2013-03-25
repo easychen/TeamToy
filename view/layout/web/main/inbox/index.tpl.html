@@ -1,7 +1,7 @@
 <?php do_action( 'UI_INBOX_BEFORE' );  ?>
 <div class="row-fluid">
 <div class="span7">
-	<h2 class="main_board">收件箱</h2>
+	<h2 class="main_board"><?=__('INBOX_PAGE_TITLE')?></h2>
 
 	<?php do_action( 'UI_INBOX_LIST_BEFORE' ); ?>
 	<ul id="notice_list"></ul>	
@@ -41,7 +41,7 @@
 <div class="span5" id="side_board">
 <div id="nsettings_box">
 	<div id="side_container">
-		<h2 class="side_board">消息推送设置</h2>
+		<h2 class="side_board"><?=__('INBOX_RECEIVE_SETTINGS')?></h2>
 		<ul class="settings_icon" id="n1">
 			<li id="desknoty_li"><a href="javascript:void(0);" title="桌面通知" id="desknoty_link"><img src="<?=image('settings.btn.desktop.png')?>"/></a></li>
 		<!--
@@ -50,10 +50,10 @@
 		</ul>	
 		<div class="line-large"></div>
 		
-		<h2 class="side_board">通过手机客户端接收通知</h2>
+		<h2 class="side_board"><?=__('INBOX_RECEIVE_MESSAGE_VIA_MOBILE_CLIENT')?></h2>
 		<ul class="settings_icon client">
-			<li><a href="javascript:show_float_box( '使用Android客户端登入' , '?c=inbox&a=client&type=android' );void(0);" target="_blank" title="Android" rel="tooltip"><img src="<?=image('settings.btn.android.png')?>"/></a></li>
-			<li><a href="javascript:show_float_box( '使用iOS客户端登入' , '?c=inbox&a=client&type=ios' );void(0);" target="_blank" title="iOS" rel="tooltip"><img src="<?=image('settings.btn.ios.png')?>"/></a></li>
+			<li><a href="javascript:show_float_box( '<?=__('INBOX_ANDROID_LOGIN')?>' , '?c=inbox&a=client&type=android' );void(0);" target="_blank" title="Android" rel="tooltip"><img src="<?=image('settings.btn.android.png')?>"/></a></li>
+			<li><a href="javascript:show_float_box( '<?=__('INBOX_IOS_LOGIN')?>' , '?c=inbox&a=client&type=ios' );void(0);" target="_blank" title="iOS" rel="tooltip"><img src="<?=image('settings.btn.ios.png')?>"/></a></li>
 			<?php do_action( 'UI_INBOX_CLIENT_LAST' ); ?>
 		</ul>		
 		

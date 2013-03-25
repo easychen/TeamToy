@@ -2,41 +2,41 @@
 <ul class="gbox">
 <?php if( $data['owner_uid'] != uid() ): ?>
 	<?php if( intval($data['details']['is_follow']) == 1 ): ?>
-	<li class="follow"><a href="javascript:void(0);">关注</a></li>
+	<li class="follow"><a href="javascript:void(0);"><?=__('FOLLOW')?></a></li>
 	<?php else: ?>
-	<li class="nofollow"><a href="javascript:void(0);">关注</a></li>
+	<li class="nofollow"><a href="javascript:void(0);"><?=__('FOLLOW')?></a></li>
 	<?php endif; ?>	
 
 	<?php if( intval($data['details']['status']) == 3 ): ?>
-	<li class="done"><a href="javascript:void(0);">完成</a></li>
+	<li class="done"><a href="javascript:void(0);"><?=__('FINISH')?></a></li>
 	<?php else: ?>
-	<li class="notdone"><a href="javascript:void(0);">完成</a></li>
+	<li class="notdone"><a href="javascript:void(0);"><?=__('FINISH')?></a></li>
 	<?php endif; ?>	
 	
 
 	<li class="owner"><a href="javascript:void(0);" class="namecard" uid="<?=$data['owner']['uid']?>"><?=$data['owner']['name']?></a></li>
 <?php else: ?>	
-<li class="forward"><a href="javascript:todo_forward( '<?=$data['tid']?>','?c=dashboard&a=people_box&jsfunc=todo_assign&tid=<?=$data['tid']?>');" >转让</a></li>
+<li class="forward"><a href="javascript:todo_forward( '<?=$data['tid']?>','?c=dashboard&a=people_box&jsfunc=todo_assign&tid=<?=$data['tid']?>');" ><?=__('ASSIGN')?></a></li>
 <?php if( intval($data['details']['is_public']) == 1 ): ?>
-<li class="public"><a href="javascript:void(0);">私密</a></li>
+<li class="public"><a href="javascript:void(0);"><?=__('PRIVATE')?></a></li>
 <?php else: ?>
-<li class="private"><a href="javascript:void(0);">私密</a></li>
+<li class="private"><a href="javascript:void(0);"><?=__('PRIVATE')?></a></li>
 <?php endif; ?>	
 
 <?php if( intval($data['details']['is_star']) == 1 ): ?>
 
 	<?php if( intval($data['details']['is_public']) == 1 ): ?>
-	<li class="star public"><a href="javascript:void(0);">星标</a></li>
+	<li class="star public"><a href="javascript:void(0);"><?=__('STAR')?></a></li>
 	<?php else: ?>
-	<li class="star private"><a href="javascript:void(0);">星标</a></li>
+	<li class="star private"><a href="javascript:void(0);"><?=__('STAR')?></a></li>
 	<?php endif; ?>
 
 <?php else: ?>
 
 	<?php if( intval($data['details']['is_public']) == 1 ): ?>
-	<li class="nostar pub"><a href="javascript:void(0);">星标</a></li>
+	<li class="nostar pub"><a href="javascript:void(0);"><?=__('STAR')?></a></li>
 	<?php else: ?>
-	<li class="nostar pri"><a href="javascript:void(0);">星标</a></li>
+	<li class="nostar pri"><a href="javascript:void(0);"><?=__('STAR')?></a></li>
 	<?php endif; ?>
 
 <?php endif; ?>	
@@ -48,7 +48,7 @@
 <?php do_action( 'UI_TODO_DETAIL_FOLLOWER_BEFORE' , $data ); ?>
 <?php if( isset( $data['people'] ) && is_array( $data['people'] ) ): ?>	
 <div class="line"></div>
-<h2 class="side_board">谁在关注</h2>
+<h2 class="side_board"><?=__('FOLLOWER')?></h2>
 <ul class="follower">
 <?php foreach( $data['people'] as $user ): ?>
 <li><img src="<?=avatar($user['avatar_small'])?>" title="<?=$user['name']?>" /></li>
@@ -60,13 +60,14 @@
 <div class="line"></div>
 
 <?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_BEFORE' , $data ); ?>
-<h2 class="side_board">讨论</h2>
+<h2 class="side_board"><?=__('DISCUSS')?></h2>
 <div class="comment_box">
 <form class="form-inline" action="javascript:todo_add_comment( <?=$data['tid']?> , $('#comment_text').val() );void(0);" method="post" id="comment_form">
 <div class="input-append">
-  <input class="side_board_input" id="comment_text" type="text" placeholder="请输入评论内容">
-  <button class="btn" type="submit">发布</button>
-</div>	
+  <input class="side_board_input" id="comment_text" type="text" placeholder="<?=__('INPUT_COMMENT_CONTENT')?>">
+  <button class="btn" type="submit"><?=__('SEND')?></button>
+</div>
+<?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_TOOLBAR' , $data ); ?>	
 </form>	
 </div>
 <?php do_action( 'UI_TODO_DETAIL_COMMENTBOX_AFTER' , $data ); ?>

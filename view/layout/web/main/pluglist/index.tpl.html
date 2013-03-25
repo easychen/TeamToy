@@ -3,18 +3,18 @@
 <div class="row-fluid">
 <div class="span12">
 	<h2 class="main_board">
-	<a href="https://github.com/easychen/TeamToy-Plugins" target="_blank" class="side_link pull-right">更多插件</a> 	
-		插件管理&nbsp;<?php if( is_writable( c('plugin_path') )  ): ?><a href="javascript:show_float_box('上传插件' , '?c=pluglist&a=upload');void(0);" class="side_link">上传插件</a><?php endif; ?>
+	<a href="https://github.com/easychen/TeamToy-Plugins" target="_blank" class="side_link pull-right"><?=__('MORE_PLUGINS')?></a> 	
+		<?=__('PLUGIN_ADMIN_PAGE_TITLE')?>&nbsp;<?php if( is_writable( c('plugin_path') )  ): ?><a href="javascript:show_float_box('<?=__('UPLOAD_PLUGIN')?>' , '?c=pluglist&a=upload');void(0);" class="side_link"><?=__('UPLOAD_PLUGIN')?></a><?php endif; ?>
 	</h2>
 	<?php do_action( 'UI_PLUGIN_TABLE_BEFORE' ); ?>
 	<?php if( $plist && is_array( $plist ) ): ?>
 	<table class="table table-hover table-plugin">
 	<thead>
 		<tr>
-			<th width="100">名称</th>
-			<th width="40">版本</th>
-			<th>简介</th>
-			<th width="60">状态</th>
+			<th width="100"><?=__('PLUGIN_NAME')?></th>
+			<th width="40"><?=__('PLUGIN_VERSION')?></th>
+			<th><?=__('PLUGIN_DESP')?></th>
+			<th width="60"><?=__('PLUGIN_STATUS')?></th>
 		<tr>	
 	</thead>
 
@@ -26,9 +26,9 @@
 		<td><?=$item['desp']?> - by <a href="mailto:<?=$item['email']?>" target="_blank"><?=$item['author']?></a></td>
 		<td>
 		<?php if( in_array( strtolower($item['folder_name']) , c('plugins') ) ):?>
-		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )" checked="true"/>启用</label>
+		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )" checked="true"/><?=__('PLUGIN_ON')?></label>
 		<?php else: ?>
-		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )"/>启用</label>
+		<label class="checkbox"><input type="checkbox" onclick="plugin_turn('<?=$item['folder_name']?>' , '<?=$item['name']?>' , this )"/><?=__('PLUGIN_ON')?></label>
 		<?php endif; ?>
 		</td>
 	</tr>	
@@ -37,7 +37,7 @@
 	</table>
 	
 	<?php else: ?>
-	<div>没有发现可用的插件</div>
+	<div><?=__('NO_AVAILABLE_PLUGIN')?></div>
 	<?php endif; ?>	
 	<?php do_action( 'UI_PLUGIN_TABLE_AFTER' ); ?>
 

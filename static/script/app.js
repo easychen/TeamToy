@@ -84,6 +84,11 @@ function hide_pop_box( popid )
 	$('#' + popid ).css('display','none');
 }
 
+function __( text , values )
+{
+	return $.i18n._( text , values);
+}
+
 
 function remember()
 {
@@ -243,7 +248,7 @@ function todo_add( text , private , star , uid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_CALL_ERROR' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		done();
@@ -279,7 +284,7 @@ function todo_public( tid , type )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		done();
@@ -290,10 +295,10 @@ function todo_public( tid , type )
 
 function todo_forward( tid , url )
 {
-	if( $('#t-'+tid).hasClass('red') ) return alert('私有TODO不能转让哦~');
+	if( $('#t-'+tid).hasClass('red') ) return alert(__('JS_CANNOT_ASSIGN_PRIVATE_TODO'));
 	else
 	{
-		show_float_box( '选择要转让的同事' , url );
+		show_float_box( __('JS_SELECT_MEMBER_TO_ASSIGN') , url );
 		// $('#people_box').modal({ 'show':true,'remote':url });
 	} 
 }
@@ -392,7 +397,7 @@ function todo_star( tid , type , is_public )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		
@@ -402,7 +407,7 @@ function todo_star( tid , type , is_public )
 
 function todo_all_done()
 {
-	if( confirm( '确定要将所有TODO都标记为完成么？不准偷懒哦！' ) )
+	if( confirm( __('JS_MARK_ALL_TODO_DONE_CONFIRM') ) )
 	{
 		var url = '?c=dashboard&a=todo_all_done' ;
 		var params = { };
@@ -418,7 +423,7 @@ function todo_all_done()
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 
 			done();
@@ -429,7 +434,7 @@ function todo_all_done()
 
 function todo_clean()
 {
-	if( confirm( '确定清除所有已完成的TODO？' ) )
+	if( confirm( __('JS_REMOVE_ALL_TODO_DONE_CONFIRM') ) )
 	{
 		var url = '?c=dashboard&a=todo_clean' ;
 		var params = { };
@@ -443,7 +448,7 @@ function todo_clean()
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 
 			done();
@@ -457,7 +462,7 @@ function todo_clean()
 // $("li#fid-"+fid+" span.cnt").text( parseInt( $("li#fid-"+fid+" span.cnt").text() ) + 1 );
 function feed_remove( fid )
 {
-	if( confirm( '广播删除后不可恢复，继续？' ) )
+	if( confirm( __('JS_REMOVE_CAST_CONFIRM') ) )
 	{
 		var url = '?c=feed&a=feed_remove' ;
 		var params = { 'fid' : fid  };
@@ -471,7 +476,7 @@ function feed_remove( fid )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 			done();
 		} );
@@ -484,7 +489,7 @@ function feed_remove( fid )
 
 function feed_remove_comment( cid )
 {
-	if( confirm( '确定删除这条评论？' ) )
+	if( confirm( __('JS_REMOVE_COMMENT_CONFIRM') ) )
 	{
 		var url = '?c=feed&a=feed_remove_comment' ;
 		var params = { 'cid' : cid  };
@@ -505,7 +510,7 @@ function feed_remove_comment( cid )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 			done();
 		} );
@@ -519,7 +524,7 @@ function feed_remove_comment( cid )
 
 function todo_remove_comment( hid )
 {
-	if( confirm( '确定删除这条评论？' ) )
+	if( confirm( __('JS_REMOVE_COMMENT_CONFIRM') ) )
 	{
 		var url = '?c=dashboard&a=todo_remove_comment' ;
 		var params = { 'hid' : hid  };
@@ -533,7 +538,7 @@ function todo_remove_comment( hid )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 			done();
 		} );
@@ -559,7 +564,7 @@ function todo_add_comment( tid , comment )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		done();
@@ -587,7 +592,7 @@ function feed_add_comment( fid , comment )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		done();
@@ -617,7 +622,7 @@ function todo_follow( tid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 
 		done();
@@ -643,7 +648,7 @@ function todo_unfollow( tid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );
@@ -666,7 +671,7 @@ function todo_update( tid , text )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );	
@@ -690,7 +695,7 @@ function todo_assign( tid , uid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );	
@@ -715,7 +720,7 @@ function mark_todo_done( tid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );	
@@ -737,7 +742,7 @@ function mark_todo_undone( tid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );
@@ -798,7 +803,7 @@ function enable_at( name )
 
 function show_todo_detail_center( tid )
 {
-	show_float_box( 'TODO详情' , '?c=dashboard&a=todo_center&tid=' + tid );
+	show_float_box( __('JS_TODO_CENTER_PAGE_TITLE') , '?c=dashboard&a=todo_center&tid=' + tid );
 }
 
 function show_todo_detail( tid )
@@ -837,6 +842,9 @@ function show_todo_detail( tid )
 		namecard();
 		enable_at('comment_text');
 		done();
+
+		if( typeof JS_TODO_DETAIL_CALLBACK == 'function'  ) JS_TODO_DETAIL_CALLBACK();
+
 	} );
 
 	$('#tdboard').html('<h2 class="loading">Loading...</h2>');
@@ -904,13 +912,13 @@ function check_notice()
 				var mid = parseInt(data_obj.data.mid);
 				if( isNaN( old_mid )  ) old_mid = 0;
 
-				var title = 'TeamToy有';
+				var title = __('JS_NOTICE_PREFIX');
 				var content = '';
 				var send = false;
 
 				if( parseInt(data_obj.data.notice) > 0 )
 				{
-					title += data_obj.data.notice+'条未读通知';
+					title +=  __( 'JS_NOTICE_NOTIFACTION' , [data_obj.data.notice] ) ;
 					content += data_obj.data.text;
 
 					if( old_nid < 1  ||  old_nid < nid ) send = true;
@@ -918,7 +926,7 @@ function check_notice()
 
 				if( parseInt(data_obj.data.message) > 0 )
 				{
-					title += data_obj.data.message+'条未读私信';
+					title += __( 'JS_NOTICE_DM' , [data_obj.data.message] );
 					if( old_mid < 1  ||  old_mid < mid ) send = true;
 				}
 
@@ -985,7 +993,7 @@ function check_notice()
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	} );
 }
@@ -1070,7 +1078,7 @@ function cast_send( text )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 		done();
 	} );
@@ -1165,7 +1173,7 @@ function bind_todo()
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 		} );
 
@@ -1355,8 +1363,8 @@ function cast_at_check()
 {
 	$('#cast_text').bind( 'keydown keyup' , function(evt)
 	{
-		if( /@/.test( $('#cast_text').val() ) ) $('#cast_user_tips').text('点名的人会收到通知');
-		else $('#cast_user_tips').text('所有人都会收到通知');
+		if( /@/.test( $('#cast_text').val() ) ) $('#cast_user_tips').text(__('JS_CAST_MENTION_EXPLAIN_MENONTED'));
+		else $('#cast_user_tips').text(__('JS_CAST_MENTION_EXPLAIN_ALL'));
 
 		if( $('#cast_text').val() == '' ) $('#cast_form [type=submit]').attr('disabled',true);
 		else  $('#cast_form [type=submit]').attr('disabled',false);
@@ -1391,7 +1399,7 @@ function admin_user( uid , on )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	} );
 }
@@ -1404,7 +1412,7 @@ function plugin_turn( fold_name , name , obj )
 
 	if( on == 0 )
 	{
-		if( confirm( '停用'+name+'插件后相关的功能将不可用，继续？' ) )
+		if( confirm( __('JS_STOP_PLUGIN_CONFIRM',[name]) ) )
 			doo = 1
 	}
 	else doo = 1;
@@ -1423,7 +1431,7 @@ function plugin_turn( fold_name , name , obj )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}		
 		}); 
 
@@ -1434,19 +1442,19 @@ function save_password()
 {
 	if( $('#password_form [name=oldpassword]').val() == '' )
 	{
-		alert( '原密码不能为空' );
+		alert( __('JS_OLD_PASSWORD_CANNOT_EMPTY') );
 		return false;
 	}
 
 	if( $('#password_form [name=newpassword]').val() == '' )
 	{
-		alert( '新密码不能为空' );
+		alert( __('JS_NEW_PASSWORD_CANNOT_EMPTY') );
 		return false;
 	}
 
 	if( $('#password_form [name=newpassword]').val() != $('#password_form [name=newpassword2]').val() )
 	{
-		alert( '两次输入的密码不一致' );
+		alert( __('JS_TWO_PASSWORDS_NOT_SAME') );
 		return false;
 	}
 
@@ -1462,13 +1470,13 @@ function password_updated( data )
 	if( data_obj.err_code == 0 )
 	{
 		
-		alert('密码修改成功，请使用新密码登入');
+		alert(__('JS_PASSWORD_CHANGED'));
 		close_float_box();
 		location = '?c=guest&a=logout';
 	}
 	else
 	{
-		alert('服务器通信失败，请稍后再试'+data);
+		alert(__('JS_API_CONNECT_ERROR'));
 	}
 }
 
@@ -1485,16 +1493,16 @@ function profile_updated( data )
 	else
 	{
 		if( data_obj.err_code == 10006 )
-			alert('Email和手机号都是必填项');
+			alert(__('JS_FILL_MOBILE_EMAIL_PLZ'));
 		else
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 	}
 }
 
 
 function admin_close_user( uid )
 {
-	if( confirm( '确定要关闭该用户么？关闭后此用户资料将保留，但不能登入系统' ) )
+	if( confirm( __('JS_ACCOUNT_CLOSE_CONFIRM') ) )
 	{
 		var url = '?c=buddy&a=user_close' ;
 	
@@ -1511,7 +1519,7 @@ function admin_close_user( uid )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 		} );	
 	}
@@ -1600,7 +1608,7 @@ function load_im_buddy_list()
 		}
 		else
 		{
-			console.log('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			console.log( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	});	
 }
@@ -1656,7 +1664,7 @@ function show_im_box( uid )
 						}
 						else
 						{
-							alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+							alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 						}
 
 						$('#im_area_list li#im_box_'+uid+' .im_form_textarea').attr('disabled',false);
@@ -1692,7 +1700,7 @@ function show_im_box( uid )
 		}
 		else
 		{
-			console.log('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			console.log(__('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ));
 		}
 	});	
 
@@ -1704,7 +1712,7 @@ function show_im_box( uid )
 
 function user_reset_password( uid , uname )
 {
-	if( confirm( '确定要重置'+uname+'的密码？' ) )
+	if( confirm( __('JS_RESET_PASSWORD_CONFIRM',[uname]) ))
 	{
 		var url = '?c=dashboard&a=user_reset_password&uid=' + uid ;
 		var params = {};
@@ -1732,7 +1740,7 @@ function user_reset_password( uid , uname )
 			}
 			else
 			{
-				alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+				alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 			}
 		});
 
@@ -1752,7 +1760,8 @@ function check_im( uid )
 			$('#im_area_list li#im_box_'+uid+' .im_history').data('jsp').getContentPane().append( data );
 			$('#im_area_list li#im_box_'+uid+' .im_history').data('jsp').reinitialise();
 			$('#im_area_list li#im_box_'+uid+' .im_history').data('jsp').scrollToBottom();
-			$.titleAlert("有新的私信啦", 
+
+			$.titleAlert( __('JS_NEW_DM') , 
 			{
 			    requireBlur:false,
 			    stopOnFocus:true,
@@ -1806,19 +1815,19 @@ function check_version()
 			// error in ie , becoz .new 
 			if( data_obj.data.new && parseInt( data_obj.data.new )  == 1 )
 			{
-				if( confirm( '有新的版本'+data_obj.data.version + '['+ data_obj.data.info +']。升级到最新版？' ) )
+				if( confirm(  __('JS_NEW_VERSION',[data_obj.data.version , data_obj.data.info]) ) )
 				{
 					location = '?c=dashboard&a=upgrade';
 				}
 			}
 			else
 			{
-				alert('当前版本已经是最新了');
+				alert(__('JS_ALREAD_LASTEST_VERSION'));
 			}
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	} );
 	doing();	
@@ -1849,11 +1858,11 @@ function user_added( data )
 	{
 		if( data_obj.err_code == 100002 )
 		{
-			return alert('所有字段均为必填项，请认真填写');
+			return alert( __('JS_ALL_CANNOT_EMPTY') );
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}	
 
 	}
@@ -1869,7 +1878,7 @@ function edit_tag( uid )
 	$('#t-tags-edit-'+uid).show();
 	
 	if( $('#t-tags-input-'+uid+'_tag').length < 1 )
-		$('#t-tags-input-'+uid).tagsInput({'defaultText':'添加分组名称'});
+		$('#t-tags-input-'+uid).tagsInput({'defaultText':__('JS_ADD_GRUOP_NAME')});
 }
 
 function save_tag( uid )
@@ -1888,7 +1897,7 @@ function save_tag( uid )
 		}
 		else
 		{
-			alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	} );
 
@@ -1905,7 +1914,7 @@ function cancel_tag( uid )
 
 function show_im_all_history( uid , uname )
 {
-	show_float_box( '我和'+ uname +'的聊天记录' , '?c=dashboard&a=im_all&uid='+uid );
+	show_float_box( __('JS_CHAT_HISTORY_WITH_SOMEONE',[uname]) , '?c=dashboard&a=im_all&uid='+uid );
 }
 
 function im_next_btn()
@@ -1950,7 +1959,7 @@ function im_all_update( uid , keyword , max )
 		}
 		else
 		{
-			//alert('API调用错误，请稍后再试。错误号'+data_obj.err_code + ' 错误信息 ' + data_obj.message);
+			//alert( __('JS_API_ERROR_INFO' , [ data_obj.err_code , data_obj.message ] ) );
 		}
 	} );
 
@@ -1991,7 +2000,7 @@ function assign_chooser()
 {
 	if( $('#todo_form [name=private]:checked').val() == 1 )
 	{
-		alert( '私有TODO不能添加给别人' );
+		alert( __('JS_CANNOT_ADD_PRIVATE_TODO_TO_OTHERS') );
 		return false;
 	} 
 
@@ -2007,7 +2016,7 @@ function assign_set( tid , uid , uname )
 
 function at_chooser()
 {
-	show_float_box( '请在选择你要点名的同事' , '?c=dashboard&a=people_box&jsfunc=cast_at_selected&multi=1' );
+	show_float_box( __('JS_SELECT_MEMBER_TO_METION') , '?c=dashboard&a=people_box&jsfunc=cast_at_selected&multi=1' );
 }
 
 function cast_at_selected( uids , unames )

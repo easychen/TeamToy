@@ -73,7 +73,7 @@ function db_init()
 
     if(  db_errno() == 0 )
     {
-        info_page('数据库初始化成功，请使用【member@teamtoy.net】和【' . $password . '】<a href="/" target="new">登入并添加用户</a>');
+        info_page(__('DATABASE_INIT_FINISHED' , $password ));
         exit;
     }
     else
@@ -183,8 +183,8 @@ function avatar( $url )
 function ctime( $timeline )
 {
     $time = strtotime($timeline);
-    if( time() > ($time+60*60*24*300) )return date("Y年n月j日 H:i",$time);
-    elseif( time() > ($time+60*60*8) ) return date("n月j日 H:i",$time);
+    if( time() > ($time+60*60*24*300) )return date( __('DATE_FULL_FORMAT') ,$time);
+    elseif( time() > ($time+60*60*8) ) return date( __('DATE_SHORT_FORMAT') ,$time);
     else return date("H:i:s",$time);
 }
 
@@ -195,15 +195,17 @@ function rtime( $timeline )
 }
 */
 
-function rtime( $time = false, $limit = 86400, $format = 'm月d日 H点i分') 
+function rtime( $time = false, $limit = 86400, $format = null) 
 {
-	$time = strtotime($time);
+	if( $format === null ) $format = __('DATE_SHORT_FORMAT');
+
+    $time = strtotime($time);
 
 	$now = time();
 	$relative = '';
 
-	if ($time === $now) $relative = '刚刚';
-	elseif ($time > $now) $relative = '以后';
+	if ($time === $now) $relative = __('DATE_RELATED_NOW');
+	elseif ($time > $now) $relative = __('DATE_RELATED_AFTER') ;
 	else 
 	{
 		$diff = $now - $time;
@@ -212,16 +214,20 @@ function rtime( $time = false, $limit = 86400, $format = 'm月d日 H点i分')
 
 		elseif ($diff < 60) 
 		{
-			$relative = '不到一分钟';
+			$relative = __('DATE_RELATED_LESS_THAN_A_MINUTE');
 		}
 		elseif (($minutes = ceil($diff/60)) < 60)
 		{
-			$relative = $minutes.'分钟'.(((int)$minutes === 1) ? '' : '').'前';
+			if( (int)$minutes === 1 ) $relative = __( 'DATE_RELATED_ONE_MINUTE' );
+            else  $relative = __( 'DATE_RELATED_SOME_MINUTES' ,  $minutes );      
 		}
 		else
 		{
 			$hours = ceil($diff/3600);
-			$relative = $hours.'小时'.(((int)$hours === 1) ? '' : '').'前';
+
+            if( (int)$hours === 1 ) $relative = __( 'DATE_RELATED_ONE_HOUR' );
+            else  $relative = __( 'DATE_RELATED_SOME_HOURS' ,  $hours );  
+
 		}
 	}
 
@@ -281,10 +287,10 @@ function feed_class(  $type )
 
 function device( $type )
 {
-	if( strtolower($type) == 'mobile' )
-		$ret = '<a href="http://teamtoy.net/?c=download&type=mobile" target="_blank">来自移动版</a>';
+	if( strtolower(t($type)) == 'mobile' )
+		$ret = __('FROM_MOBILE_DEVICE');
 	else
-		$ret = '<a href="http://teamtoy.net/?c=download&type=web" target="_blank">来自网页版</a>';
+		$ret = __('FROM_WEB_DEVICE');
 	return $ret;
 }
 
@@ -720,7 +726,7 @@ function link_at( $str )
 
 function find_links( $html )
 {
-    $reg = '/(http:\/\/(.+?))((\s+)|$)/is';
+    $reg = '/(http[s]*:\/\/([-a-zA-Z0-9@:%~#&_=\+\.\?\/]+?))((\s+)|$)/is';
     if( preg_match_all( $reg , $html , $out ) )
     {
         foreach( $out[0] as $item )
@@ -732,6 +738,37 @@ function find_links( $html )
         return $ret;
     }
     return false;
+}
+
+function replace_links( $html )
+{
+    $reg = '/(http[s]*:\/\/([-a-zA-Z0-9@:%~#&_=\+\.\?\/]+?))((\s+)|$)/is';
+    if(  $ret = preg_replace( $reg , "<a href='$1' target='_blank'>$1</a> " , $html ) )
+    {
+        return $ret;
+    }
+    else return $html;
+   
+
+}
+
+function js_i18n( $array )
+{
+    $ret = array();
+    foreach( $array as $key => $value )
+    {
+        if( strtoupper( substr( $key , 0 , 3 ) ) == 'JS_'  )
+            $ret[$key] = $value;
+    }
+    return $ret;
+}
+
+function plugin_append_lang( $lang_array )
+{
+    $c = g('i18n');
+    if( isset( $lang_array[$c] ) )
+        $GLOBALS['language'][$c] 
+    = array_merge( $GLOBALS['language'][$c] , $lang_array[$c] ) ;
 }
 
 

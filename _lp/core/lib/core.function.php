@@ -97,11 +97,11 @@ function render( $data = NULL , $layout = NULL , $sharp = 'default' , $pathinfo 
 	}
 }
 
-function ajax_header()
+function ajax_header( $type = 'text/html' )
 {
 	if( !headers_sent() )
 	{
-		header("Content-Type:text/html;charset=utf-8");
+		header("Content-Type:".$type.";charset=utf-8");
 		header("Expires: Thu, 01 Jan 1970 00:00:01 GMT");
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Pragma: no-cache");

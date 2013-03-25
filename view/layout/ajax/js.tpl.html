@@ -1,0 +1,6 @@
+<?php	
+	ajax_header('text/javascript');
+	$tfile = 'view' . DS . 'layout' . DS  . g('layout') . DS . g('c') . DS . g('a') . '.tpl.html' ;
+	if( file_exists( AROOT . $tfile ) ) include( AROOT . $tfile );
+	else @include( CROOT . $tfile );
+ ?>

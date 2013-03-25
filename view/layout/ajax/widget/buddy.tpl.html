@@ -11,48 +11,48 @@
  		<li ><?=$item['name']?> 
  		<?php if( $_SESSION['level'] == 9  ): ?>	
  			<?php if( $item['level'] == 9 ): ?>
- 				<i class="icon-star"></i><a href="javascript:admin_user_off(<?=$item['id']?>);void(0);" class="side_link">降为普通用户</a>
+ 				<i class="icon-star"></i><a href="javascript:admin_user_off(<?=$item['id']?>);void(0);" class="side_link"><?=__('SET_AS_NORMAL_MEMBER')?></a>
  			<?php else: ?>
- 				<a href="javascript:admin_user_on(<?=$item['id']?>);void(0);" class="side_link">升为管理员</a>
+ 				<a href="javascript:admin_user_on(<?=$item['id']?>);void(0);" class="side_link"><?=__('SET_AS_ADMIN')?></a>
  			<?php endif; ?>	
- 			<?php if( $item['id'] != uid() ): ?><a href="javascript:user_reset_password(<?=$item['id']?> , '<?=$item['name']?>');void(0);" class="side_link">重置密码</a>
+ 			<?php if( $item['id'] != uid() ): ?><a href="javascript:user_reset_password(<?=$item['id']?> , '<?=$item['name']?>');void(0);" class="side_link"><?=__('RESET_PASSWORD')?></a>
  			<?php endif; ?>
  			</li>
  		<?php endif; ?>	
 
  		<?php do_action( 'UI_BUDDY_ITEM_INFO_FIRST' , $item ); ?>
  		<?php if( strlen($item['email']) ): ?>
- 			<li><i class="icon-envelope" ></i>&nbsp;邮箱 - <a href="mailto:<?=$item['email']?>" target="_blank"><?=$item['email']?></a></li>
+ 			<li><i class="icon-envelope" ></i>&nbsp;<?=__('EMAIL')?> - <a href="mailto:<?=$item['email']?>" target="_blank"><?=$item['email']?></a></li>
  		<?php endif; ?>
 
  		
  		<?php if( strlen($item['mobile']) ): ?>
- 			<li><i class="icon-phone" ></i>&nbsp;手机 - <a href="tel:+86<?=$item['mobile']?>" target="_blank"><?=$item['mobile']?></a></li>
+ 			<li><i class="icon-phone" ></i>&nbsp;<?=__('MOBILE')?> - <a href="tel:<?=$item['mobile']?>" target="_blank"><?=$item['mobile']?></a></li>
  		<?php endif; ?>
  		
 
  		<?php if( strlen($item['tel']) ): ?>
- 			<li><i class="icon-phone" ></i>&nbsp;分机 - <a href="tel:+86:<?=$item['tel']?>" target="_blank"><?=$item['tel']?></a></li>
+ 			<li><i class="icon-phone" ></i>&nbsp;<?=__('TEL')?> - <a href="tel:<?=$item['tel']?>" target="_blank"><?=$item['tel']?></a></li>
  		<?php endif; ?>
  		
 
  		<?php if( strlen($item['eid']) ): ?>
- 			<li><i class="icon-credit-card" ></i>&nbsp;工号 - <a href="#"><?=$item['eid']?></a></li>
+ 			<li><i class="icon-credit-card" ></i>&nbsp;<?=__('EMPLOYEE_ID')?> - <a href="#"><?=$item['eid']?></a></li>
  		<?php endif; ?>
  		
  		<?php if( strlen($item['weibo']) ): ?>
- 			<li><i class="icon-twitter" ></i>&nbsp;微博 - <a href="http://s.weibo.com/user/<?=$item['weibo']?>" target="_blank">@<?=$item['weibo']?></a></li>
+ 			<li><i class="icon-twitter" ></i>&nbsp;<?=__('WEIBO_ID')?> - <a href="<?=__('WEIBO_LINK' , u($item['weibo']))?>" target="_blank">@<?=$item['weibo']?></a></li>
  		<?php endif; ?>
  		
  		<?php if( strlen($item['desp']) ): ?>
- 			<li><i class="icon-asterisk" ></i>&nbsp;备注 - <?=nl2br($item['desp'])?></li>
+ 			<li><i class="icon-asterisk" ></i>&nbsp;<?=__('DESP_TEXT')?> - <?=nl2br($item['desp'])?></li>
  		<?php endif; ?>
 
  		<?php if( is_array($item['groups']) ): ?>
  			<li id="t-tags-<?=$item['id']?>"><i class="icon-tags" ></i>&nbsp;
- 			<?foreach( $item['groups'] as $group ):?>
+ 			<?php foreach( $item['groups'] as $group ):?>
  			<span class="label label-info"><?=$group?></span>&nbsp;
- 			<?endforeach;?>	
+ 			<?php endforeach;?>	
  			</li>
  		<?php endif; ?>
 
@@ -60,11 +60,11 @@
  		<li id="t-tags-edit-<?=$item['id']?>" style="display:none">
  			<div>
  			<input id="t-tags-input-<?=$item['id']?>" value="<?=@join(',',$item['groups'])?>" />
- 			<br/><a href="javascript:save_tag('<?=$item['id']?>');void(0);" class="btn btn-primary">保存</a>&nbsp;&nbsp;<a href="javascript:cancel_tag('<?=$item['id']?>');void(0);" class="btn">取消</a>
+ 			<br/><a href="javascript:save_tag('<?=$item['id']?>');void(0);" class="btn btn-primary"><?=__('SAVE')?></a>&nbsp;&nbsp;<a href="javascript:cancel_tag('<?=$item['id']?>');void(0);" class="btn"><?=__('CANCEL')?></a>
  			</div>
  		</li>	
  		<li>
- 			<a class="side_link" href="javascript:edit_tag( '<?=$item['id']?>');void(0);" id="t-tags-link-<?=$item['id']?>">编辑用户所属分组</a>&nbsp;
+ 			<a class="side_link" href="javascript:edit_tag( '<?=$item['id']?>');void(0);" id="t-tags-link-<?=$item['id']?>"><?=__('EDIT_MEMBER_GROUP')?></a>&nbsp;
  		</li>
  		<?php else: ?>
  		<li>&nbsp;</li>

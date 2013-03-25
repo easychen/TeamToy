@@ -143,7 +143,7 @@ function add_todo( $text , $is_public = 0 , $uid = null )
 	
 	if( db_errno() != 0 ) return false;
 	
-	$sql = "INSERT INTO `todo_history` ( `tid` , `uid` , `content` , `type` , `timeline` ) VALUES ( '" . intval($lid) . "' , '" . intval($uid) . "' , '创建了TODO' , 1 , NOW() )";
+	$sql = "INSERT INTO `todo_history` ( `tid` , `uid` , `content` , `type` , `timeline` ) VALUES ( '" . intval($lid) . "' , '" . intval($uid) . "' , '".__('TODO_CREATED')."' , 1 , NOW() )";
 	
 	run_sql( $sql );
 	if( db_errno() != 0 ) return false;
