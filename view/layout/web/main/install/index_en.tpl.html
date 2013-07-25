@@ -1,0 +1,115 @@
+<table class="table table-hover table-install">
+<caption><h1>TeamToy Install Guide <a href="?c=install&a=index">中文</a></h1><br/><br/></caption>
+<thead>
+	<tr>
+		<th width="100">Check items</th>
+		<th width="100">Suggest</th>
+		<th width="100">Current</th>
+		<th width="200">Problems</th>
+		<th>How to fix</th>
+	<tr>	
+</thead>
+
+<tbody>
+	<tr <?php if( version_compare(PHP_VERSION, '5.2.0' , '<')  ){ echo ' class="bad" '; } ?> >
+		<td>PHP Version</td>
+		<td>5.3</td>
+		<td><?=phpversion()?></td>
+		<td class="ierror">Low version will cause time-zone, json decode , plugin features error</td>
+		<td class="ierror">upgrade PHP or change to other VHost</td>
+	</tr>
+
+	<tr <?php if( !is_writable(AROOT)  ){ echo ' class="bad" '; } ?> >
+		<td>Folder writable?</td>
+		<td>Yes</td>
+		<td>
+			ROOT - <?php echo is_writable(AROOT)?'Yes':'No' ?><br/>
+			avatar folder - <?php echo is_writable(AROOT.'static'.DS .'upload' . DS .'avatar')?'Yes':'NO' ?><br/>
+			plugin folder - <?php echo is_writable(AROOT.'plugin')?'Yes':'No' ?>
+		</td>
+		<td class="ierror">Online upgrade, plugin and avatar upload may not available</td>
+		<td class="ierror">Change folder to 755</td>
+	</tr>
+
+	<tr <?php if(  !function_exists('ImageCreateTrueColor')   ){ echo ' class="bad" '; } ?> >
+		<td>GD</td>
+		<td>-</td>
+		<td>
+			<?php echo function_exists('ImageCreateTrueColor')?'Installed':'Not installed' ?>
+		</td>
+		<td class="ierror">Avatar upload may not available</td>
+		<td class="ierror">Modify your php.ini to add gd2 module</td>
+	</tr>
+
+	<tr <?php if(  !function_exists('curl_init')   ){ echo ' class="bad" '; } ?> >
+		<td>CURL</td>
+		<td>-</td>
+		<td>
+			<?php echo function_exists('curl_init')?'Installed':'Not installed' ?>
+		</td>
+		<td class="ierror">Login and online upgrade may not available</td>
+		<td class="ierror">Modify your php.ini to add curl module</td>
+	</tr>
+	
+	<tr <?php if(   strtolower(str_replace('//' , '/' , $_SERVER['PHP_SELF'] )) != strtolower(str_replace('http://'.$GLOBALS['config']['site_domain'] , '' , c('api_server'))  ) ) { echo ' class="bad" '; } ?> >
+		<td>API url</td>
+		<td><?='http://'.c('site_domain')?><?=$_SERVER['PHP_SELF']?></td>
+		<td>
+			<?=c('api_server')?>
+		</td>
+		<td class="ierror">Login error</td>
+		<td class="ierror">Install TeamToy to the root of the domain</td>
+	</tr>
+	
+
+	<?php $new_info = @json_decode( @file_get_contents( c('teamtoy_url') . '/?a=last_version' )  , 1); ?>
+	<tr <?php if( !isset($new_info['version']) ){ echo ' class="bad" '; } ?> >
+		<td>TeamToy Cloud Server</td>
+		<td>-</td>
+		<td>
+			<?php if( !isset($new_info['version']) ): ?>
+				Can't connect to TeamToy upgrade server
+			<?php else:?>
+				OK
+			<?php endif ?>
+		</td>
+		<td class="ierror">Online upgrade may not available</td>
+		<td class="ierror">Modify your php.ini to allow URL file-access</td>
+	</tr>
+
+	<?php if( isset($new_info['version']) ): ?>
+	<tr <?php if( intval( $new_info['version'] ) != local_version()  ){ echo ' class="bad" '; } ?> >
+		<td>TeamToy version</td>
+		<td>Lastest - <?=intval( $new_info['version'] )?></td>
+		<td>
+			Current - <?=local_version()?> 
+		</td>
+		<td class="ierror">Old verison always with some fixed bugs</td>
+		<td class="ierror">Download lastest version or upgrade online right after installation </td>
+	</tr>
+	<?php endif; ?>
+
+
+	<?php $db = @db(); ?>
+	<tr <?php if( g('LP_DB_CONNECT_ERROR') ){ echo ' class="bad" '; } ?> >
+		<td>Database settings</td>
+		<td>-</td>
+		<td><?php echo g('LP_DB_CONNECT_ERROR')?'Connect error'.g('LP_DB_CONNECT_ERROR_INFO'):'OK' ?></td>
+		<td class="ierror">Error everywhere</td>
+		<td class="ierror">rename config/db.config.sample.php to config/db.config.php and set the right database info</td>
+	</tr>
+</tbody>
+</table>
+
+<div>
+<!--<a class="btn btn-success" href="http://ftqq.com/2013/01/teamtoy-manual/" target="_blank" id="guide_btn">完全使用手册</a>&nbsp;--><a class="btn btn-primary " href="?c=install&a=index_en&do=1" id="install_btn">Continue</a>  
+</div>	
+<script type="text/javascript">
+if( $('.table-install tr.bad').length == 0 )
+{
+	$('.table-install').hide(); 
+	$('#guide_btn').hide();
+	$('#install_btn').html('Ready to install');
+} 
+</script>
+ 

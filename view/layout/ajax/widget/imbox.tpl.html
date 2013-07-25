@@ -16,9 +16,9 @@
 
 				<?php do_action( 'UI_IM_TEXT_TOOLBAR_LIST_AFTER' ); ?></div>
 			<?php if( $item['id'] == uid() ):?>
-				<textarea class="im_form_textarea" disabled="disabled" uid="<?=$item['id']?>" autofocus="autofocus">亲，自言自语就不用发到服务器啦~</textarea>
+				<textarea class="im_form_textarea" disabled="disabled" uid="<?=$item['id']?>" autofocus="autofocus"><?=__('DONOT_CHAT_TO_SELF')?></textarea>
 			<?php else: ?>
-			<textarea class="im_form_textarea" placeholder="输入聊天文字，按回车键送出" uid="<?=$item['id']?>" autofocus="autofocus"></textarea>
+			<textarea class="im_form_textarea" placeholder="<?=__('CHATBOX_EXPLAIN_TEXT')?>" uid="<?=$item['id']?>" autofocus="autofocus"></textarea>
 			<?php endif; ?>
 		</div>
 	</div>

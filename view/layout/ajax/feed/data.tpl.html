@@ -3,6 +3,6 @@
 	<?php require( AROOT .  'view' . DS . 'layout' . DS .  'ajax' . DS . 'widget' . DS . 'feed.tpl.html' ); ?>
 <?php endforeach; ?>
 <?php if( intval($data['min']) > 0 ): ?>
-<li class="more"><a href="javascript:load_feed(<?=$data['min']?>);">载入更多</a></li>
+<li class="more"><a href="javascript:load_feed(<?=$data['min']?>);"><?=__('LIST_LOAD_MORE')?></a></li>
 <?php endif; ?>	
 <?php endif; ?>	

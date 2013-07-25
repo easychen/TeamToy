@@ -11,7 +11,7 @@ class guestController extends appController
 	
 	function index()
 	{
-		//if( is_mobile_request() ) return forward( 'client/' );
+		if( is_mobile_request() ) return forward( 'client/' );
 		if( is_login() ) return forward( '?c=dashboard' );
 		
 		// do login
@@ -21,6 +21,30 @@ class guestController extends appController
 		$data['langs'] = @glob( AROOT . 'local/*.lang.php'  );
 
 		return render( $data , 'web' , 'fullwidth'  );
+	}
+
+	function i18n()
+	{
+		@session_write_close(); 
+		$c = z(t(v('lang')));
+
+		if( strlen($c) < 1 )
+		{
+			$c = c('default_language');
+			if( strlen($c) < 1 ) $c = 'zh_cn';	
+		}
+		
+		if( !isset(  $GLOBALS['language'][$c] ) )
+		{
+			$lang_file = AROOT . 'local' . DS . basename($c) . '.lang.php';
+			if( file_exists( $lang_file ) )
+				include_once( $lang_file );
+		}
+
+		$data['js_items'] = js_i18n( $GLOBALS['language'][$c] );
+
+		return render( $data , 'ajax' , 'js' );
+
 	}
 	
 	function login()

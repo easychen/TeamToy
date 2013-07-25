@@ -4,11 +4,11 @@
 <?php if( ($item['user']['id'] == uid())  ): ?>
 	<a class="close pull-right hide"  href="javascript:feed_remove_comment(<?=$item['id']?>);void(0);">&times;</a>
 <?php endif; ?>	
-	<img class="avatar" src="<?=avatar($item['user']['avatar_small'])?>" /><a uid="<?=$item['uid']?>" href="javascript:void(0);" class="namecard" ><?=$item['user']['name']?></a> <?=link_at($item['content'])?>
+	<img class="avatar" src="<?=avatar($item['user']['avatar_small'])?>" /><a uid="<?=$item['uid']?>" href="javascript:void(0);" class="namecard" ><?=$item['user']['name']?></a> <?=link_at(replace_links($item['content']))?>
 
 	<div class="clearfix">
 		<?php if( ($item['user']['id'] != uid())  ): ?>
-		<div class="pull-right"><a class="bbar_link" href="javascript:$('#fcomment_text').val( $('#fcomment_text').val()+' @<?=$item['user']['name']?> ' );$('#fcomment_text').focus();void(0);">回复</a></div>
+		<div class="pull-right"><a class="bbar_link" href="javascript:$('#fcomment_text').val( $('#fcomment_text').val()+' @<?=$item['user']['name']?> ' );$('#fcomment_text').focus();void(0);"><?=__('REPLY')?></a></div>
 		<?php endif; ?>
 		<div class="exp_line"><?=rtime($item['timeline'])?> &nbsp; <?=device($item['device']);?></div>
 	</div>	

@@ -33,7 +33,7 @@
 			  </button>
         <?php do_action( 'UI_USERMENU_BEFORE' ); ?>
 			  <ul class="dropdown-menu">
-        <li><a href="http://teamtoy.net" target="_blank">TeamToy V<?=local_version()?></a></li>
+        <li><a href="javascript:show_float_box('<?=__('TEAMTOY_ABOUT')?>' , '?c=dashboard&a=about' );void(0);" ><?=__('TEAMTOY_ABOUT' )?></a></li>
         <?php if( is_admin() ): ?>
         <?php if( is_writable(AROOT) ): ?>
         <li><a href="javascript:check_version();void(0);" target="_blank"><?=__('CHECK_NEW_VERSION')?></a></li>

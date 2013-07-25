@@ -1,6 +1,6 @@
 <div class="p20">
 <?php do_action( 'UI_FEED_DETAIL_TITLE_BEFORE' , $data ); ?>	
-<a class="close pull-right"  href="javascript:fdboard_close();" title="收起动态详情">&minus;</a>
+<a class="close pull-right"  href="javascript:fdboard_close();" title="<?=__('FEED_DETAIL_CLOSE')?>">&minus;</a>
 <div class="fd_cast_title side_long " title="<?=$data['content']?>">
 	<?=$data['content']?>
 </div>
@@ -10,8 +10,8 @@
 <div class="comment_box">
 <form class="form-inline" action="javascript:feed_add_comment( '<?=$data['id']?>' ,  $('#fcomment_text').val() );void(0);" method="post" id="fcomment_form">
 <div class="input-append">
-  <input class="side_board_input" id="fcomment_text" type="text" placeholder="请输入评论内容">
-  <button class="btn" type="submit">发布</button>
+  <input class="side_board_input" id="fcomment_text" type="text" placeholder="<?=__('INPUT_COMMENT_CONTENT')?>">
+  <button class="btn" type="submit"><?=__('SEND')?></button>
 </div>	
 </form>	
 </div>	

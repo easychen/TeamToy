@@ -12,18 +12,24 @@ class installController extends appController
 	function index()
 	{
 		if( is_installed() )
-			return info_page('API Server 已初始化完成，<a href="?c=guest">请使用管理账号登入</a>');
+			return info_page( __('INSTALL_FINISHED') );
 		elseif( intval(v('do')) == 1 )
 		{
 			 db_init();
 		}
 		else
 		{
-			$data['title'] = $data['top_title'] = 'TeamToy安装页面';
+			$data['title'] = $data['top_title'] =  __('INSTALL_PAGE_TITLE') ;
 			return render( $data , 'web' , 'fullwidth' );
 		}
 			
 
+	}
+
+	function index_en()
+	{
+		$GLOBALS['i18n'] = 'us_en';
+		return $this->index();
 	}
 	
 	

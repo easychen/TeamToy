@@ -1,16 +1,16 @@
 <div id="todo_box">
 	<div id="side_container" >
-	<h2 class="side_board">添加TODO</h2>	
+	<h2 class="side_board"><?=__('ADD_TODO')?></h2>	
 	<form class="form-horizontal" action="javascript:todo_add($('#todo_form [name=content]').val() , $('#todo_form [name=private]:checked').val() ,  $('#todo_form [name=star]:checked').val() , $('#todo_assign_uid').val());void(0);" method="post" id="todo_form">
-	<div > <input  name="content" type="text" placeholder="请输入TODO内容" class="full tt" id="todo_add_content"></div>  
+	<div > <input  name="content" type="text" placeholder="<?=__('ENTER_TODO_CONTENT')?>" class="full tt" id="todo_add_content"></div>  
 	<div class="line"></div>
 	<?php do_action( 'UI_TODOBOX_FIELD_LAST' ); ?>
-	<div class="hide form-inline" id="todo_more_option"><label class="checkbox"><input type="checkbox" name="private" value="1" class="remember">仅自己可见</label> <label class="checkbox"><input type="checkbox" name="star" value="1" class="remember">加星</label> <span id="assign_chooser_span" class="pull-right"><a href="javascript:assign_chooser();void(0)">给 <i class="icon-user"></i> <?=uname();?></a></span> <input type="hidden" name="uid" value="0" id="todo_assign_uid" /> <?php do_action( 'UI_TODOBOX_HELPER_LAST' ); ?>	
+	<div class="hide form-inline" id="todo_more_option"><label class="checkbox"><input type="checkbox" name="private" value="1" class="remember"><?=__('SLEF_ONLY')?></label> <label class="checkbox"><input type="checkbox" name="star" value="1" class="remember"><?=__('ADD_STAR')?></label> <span id="assign_chooser_span" class="pull-right"><a href="javascript:assign_chooser();void(0)"><?=__('FOR_SOMEONE' , uname() )?></a></span> <input type="hidden" name="uid" value="0" id="todo_assign_uid" /> <?php do_action( 'UI_TODOBOX_HELPER_LAST' ); ?>	
 	</div>
 
 	<div><!--<a href="#" class="gray_link">添加更多描述</a>-->
-		<a href="<?=c('teamtoy_url')?>/?a=promo" target="_blank"><img src="<?=c('teamtoy_url')?>/?a=promo_img&date=<?=date("Y-m-d")?>" onError="$(this).hide();void(0);" /></a>
-		<button class="btn pull-right" type="submit" >保存</button>
+		<a href="<?=c('teamtoy_url')?>/?a=promo" target="_blank"><img src="<?=c('teamtoy_url')?>/?a=promo_img&date=<?=date("Y-m-d")?>&lang=<?=g('i18n')?>" onError="$(this).hide();void(0);" /></a>
+		<button class="btn pull-right" type="submit" ><?=__('SAVE')?></button>
 	</div> 
 	</form>	
 

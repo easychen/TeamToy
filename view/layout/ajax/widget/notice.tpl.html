@@ -4,14 +4,14 @@
 <li class="todo <?=read_class($item['is_read'])?>" tid="<?=$item['data']['tid']?>" id="nid-<?=$item['id']?>"  >
 	<?=link_at($item['content']);?> 
 	<div><span class="time"><?=rtime($item['timeline'])?></span>
-	<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>	
+	<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);"><?=__('COMMENT')?>(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>	
 	</div>
 </li>
 <?php elseif( $item['type'] == 2 ): ?>
 <li class="cast <?=read_class($item['is_read'])?>" fid="<?=$item['data']['fid']?>" id="nid-<?=$item['id']?>"  >
 	<?=link_at($item['content']);?> 
 	<div><span class="time"><?=rtime($item['timeline'])?></span>
-<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>
+<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);"><?=__('COMMENT')?>(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>
 	</div>
 </li>
 <?php elseif( $item['type'] == 10 ): ?>
@@ -20,7 +20,7 @@
 	<?php if( isset($item['data']['info']) ): ?>
 	<div class="upgrade">
 		<?=t($item['data']['info'])?><br/>
-		<?php if( is_admin() ): ?><a class="btn btn-primary" href="?c=dashboard&a=upgrade" target="_blank">立刻升级</a><?php endif; ?>
+		<?php if( is_admin() ): ?><a class="btn btn-primary" href="?c=dashboard&a=upgrade" target="_blank"><?=__('UPGRADE_NOW')?></a><?php endif; ?>
 	</div>	
 	<?php endif; ?>
 	<div><span class="time"><?=rtime($item['timeline'])?></span></div>
@@ -29,7 +29,7 @@
 <li class="normal <?=read_class($item['is_read'])?>"  id="nid-<?=$item['id']?>"  >
 	<?=link_at($item['content']);?> 
 	<div><span class="time"><?=rtime($item['timeline'])?></span>
-<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);">评论(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>
+<?php if( intval($item['data']['count']) > 0 ): ?><a class="pull-right ccount" href="javascript:void(0);"><?=__('COMMENT')?>(<span class="cnt"><?=intval($item['data']['count'])?></span>)</a><?php endif; ?>
 	</div>
 </li>
 <?php endif; ?>	

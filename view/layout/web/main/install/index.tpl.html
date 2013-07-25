@@ -1,4 +1,5 @@
 <table class="table table-hover table-install">
+<caption><h1>TeamToy安装界面 <a href="?c=install&a=index_en">switch to  English</a></h1><br/><br/></caption>
 <thead>
 	<tr>
 		<th width="100">检查项</th>
@@ -27,7 +28,7 @@
 			插件目录 - <?php echo is_writable(AROOT.'plugin')?'是':'否' ?>
 		</td>
 		<td class="ierror">在线升级、上传插件、上传头像等功能不可用</td>
-		<td class="ierror">修改目录属性为755;SAE环境请手工开启Storage服务，并建立名为upload的puglic domain</td>
+		<td class="ierror">修改目录属性为755;SAE环境请手工开启Storage服务，并建立名为upload的public domain</td>
 	</tr>
 
 	<tr <?php if(  !function_exists('ImageCreateTrueColor')   ){ echo ' class="bad" '; } ?> >
@@ -82,7 +83,7 @@
 		<td>
 			<?php if( !isset($new_info['version']) ): ?>
 				和TeamToy升级服务器通讯不能
-			<?else:?>
+			<?php else:?>
 				可用
 			<?php endif ?>
 		</td>

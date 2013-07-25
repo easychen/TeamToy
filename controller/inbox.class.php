@@ -13,7 +13,7 @@ class inboxController extends appController
 	function index()
 	{
 		
-		$data['title'] = $data['top_title'] = '收件箱';
+		$data['title'] = $data['top_title'] = __('INBOX_PAGE_TITLE');
 		render( $data , 'web' , 'card' );
 	}
 

@@ -6,7 +6,7 @@
 
 <div id="im_search" class="input-prepend ">
     <span class="add-on"><i class="icon-search"></i></span>
-    <input id="imkeyword" type="text" placeholder="姓名或拼音">
+    <input id="imkeyword" type="text" placeholder="<?=__('MEMBER_SEARCH_KEYWORD_EXPLAIN_SHORT')?>">
 </div>
 
 <ul id="im_buddy_list">
@@ -23,7 +23,7 @@
   <div class="modal hide fade" id="float_box">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3 id="float_box_title">正在载入</h3>
+    <h3 id="float_box_title"><?=__('LOADING')?></h3>
   </div>
   <div class="modal-body"></div>
   </div>
@@ -34,8 +34,7 @@
 <div id="to_top"><i class="icon-arrow-up"></i> Top</div>
 <!--  /to top button  -->
 
-
-<audio id='ttsoundplayer'  preload='auto'>
+<audio id='ttsoundplayer'  preload='none'>
   <source src='static/sound/dididi.wav' type='audio/wav'>
 </audio> 
 

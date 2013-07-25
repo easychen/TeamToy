@@ -12,7 +12,7 @@ class buddyController extends appController
 	
 	function index()
 	{
-		$data['title'] = $data['top_title'] = '团队成员';
+		$data['title'] = $data['top_title'] = __('MEMBER_PAGE_TITLE');
 		$data['js'][] = 'jquery.tagsinput.js';
 		render( $data , 'web' , 'card' );
 	}
@@ -53,7 +53,7 @@ class buddyController extends appController
 	function update_groups()
 	{
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 
 		$groups = z(t(v('groups')));
 		// remove spaces in name
@@ -73,7 +73,7 @@ class buddyController extends appController
 						. DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'buddy.tpl.html'  ) ) ) , 'rest' );
 		}
 
-		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+		return render( array( 'code' => 100001 , 'message' => __('API_CONNECT_ERROR_NOTICE') ) , 'rest' );
 
 	}
 
@@ -84,13 +84,13 @@ class buddyController extends appController
 		$name = z(t(v('name')));
 		// remove spaces in name
 		$name = str_replace( ' ' , '' , $name );
-		if( strlen($name) < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( strlen($name) < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 
 		$email = z(t(v('email')));
-		if( strlen($email) < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( strlen($email) < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 
 		$password = z(t(v('password')));
-		if( strlen($password) < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( strlen($password) < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 
 
 		$params = array();
@@ -108,13 +108,13 @@ class buddyController extends appController
 						. DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'buddy.tpl.html'  ) ) ) , 'rest' );
 		}
 
-		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+		return render( array( 'code' => 100001 , 'message' => __('API_CONNECT_ERROR_NOTICE') ) , 'rest' );
 	}
 
 	function admin_user()
 	{
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 
 		if( intval(v('set')) == 1 ) $level = '9';
 		else $level = '1';
@@ -133,14 +133,14 @@ class buddyController extends appController
 						. DS . 'layout' . DS . 'ajax' . DS . 'widget' . DS . 'buddy.tpl.html'  ) ) ) , 'rest' );
 		}
 
-		return render( array( 'code' => 1000012 , 'message' => 'can not get api content'.$content ) , 'rest' );
+		return render( array( 'code' => 1000012 , 'message' => __('API_CONNECT_ERROR_NOTICE').$content ) , 'rest' );
 	}
 
 	function user_close()
 	{
 
 		$uid = intval(v('uid'));
-		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => 'bad args' ) , 'rest' );
+		if( $uid < 1 ) return render( array( 'code' => 100002 , 'message' => __('BAD_ARGS') ) , 'rest' );
 		
 		
 		$params = array();
@@ -154,7 +154,7 @@ class buddyController extends appController
 			return render( array( 'code' => 0 , 'data' => $data['data'] ) , 'rest' );
 		}
 
-		return render( array( 'code' => 100001 , 'message' => 'can not get api content' ) , 'rest' );
+		return render( array( 'code' => 100001 , 'message' => __('API_CONNECT_ERROR_NOTICE') ) , 'rest' );
 	}
 
 	

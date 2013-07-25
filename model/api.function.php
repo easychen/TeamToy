@@ -19,13 +19,49 @@ function get_user_full_info_by_id( $uid )
 
 function get_full_info_by_email_password( $email , $password )
 {
-	$sql = "SELECT * FROM `user` WHERE `email` = '" . s( $email ) . "' AND `password` = '" . md5( $password ) . "' LIMIT 1";
-	return get_line( $sql );
+	$sql = "SELECT * FROM `user` WHERE `email` = '" . s( $email ) . "' LIMIT 1";
+	if(!$line = get_line( $sql )) return false;
+
+	$ret = false;
+	
+	//$passwordv2 = ttpassv2($line['id']);
+	$passwordv2 = ttpassv2( $password ,  $line['id']);
+
+	// ============================
+	// to remove in next version
+	if( ttpassv2($line['id']) == $line['password'] )
+	{
+		$sql = "UPDATE `user` SET `password` = '" . s( $passwordv2 ) . "' WHERE `id` = '" . intval( $line['id'] ) . "' LIMIT 1";
+		run_sql( $sql );
+		return $line;
+	} 
+	// =============================
+	
+	
+	if( strlen( $line['password'] ) == 32 )
+	{
+		// old password format 
+		$passwordv1 = md5( $password  );
+
+		if( $passwordv1 == $line['password'] ) $ret = $line;
+
+		// change to new password
+		$sql = "UPDATE `user` SET `password` = '" . s( $passwordv2 ) . "' WHERE `id` = '" . intval( $line['id'] ) . "' LIMIT 1";
+		run_sql( $sql );
+
+	}elseif( strlen( $line['password'] ) == 30 )
+	{
+		if( $passwordv2 == $line['password'] ) $ret = $line;
+	}
+
+	return $ret; 
 }
+
+
 
 function close_user_by_id( $uid )
 {
-	$sql = "UPDATE `user` SET `is_closed` = '1' , `level` = 0  WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
+	$sql = "UPDATE `user` SET `is_closed` = '1' , `level` = 0  , `email` = CONCAT( `email` , 'closed-" . intval($uid) . '-' . time() . "' ) , `name` = CONCAT( `name` ,'" . intval($uid) . "' ) WHERE `id`  = '" . intval($uid) . "' LIMIT 1";
 	run_sql( $sql );
 }
 
@@ -107,7 +143,7 @@ function add_todo( $text , $is_public = 0 , $uid = null )
 	
 	if( db_errno() != 0 ) return false;
 	
-	$sql = "INSERT INTO `todo_history` ( `tid` , `uid` , `content` , `type` , `timeline` ) VALUES ( '" . intval($lid) . "' , '" . intval($uid) . "' , '创建了TODO' , 1 , NOW() )";
+	$sql = "INSERT INTO `todo_history` ( `tid` , `uid` , `content` , `type` , `timeline` ) VALUES ( '" . intval($lid) . "' , '" . intval($uid) . "' , '".__('TODO_CREATED')."' , 1 , NOW() )";
 	
 	run_sql( $sql );
 	if( db_errno() != 0 ) return false;

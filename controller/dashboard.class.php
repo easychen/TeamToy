@@ -13,7 +13,13 @@ class dashboardController extends appController
 	function index()
 	{
 		$data['title'] = $data['top_title'] = 'TODO';
-		render( $data , 'web' , 'card' );
+		return render( $data , 'web' , 'card' );
+	}
+
+	function about()
+	{
+		$data['title'] = $data['top_title'] = __('TEAMTOY_ABOUT');
+		return render( $data , 'ajax' , 'raw'  );
 	}
 
 	function check_version()
@@ -346,9 +352,9 @@ PRIMARY KEY (  `folder_name` )
 
 			list($width, $height, $type, $attr)=getimagesize($src); 
 
-			if( strtoupper($type) == 'IMAGETYPE_PNG' )
+			if( $type == IMAGETYPE_PNG )
 				$img_r = imagecreatefrompng($src);
-			elseif( strtoupper($type) == 'IMAGETYPE_GIF' )
+			elseif( $type== IMAGETYPE_GIF )
 				$img_r = ImageCreateFromGIF($src);
 			else
 				$img_r = imagecreatefromjpeg($src);
@@ -376,6 +382,8 @@ PRIMARY KEY (  `folder_name` )
 			else
 				return info_page( __('AVATAR_UPDATE_ERROR') , array( $data['err_code'] , $data['err_msg'] ) );
 		}
+
+		return info_page( __('AVATAR_UPDATE_SUCCESS') );
 	}
 
 	function password()
