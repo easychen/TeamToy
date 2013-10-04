@@ -30,7 +30,14 @@ function is_online( $uid )
 function is_installed()
 {
     if( !db()) return false;
-    return mysql_query("SHOW COLUMNS FROM `user`",db());
+    if( function_exists('mysqli_connect') )
+    {
+        return mysqli_query(db(), "SHOW COLUMNS FROM `user`");
+    }
+    else
+    {
+        return mysql_query("SHOW COLUMNS FROM `user`", db());
+    }
 }
 
 function kset( $key , $value )
