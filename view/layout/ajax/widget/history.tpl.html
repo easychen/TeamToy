@@ -10,7 +10,7 @@
 		<?php if( ($item['user']['id'] != uid()) && ($item['type'] == 2) ): ?>
 		<div class="pull-right"><a class="bbar_link" href="javascript:$('#comment_text').val( $('#comment_text').val()+' @<?=$item['user']['name']?> ' );$('#comment_text').focus();void(0);"><?=__('REPLY')?></a></div>
 		<?php endif; ?>
-		<div class="exp_line"><?=rtime($item['timeline'])?> &nbsp; <?=device($item['device']);?></div>
+		<div class="exp_line"><abbr title="<?=date("Y-m-d H:i:s" , strtotime($item['timeline']) )?>"><?=rtime($item['timeline'])?></abbr>  &nbsp; <?=device($item['device']);?></div>
 	</div>
 
 </li>

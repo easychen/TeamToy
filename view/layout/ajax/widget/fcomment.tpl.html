@@ -10,7 +10,7 @@
 		<?php if( ($item['user']['id'] != uid())  ): ?>
 		<div class="pull-right"><a class="bbar_link" href="javascript:$('#fcomment_text').val( $('#fcomment_text').val()+' @<?=$item['user']['name']?> ' );$('#fcomment_text').focus();void(0);"><?=__('REPLY')?></a></div>
 		<?php endif; ?>
-		<div class="exp_line"><?=rtime($item['timeline'])?> &nbsp; <?=device($item['device']);?></div>
+		<div class="exp_line"><abbr title="<?=date("Y-m-d H:i:s" , strtotime($item['timeline']) )?>"><?=rtime($item['timeline'])?></abbr>  &nbsp; <?=device($item['device']);?></div>
 	</div>	
 </li>
 <?php do_action( 'UI_FCOMMENT_ITEM_AFTER' , $item ); ?>

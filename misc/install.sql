@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `from_delete` tinyint(1) NOT NULL DEFAULT '0',
   `to_delete` tinyint(1) NOT NULL DEFAULT '0',
   `timeline` datetime DEFAULT NULL,
-  `content` varchar(255) NOT NULL,
+  `content` text NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

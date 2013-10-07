@@ -21,7 +21,7 @@ class appController extends coreController
 			// 载入插件
 			$plugins = c('plugins');
 			
-			if( mysql_query("SHOW COLUMNS FROM `plugin`",db()) )
+			if( my_sql("SHOW COLUMNS FROM `plugin`") )
 			if($pinfos = get_data("SELECT * FROM `plugin`"))
 			{
 				foreach( $pinfos as $pinfo )

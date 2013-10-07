@@ -2694,7 +2694,7 @@ class apiController extends appController
 				}
 			}
 
-			$sql = "UPDATE `message` SET `is_read` = 1 WHERE `to_uid` = '" . intval(uid()) . "' AND `from_uid` = '" . intval($uid) . "' LIMIT 100";
+			$sql = "UPDATE `message` SET `is_read` = 1 WHERE `to_uid` = '" . intval(uid()) . "' AND `from_uid` = '" . intval($uid) . "' AND `is_read` = 0 ";
 			run_sql( $sql );
 			
 			return self::send_result(  array( 'max' => intval($max) , 'min' => intval($min) , 'items' => $data , 'more'=> intval( $more ) )  );

@@ -239,7 +239,16 @@ function load( $file_path )
 //	include_once( CROOT .  'lib/db.function.php' );
 
 // use master db on sae to void sync problem
-include_once( CROOT .  'lib/db.function.php' );
+if( function_exists('mysqli_connect') )
+	$dbfile_postfix = '.mysqli.function.php';
+else
+	$dbfile_postfix = '.function.php';
+
+//if( defined('SAE_APPNAME') )
+//	include_once( CROOT .  'lib/db.sae'. $dbfile_postfix );
+//else
+
+include_once( CROOT .  'lib/db' . $dbfile_postfix );
 
 if (!function_exists('__'))
 {
