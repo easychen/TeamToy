@@ -811,6 +811,19 @@ function phpmailer_send_mail(  $to , $subject , $body , $from ,  $host , $port ,
     $mail->MsgHTML($body);
     $mail->AddAddress( $to );
 
+    switch ($port) 
+    {
+        case 465:
+            $mail->SMTPSecure = "ssl";
+            break;
+        case 587:
+            $mail->SMTPSecure = 'tls';
+            break;
+        default:
+            // Do nothing!
+            break;
+    }
+
     if(!$mail->Send())
     {
         $GLOBALS['LP_MAILER_ERROR'] = $mail->ErrorInfo;
