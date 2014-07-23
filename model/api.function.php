@@ -132,6 +132,7 @@ function add_todo( $text , $is_public = 0 , $uid = null )
 {
 	if( $uid == null || intval($uid) < 1 ) $uid = $_SESSION['uid'];
 	
+    $text = htmlspecialchars($text, ENT_QUOTES|ENT_XHTML, 'UTF-8');
 	$sql = "INSERT INTO `todo` ( `content` ,  `timeline` , `owner_uid` ) VALUES ( '" . s( $text ) . "'  , NOW() , '" . intval( $uid ) . "' ) ";
 	run_sql( $sql );
 	
